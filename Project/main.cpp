@@ -4,6 +4,30 @@
 
 using namespace std;
 
+//Cac ham ve
+void KhoiTaoChuongTrinh();
+void TaoManHinhLamViec();
+void VeMenu();
+void VeMenuPhu(int x, char menu[][30]);
+void NoiBatMuc(int x, int y, char menu[][30]);
+
+// Cac ham Menu
+void Menu();
+void MenuPhu(int x);
+void Materials();
+void Employees();
+void Show();
+void Statistics();
+void Help();
+
+//==========MAIN==========
+int main()
+{
+	KhoiTaoChuongTrinh();
+	Menu();
+	return 0;
+}
+
 void VeMenu()
 {
 	setbkcolor(MAU_NEN);
@@ -24,16 +48,6 @@ void VeMenu()
 	line(0, 25, WD_WIDTH+1000, 25);
 }
 
-//void NoiBatMuc(int x)
-//{
-//	setbkcolor(HIGHTLIGHT);
-//	setfillstyle(SOLID_FILL, HIGHTLIGHT);
-//	setusercharsize(1, 2, 1, 2);
-//	setcolor(WHITE);
-//	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-//	bar(ViTriMucMenu[x]-DIS_MENUX/2, 0, ViTriMucMenu[x+1]-DIS_MENUX/2, 25);
-//	outtextxy(ViTriMucMenu[x], 2, MenuChinh[x]);
-//}
 
 void NoiBatMuc(int x, int y, char menu[][30])
 {
@@ -55,7 +69,7 @@ void NoiBatMuc(int x, int y, char menu[][30])
 	}	
 }
 
-void ShowMenuPhu(int x, char menu[][30])
+void VeMenuPhu(int x, char menu[][30])
 {
 	int MAX;
 	switch(x)
@@ -98,65 +112,34 @@ void ShowMenuPhu(int x, char menu[][30])
 		outtextxy(ViTriMucMenu[x], 25+ViTriMucMenuPhu[i]+DIS_MENUY/2, menu[i]);
 	}
 }
-//switch(x)
-//	{
-//		case 0:
-//		{
-//			menu = MenuMater[][30];
-//			MAX = 3;
-//			break;	
-//		}
-//		case 0:
-//		{
-//			menu = MenuEmp[][30];
-//			MAX = 3;
-//			break;	
-//		}
-//		case 0:
-//		{
-//			menu = MenuShow[][30];
-//			MAX = 3;
-//			break;	
-//		}
-//		case 0:
-//		{
-//			menu = MenuStat[][30];
-//			MAX = 2;
-//			break;	
-//		}
-//		case 0:
-//		{
-//			menu = MenuHelp[][30];
-//			MAX = 1;
-//			break;	
-//		}
-//	}
+
 
 void Materials()
 {
-	ShowMenuPhu(0, MenuMater);
+	VeMenuPhu(0, MenuMater);
 	
 }
 
 void Employees()
 {
-	ShowMenuPhu(1, MenuEmp);
+	VeMenuPhu(1, MenuEmp);
 }
 
 void Show()
 {
-	ShowMenuPhu(2, MenuShow);
+	VeMenuPhu(2, MenuShow);
 }
 
 void Statistics()
 {
-	ShowMenuPhu(3, MenuStat);
+	VeMenuPhu(3, MenuStat);
 }
 
 void Help()
 {
-	ShowMenuPhu(4, MenuHelp);
+	VeMenuPhu(4, MenuHelp);
 }
+
 void MenuPhu(int x)
 {
 	switch(x)
@@ -224,12 +207,3 @@ void Menu()
 	}
 }
 
-
-
-int main()
-{
-	KhoiTaoChuongTrinh();
-	Menu();
-	delay(20000);
-	return 0;
-}
