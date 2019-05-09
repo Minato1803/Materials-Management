@@ -120,7 +120,8 @@ void Remove(char x, NODEPTR &p)
 		if(p != NULL)
 		{
 			Inorder(p->left);
-			cout<<p->info;
+//			cout<<p->info;
+			//show
 			Inorder(p->right);
 			
 		}
