@@ -230,7 +230,7 @@ void Employees()
 	{
 		case 1:
 			{
-				//VeKhung2(khungEmp, 450, 600, 4, 4);
+				VeKhung2(khungEmp, 450, 600, 4, 4);
 				break;
 			}
 		case 2:
@@ -783,8 +783,8 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 			{
 				if (pos <= 4)
 					pos++;
-				else
-					return;
+//				else
+//					return;
 			}
 			else if (key == 27)
 			{
@@ -861,8 +861,9 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 											}
 									}
 								}
-								else if (key == '\r')
+								else if (key5 == '\r')
 								{
+									//return;
 									if (buttonL == 1)
 									{
 										About();//them Mat
@@ -874,7 +875,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 										return;
 									}
 								}
-								else if (key == 27)
+								else if (key5 == 27)
 								{
 									//VeMenu();
 									return;
