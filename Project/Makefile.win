@@ -5,8 +5,13 @@ CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
 <<<<<<< HEAD
+<<<<<<< HEAD
 OBJ      = main.o UI.o
 LINKOBJ  = main.o UI.o
+=======
+OBJ      = main.o
+LINKOBJ  = main.o
+>>>>>>> parent of b093e42... up cmn date
 =======
 OBJ      = main.o
 LINKOBJ  = main.o
