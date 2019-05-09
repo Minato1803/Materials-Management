@@ -1,3 +1,6 @@
+#ifndef CONTENTS_DEF
+#define CONTENTS_DEF
+
 #define WD_WIDTH 1200
 #define WD_HEIGHT 700
 #define MAX_MENU 5
@@ -22,3 +25,4 @@ int KichThuocMenuPhu[MAX_MENU+1] = {120, 120, 200, 180, 120};
 char khungMat[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Name", "Unit", "Amount"};
 char khungEmp[][30] = {"Employee's Informations", "Add Employee", "Exit", "ID", "Last Name", "First Name", "Sex"};
 char Sex[][30] = {"Male", "Female"};
+#endif

@@ -1,5 +1,7 @@
-#include "graphics.h"
+#ifndef CL_DEF
+#define CL_DEF
 
+#include "graphics.h"
 #define COLOR(r,g,b) (0x04000000 | RGB(r,g,b))
 
 enum mauChinh
@@ -19,3 +21,4 @@ enum mauKhung
 	TEXTBOX				= COLOR(29, 33, 37),
 	HL_NUT				= WHITE
 };
+#endif
