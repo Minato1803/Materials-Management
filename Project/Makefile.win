@@ -6,9 +6,9 @@ CC       = gcc.exe
 WINDRES  = windres.exe
 OBJ      = main.o UI.o
 LINKOBJ  = main.o UI.o
-LIBS     = -L"E:/code/IDEdevc/Dev-Cpp/MinGW64/lib32" -L"E:/code/IDEdevc/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -std=c++11 -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -mwindows libbgi.a -m32
-INCS     = -I"E:/code/IDEdevc/Dev-Cpp/MinGW64/include" -I"E:/code/IDEdevc/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"E:/code/IDEdevc/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
-CXXINCS  = -I"E:/code/IDEdevc/Dev-Cpp/MinGW64/include" -I"E:/code/IDEdevc/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"E:/code/IDEdevc/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"E:/code/IDEdevc/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib32" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -mwindows libbgi.a -m32
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
 BIN      = VatTuBeta.exe
 CXXFLAGS = $(CXXINCS) -m32
 CFLAGS   = $(INCS) -m32
