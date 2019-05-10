@@ -24,7 +24,7 @@ void MenuPhu(int viTriMenuPhu, char menu[][30], int MAXMENU, int &chonMuc);
 void ChonMenuPhu(int x);
 void Materials();
 void Employees();
-void Show();
+void Bill();
 void Statistics();
 void Help();
 void About();
@@ -37,6 +37,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W);
 //=========================
 
 //==========CHINHAN========
+void VeKhungAddEmp(char khungNoiDung[][30], int H, int W);
 //=========================
 
 
@@ -106,17 +107,17 @@ void VeMenuPhu(int x, char menu[][30])
 	{
 		case 0: 
 		{
-			MAX = 3;
+			MAX = 4;
 			break;
 		}
 		case 1: 
 		{
-			MAX = 3;
+			MAX = 4;
 			break;
 		}
 		case 2: 
 		{
-			MAX = 3;
+			MAX = 2;
 			break;
 		}
 		case 3: 
@@ -187,8 +188,8 @@ void MenuPhu(int viTriMenuPhu, char menu[][30], int MAXMENU, int &chonMuc)
 			}
 			else if (key == '\r')
 			{
-				VeMenu();
-				return;
+
+				return VeMenu();
 			}
 			NoiBatMuc(viTriMenuPhu, chonMuc, menu, HL_MENU_PHU, 2);
 		}
@@ -199,7 +200,7 @@ void Materials()
 {
 	VeMenuPhu(0, MenuMater);
 	int thaoTac;
-	MenuPhu(0, MenuMater, 3, thaoTac);
+	MenuPhu(0, MenuMater, 4, thaoTac);
 	switch (thaoTac)
 	{
 		case 1:
@@ -210,7 +211,7 @@ void Materials()
 			}
 		case 2:
 			{
-				About();
+				VeKhungAddEmp(khungEmp, 450, 600);
 				break;
 			}
 		case 3:
@@ -225,17 +226,15 @@ void Employees()
 {
 	VeMenuPhu(1, MenuEmp);
 	int thaoTac;
-	MenuPhu(1, MenuMater, 3, thaoTac);
+	MenuPhu(1, MenuEmp, 4, thaoTac);
 	switch (thaoTac)
 	{
 		case 1:
 			{
-				VeKhung2(khungEmp, 450, 600, 4, 4);
-				break;
+				return VeKhungAddEmp(khungEmp, 450, 600);
 			}
 		case 2:
 			{
-				About();
 				break;
 			}
 		case 3:
@@ -246,11 +245,11 @@ void Employees()
 	}
 }
 
-void Show()
+void Bill()
 {
-	VeMenuPhu(2, MenuShow);
+	VeMenuPhu(2, MenuBill);
 	int thaoTac;
-	MenuPhu(2, MenuShow, 3, thaoTac);
+	MenuPhu(2, MenuBill, 2, thaoTac);
 	if (thaoTac == 1)
 	{
 		
@@ -289,8 +288,8 @@ void ChonMenuPhu(int x)
 	switch(x)
 	{
 		case 0:	return Materials();
-		case 1:	return Employees();
-		case 2:	return Show();
+		case 1: return Employees();
+		case 2:	return Bill();
 		case 3:	return Statistics();
 		case 4:	return Help();
 		default : return;
@@ -342,8 +341,9 @@ void Menu()
 				if (chiMuc < 0)
 					chiMuc = MAX_MENU-1;
 			}
-			else if (key == '\r')
+			else if (key == 13)
 			{
+				VeMenu();
 				ChonMenuPhu(chiMuc);
 			}
 			NoiBatMuc(chiMuc, 0, MenuChinh, HIGHTLIGHT, USER_CHAR_SIZE);
@@ -788,7 +788,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 			}
 			else if (key == 27)
 			{
-				//VeMenu();
+				VeMenu();
 				return;
 			}
 			
@@ -866,18 +866,18 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 									//return;
 									if (buttonL == 1)
 									{
-										About();//them Mat
+										VeMenu();//them Mat
 										return;
 									}
 									else
 									{
-										Guild();
+										VeMenu();
 										return;
 									}
 								}
 								else if (key5 == 27)
 								{
-									//VeMenu();
+									VeMenu();
 									return;
 								}
 								veKhungNut(H, W, khungNoiDung, buttonL, 0);
@@ -891,5 +891,248 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 }
 //===========endDUCKHAI=========
 
-
+//===========CHINHAN============
+void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
+{
+	fflush(stdin);
+	int soLuongKhung = 4;
+	int kichThuocSTT = 30;
+	int kichThuocNut = 40;
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+			
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								//top line
+	
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	setcolor(MAU_TEXT_KHUNG);
+	outtextxy(310, 130, khungNoiDung[0]);
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, D-kichThuocNut, R, D);
+	
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);
+	line(L, D-kichThuocNut, R, D-kichThuocNut);								//bottom line
+	line(WD_WIDTH/2, D-kichThuocNut, WD_WIDTH/2, D);						//center line
+	
+	setbkcolor(NEN_KHUNG);
+	int midText1 = ((R-L)/2 - textwidth(khungNoiDung[1]))/2;
+	int midText2 = ((R-L)/2 - textwidth(khungNoiDung[2]))/2;
+	int midTextH = (kichThuocNut - textheight(khungNoiDung[1]))/2 + textheight(khungNoiDung[1]);
+	setcolor(WHITE);
+	outtextxy(L+midText1, D-midTextH, khungNoiDung[1]);
+	outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[2]);
+	//ve khung nhap lieu
+	for (int i = 1; i <= soLuongKhung; i++)
+	{
+		if (i != soLuongKhung)
+		{
+			if (i == 1)
+				veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 1, NEN_KHUNG, WHITE);
+			else
+				veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
+		}
+		else
+		{
+			veMuc2Chon(380, ViTriKhung[i], khungNoiDung[i+2], Sex, 1, NEN_KHUNG, WHITE);
+		}
+	}
+	int pos = 1;
+	int fst = 1;			//SEX
+	while(1)
+	{
+		if(kbhit())
+		{
+			char key = getch();
+			char cNext;
+			if (key == 0)
+			{
+				cNext = getch();
+				switch(cNext)
+				{
+					case KEY_UP:
+						{
+							pos--;
+							break;
+						}
+					case KEY_DOWN:
+						{
+							pos++;
+							break;
+						}
+				}
+				cpos:
+				if (pos == 0)
+					pos = 5;
+				if (pos > 5)
+					pos = 1;
+			}
+			else if (key == '\n')
+			{
+				if (pos <= 4)
+					pos++;
+			}
+			else if (key == 27)
+			{
+				//VeMenu();
+				return;
+			}
+			
+			for (int i = 1; i <= 4; i++)
+			{
+				if (i != 4)
+					veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
+				else
+					veMuc2Chon(380, ViTriKhung[i], khungNoiDung[i+2], Sex, fst, NEN_KHUNG, WHITE);
+			}
+			switch(pos)
+			{
+				case 1:
+					{
+						veKhung(380, 200, khungNoiDung[3], 1, NEN_KHUNG, WHITE);
+						break;
+					}
+				case 2:
+					{
+						veKhung(380, 260, khungNoiDung[4], 1, NEN_KHUNG, WHITE);
+						break;
+					}
+				case 3:
+					{
+						veKhung(380, 320, khungNoiDung[5], 1, NEN_KHUNG, WHITE);
+						break;
+					}
+				case 4:
+					{
+						veMuc2Chon(380, 380, khungNoiDung[6], Sex, fst, NEN_KHUNG, WHITE);
+						while(1)
+						{
+							if (kbhit())
+							{
+								char key4 = getch();
+								if (key4 == 0)
+								{
+									char c4Next = getch();
+									switch(c4Next)
+									{
+										case KEY_LEFT:
+											{
+												fst++;
+												break;
+											}
+										case KEY_RIGHT:
+											{
+												fst--;
+												break;
+											}
+										case KEY_UP:
+											{
+												pos--;
+												goto cpos;
+											}
+										case KEY_DOWN:
+											{
+												pos++;
+												goto cpos;
+											}
+									}
+								}
+								else if (key4 == 13)
+								{
+									pos++;
+									break;
+								}
+								else if (key4 == 27)
+								{
+									return;
+								}
+								if (fst == -1)
+									fst = 1;
+								if (fst > 1)
+									fst = 0;								
+								veMuc2Chon(380, 380, khungNoiDung[6], Sex, fst, NEN_KHUNG, WHITE);
+							}
+						}
+						break;
+					}
+				case 5:
+					{
+						bool buttonL = 1;
+						veKhungNut(H, W, khungNoiDung, buttonL, 0);
+						while(1)
+						{
+							if(kbhit())
+							{
+								char key5 = getch();
+								char c5Next;
+								if (key5 == 0)
+								{
+									c5Next = getch();
+									switch(c5Next)
+									{
+										case KEY_UP:
+											{
+												pos--;
+												veKhungNut(H, W, khungNoiDung, buttonL, 1);
+												goto cpos;
+											}
+										case KEY_DOWN:
+											{
+												pos++;
+												veKhungNut(H, W, khungNoiDung, buttonL, 1);
+												goto cpos;
+											}
+										case KEY_LEFT:
+											{
+												buttonL ^= 1;
+												break;
+											}
+										case KEY_RIGHT:
+											{
+												buttonL ^= 1;
+												break;
+											}
+									}
+								}
+								else if (key5 == '\r')
+								{
+									//return;
+									if (buttonL == 1)
+									{
+										VeMenu();
+										return;
+									}
+									else
+									{
+										VeMenu();
+										return;
+									}
+								}
+								else if (key5 == 27)
+								{
+									VeMenu();
+									return;
+								}
+								veKhungNut(H, W, khungNoiDung, buttonL, 0);
+							}
+						}
+					}
+			}
+		}
+	}
+}
+//==========endCHINHAN========
 
