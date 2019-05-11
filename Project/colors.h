@@ -7,9 +7,9 @@
 enum mauChinh
 {
 	MAU_MENU			= COLOR(36, 41, 46),
-	MAU_NEN				= COLOR(18, 20, 23),
-	HIGHTLIGHT			= COLOR(47, 54, 61),
-	HL_MENU_PHU			= COLOR(3, 102, 214)
+	MAU_NEN				= COLOR(18, 20, 23),	
+	HIGHTLIGHT			= COLOR(47, 54, 61),   	
+	HL_MENU_PHU			= COLOR(3, 102, 214)	
 };
 
 enum mauKhung

@@ -93,11 +93,13 @@ void Nhap(int x, int y,int check, char c, char s[], int n)
 			}
 		}
 	}
+	setcolor(WHITE);
 	outtextxy(x,y,s);
 }
 
 void InThongTin(int x, int y, const char *s)
 {
+	setcolor(WHITE);
 	outtextxy(x, y, s);
 }
 

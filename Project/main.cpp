@@ -20,6 +20,7 @@ void veNut2(char khungNoiDung[][30], int ViTriKhung[], int SoLuongKhung, int H, 
 void veKhung(int x, int y, char noiDung[], bool daChon, int mauNen, int mauChu);
 void veMuc2Chon(int x, int y, char noiDung[], char noiDungMucChon[][30], bool chonTrai, int mauNen, int mauChu);
 void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset);
+void notiBool(char khungNoiDung[][50], bool choice, int n);
 
 // Cac ham Menu
 void Menu();
@@ -219,7 +220,7 @@ void Materials()
 			}
 		case 3:
 			{
-				About();
+				
 				break;
 			}
 	}
@@ -695,10 +696,75 @@ void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset)
 	line(L, D-kichThuocNut, R, D-kichThuocNut);								//bottom line
 	line(WD_WIDTH/2, D-kichThuocNut, WD_WIDTH/2, D);						//center line
 }
-//=============endUI============
+
+void notiBool(char khungNoiDung[][50], bool choice, int n )
+{
+	int kichThuocSTT = 30;
+	int kichThuocNut = 40;
+	int H = 200;
+	int W = 450;
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+	
+	setcolor(BLACK);
+	rectangle(L-1, U-1, R+1, D+1);
+			
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								//top line
+	
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	setcolor(MAU_TEXT_KHUNG);
+	
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);
+	line(L, D-kichThuocNut, R, D-kichThuocNut);								//bottom line
+	line(WD_WIDTH/2, D-kichThuocNut, WD_WIDTH/2, D);						//center line
+	
+	setbkcolor(NEN_KHUNG);
+	int midText1 = ((R-L)/2 - textwidth(khungNoiDung[2]))/2;
+	int midText2 = ((R-L)/2 - textwidth(khungNoiDung[3]))/2;
+	int midTextH = (kichThuocNut - textheight(khungNoiDung[1]))/2 + textheight(khungNoiDung[1]);
+	setcolor(WHITE);
+	outtextxy(L+25, ViTriKhung[3], khungNoiDung[n]);
+	outtextxy(L+25, ViTriKhung[4], khungNoiDung[4]);
+	setfillstyle(SOLID_FILL, HL_MENU_PHU);									//do mau nen cho nut
+	if (choice)
+	{
+		bar (L, D-kichThuocNut, WD_WIDTH/2, D);
+		setbkcolor(HL_MENU_PHU);
+		outtextxy(L+midText1, D-midTextH, khungNoiDung[2]);
+		setbkcolor(NEN_KHUNG);
+		outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[3]);
+	}
+	else	
+	{
+		bar (WD_WIDTH/2, D-kichThuocNut, R, D);
+		setbkcolor(NEN_KHUNG);
+		outtextxy(L+midText1, D-midTextH, khungNoiDung[2]);
+		setbkcolor(HL_MENU_PHU);
+		outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[3]);
+	}
+	setcolor(BLACK);
+	line(L, D-kichThuocNut, R, D-kichThuocNut);								//bottom line
+	line(WD_WIDTH/2, D-kichThuocNut, WD_WIDTH/2, D);
+}
+//=============endUI============//
 
 
-//============DUCKHAI===========
+//============DUCKHAI===========//
 void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 {
 	int kichThuocSTT = 30;
@@ -795,10 +861,13 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 				return;
 			}
 			
+//			NotiN:
+			
 			for (int i = 1; i <= SoLuongKhung; i++)
 			{
 				veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
 			}
+//			veKhungNut(H, W, khungNoiDung, 1, 1);
 			InThongTin(560, ViTriKhung[1], tmp.code);
 			InThongTin(560, ViTriKhung[2], tmp.name);
 			InThongTin(560, ViTriKhung[3], tmp.type);
@@ -833,7 +902,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 				case 5:
 					{
 						// AddMaterials
-						//veKhung(380, 380, khungNoiDung[1], 1, NEN_KHUNG, WHITE);
+//						veKhung(380, 380, khungNoiDung[1], 1, NEN_KHUNG, WHITE);
 
 						bool buttonL = 1;
 						veKhungNut(H, W, khungNoiDung, buttonL, 0);
@@ -877,6 +946,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 									//return;
 									if (buttonL == 1)
 									{
+										NotiY:
 										if(strlen(tmp.code) != 0 && strlen(tmp.name) != 0 && strlen(tmp.type) != 0 && strlen(tmp.amount) != 0)
 										{
 											ThongBao(725, 130, Success[0], GREEN, MAU_MENU);	
@@ -885,6 +955,46 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 										else
 										{
 											ThongBao(780, 130, Fail[0], LIGHTRED, MAU_MENU);
+//											pos = 1;
+//											goto NotiN;
+										}
+										//===thong bao loi===//
+										bool x = 1;
+										notiBool(Noti, x,0);
+										while(1)
+										{
+											if(kbhit())
+											{
+												char keyNoti = getch();
+												char ckeyNoti;
+												if(keyNoti==0)
+												{
+													ckeyNoti = getch();
+													if(ckeyNoti == KEY_LEFT || ckeyNoti == KEY_RIGHT)
+													{
+														x ^= 1;
+														notiBool(Noti, x,0);
+													}
+												}
+												else if(keyNoti == '\r')
+												{
+													if(x==1)
+													{
+														goto NotiY;
+													}
+													else
+													{
+														pos = 1;
+//														goto NotiN;
+													}
+												}
+												else if(keyNoti == 27)
+												{
+													pos = 1;
+//													goto NotiN;
+												}
+													
+											}
 										}
 									}
 									else
