@@ -3,19 +3,19 @@
 
 bool CheckLetter(char s)
 {
-	if((s< 65||s> 90) || (s< 97 && s> 90 ) || (s> 122))
-	{
-		return 0;
-	}
+			if((s< 65||s> 90) || (s< 97 && s> 90 ) || (s> 122))
+			{
+				return 0;
+			}
 	return 1;	 
 }
 
 bool CheckNum(char s)
 {
-	if(s < 48 || s > 57)
-	{
-		return 0;
-	}
+		if(s < 48 || s > 57)
+		{
+			return 0;
+		}
 	return 1;	 
 }
 
