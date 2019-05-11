@@ -767,6 +767,8 @@ void notiBool(char khungNoiDung[][50], bool choice, int n )
 //============DUCKHAI===========//
 void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 {
+	struct Materials tmp;
+	NotiN:
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
 	setusercharsize(1, 2, 1, 2);
@@ -817,9 +819,12 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 		else
 			veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
 	}
-	//Chon vi tri ======
+	InThongTin(560, ViTriKhung[1], tmp.code);
+			InThongTin(560, ViTriKhung[2], tmp.name);
+			InThongTin(560, ViTriKhung[3], tmp.type);
+			InThongTin(560, ViTriKhung[4], tmp.amount);
+	//===== Chon vi tri ======//
 	int pos = 1;
-	struct Materials tmp;
 	while(1)
 	{
 		if(kbhit())
@@ -861,17 +866,16 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 				return;
 			}
 			
-//			NotiN:
 			
 			for (int i = 1; i <= SoLuongKhung; i++)
 			{
 				veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
 			}
-//			veKhungNut(H, W, khungNoiDung, 1, 1);
 			InThongTin(560, ViTriKhung[1], tmp.code);
 			InThongTin(560, ViTriKhung[2], tmp.name);
 			InThongTin(560, ViTriKhung[3], tmp.type);
 			InThongTin(560, ViTriKhung[4], tmp.amount);
+			veKhungNut(H, W, khungNoiDung, 1, 1);
 			//===di chuyen trong menu===//
 			switch(pos)
 			{
@@ -955,8 +959,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 										else
 										{
 											ThongBao(780, 130, Fail[0], LIGHTRED, MAU_MENU);
-//											pos = 1;
-//											goto NotiN;
+											goto NotiN;
 										}
 										//===thong bao loi===//
 										bool x = 1;
@@ -984,14 +987,14 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 													}
 													else
 													{
-														pos = 1;
-//														goto NotiN;
+														
+														goto NotiN;
 													}
 												}
 												else if(keyNoti == 27)
 												{
-													pos = 1;
-//													goto NotiN;
+													
+													goto NotiN;
 												}
 													
 											}
