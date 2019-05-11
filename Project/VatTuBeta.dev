@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=3
 CompilerSettings=0000000100000000000000000
-UnitCount=6
+UnitCount=7
 
 [VersionInfo]
 Major=1
@@ -131,7 +131,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=create_structure.h
+FileName=create_structure_K.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -152,6 +152,16 @@ BuildCmd=
 
 [Unit6]
 FileName=Functions.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit7]
+FileName=create_structure_N.h
 CompileCpp=1
 Folder=
 Compile=1

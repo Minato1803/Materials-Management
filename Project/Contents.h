@@ -14,7 +14,8 @@ char MenuEmp[][30] = {"Add", "Remove", "Adjust", "Employees List"};
 char MenuBill[][30] = {"Create Bill", "Bills List"};
 char MenuStat[][30] = {"Bills", "Top Materials"};
 char MenuHelp[][30] = {"Guild", "About"};
-
+char Success[][50] = {"Added Successfully!", ""};
+char Fail[][50] = {"Empty Field"};
 //thong so
 int ViTriMucMenu[MAX_MENU+1] = {10};
 int ViTriMucMenuPhu[5] = {0, 42, 84, 126, 168};
@@ -23,7 +24,6 @@ int KichThuocMenuPhu[MAX_MENU+1] = {200, 200, 180, 180, 120};
 
 //noi dung khung 
 char khungMat[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Name", "Unit", "Amount"};
-char khungEmp[][30] = {"Employee's Informations", "Add Employee", "Exit", "ID", "Last Name", "First Name", "Sex"};
+char khungEmp[][30] = {"Employee's Informations", "Add Employee", "Exit", "ID", "First Name", "Last Name", "Sex"};
 char Sex[][30] = {"Male", "Female"};
-char Success[][30] = {""};
 #endif

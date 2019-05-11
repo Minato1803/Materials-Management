@@ -2,6 +2,9 @@
 #include "Contents.h"
 #include "colors.h"
 #include "Functions.h"
+#include "create_structure_K.h"
+#include "create_structure_N.h"
+
 using namespace std;
 
 
@@ -235,6 +238,7 @@ void Employees()
 			}
 		case 2:
 			{
+				return VeKhungAddMat(khungMat, 450, 600);
 				break;
 			}
 		case 3:
@@ -750,7 +754,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 	}
 	//Chon vi tri ======
 	int pos = 1;
-	int fst = 1;			//SEX
+	struct Materials tmp;
 	while(1)
 	{
 		if(kbhit())
@@ -788,7 +792,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 			}
 			else if (key == 27)
 			{
-				VeMenu();
+				//VeMenu();
 				return;
 			}
 			
@@ -796,27 +800,35 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 			{
 				veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
 			}
+			InThongTin(560, ViTriKhung[1], tmp.code);
+			InThongTin(560, ViTriKhung[2], tmp.name);
+			InThongTin(560, ViTriKhung[3], tmp.type);
+			InThongTin(560, ViTriKhung[4], tmp.amount);
+			//===di chuyen trong menu===//
 			switch(pos)
 			{
 				case 1:
 					{
 						veKhung(380, 200, khungNoiDung[3], 1, NEN_KHUNG, WHITE);
-						// nhap
+						Nhap(560,200,-1, key, tmp.code,10);
 						break;
 					}
 				case 2:
 					{
 						veKhung(380, 260, khungNoiDung[4], 1, NEN_KHUNG, WHITE);
+						Nhap(560,260,1, key, tmp.name,50);
 						break;
 					}
 				case 3:
 					{
 						veKhung(380, 320, khungNoiDung[5], 1, NEN_KHUNG, WHITE);
+						Nhap(560,320,1, key, tmp.type,25);
 						break;
 					}
 				case 4:
 					{
 						veKhung(380, 380, khungNoiDung[6], 1, NEN_KHUNG, WHITE);
+						Nhap(560,380,0, key, tmp.amount,18);
 						break;
 					}
 				case 5:
@@ -866,8 +878,15 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 									//return;
 									if (buttonL == 1)
 									{
-										VeMenu();//them Mat
-										return;
+										if(strlen(tmp.code) != 0 && strlen(tmp.name) != 0 && strlen(tmp.type) != 0 && strlen(tmp.amount) != 0)
+										{
+											ThongBao(725, 130, Success[0], GREEN, MAU_MENU);	
+											return VeKhungAddMat(khungMat, 450, 600);
+										}
+										else
+										{
+											ThongBao(780, 130, Fail[0], LIGHTRED, MAU_MENU);
+										}
 									}
 									else
 									{
@@ -894,7 +913,6 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 //===========CHINHAN============
 void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 {
-	fflush(stdin);
 	int soLuongKhung = 4;
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
@@ -952,6 +970,7 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 	}
 	int pos = 1;
 	int fst = 1;			//SEX
+	struct Employees tmp;
 	while(1)
 	{
 		if(kbhit())
@@ -980,7 +999,7 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 				if (pos > 5)
 					pos = 1;
 			}
-			else if (key == '\n')
+			else if (key == '\r')
 			{
 				if (pos <= 4)
 					pos++;
@@ -997,22 +1016,30 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 					veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
 				else
 					veMuc2Chon(380, ViTriKhung[i], khungNoiDung[i+2], Sex, fst, NEN_KHUNG, WHITE);
+				setcolor(WHITE);
 			}
+			InThongTin(560, ViTriKhung[1], tmp.ID);
+			InThongTin(560, ViTriKhung[2], tmp.firstName);
+			InThongTin(560, ViTriKhung[3], tmp.lastName);
+			
 			switch(pos)
 			{
 				case 1:
 					{
 						veKhung(380, 200, khungNoiDung[3], 1, NEN_KHUNG, WHITE);
+						Nhap(560, 200, -1, key, tmp.ID, 10);
 						break;
 					}
 				case 2:
 					{
 						veKhung(380, 260, khungNoiDung[4], 1, NEN_KHUNG, WHITE);
+						Nhap(560, 260, 1, key, tmp.firstName, 30);
 						break;
 					}
 				case 3:
 					{
 						veKhung(380, 320, khungNoiDung[5], 1, NEN_KHUNG, WHITE);
+						Nhap(560, 320, 1, key, tmp.lastName, 30);
 						break;
 					}
 				case 4:
@@ -1050,9 +1077,10 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 											}
 									}
 								}
-								else if (key4 == 13)
+								else if (key4 == '\r')
 								{
 									pos++;
+									goto cpos;
 									break;
 								}
 								else if (key4 == 27)
@@ -1064,6 +1092,7 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 								if (fst > 1)
 									fst = 0;								
 								veMuc2Chon(380, 380, khungNoiDung[6], Sex, fst, NEN_KHUNG, WHITE);
+								tmp.sex = fst;
 							}
 						}
 						break;
@@ -1112,8 +1141,15 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 									//return;
 									if (buttonL == 1)
 									{
-										VeMenu();
-										return;
+										if(strlen(tmp.ID) != 0 && strlen(tmp.firstName) != 0 && strlen(tmp.lastName) != 0)
+										{
+											ThongBao(725, 130, Success[0], GREEN, MAU_MENU);	
+											return VeKhungAddEmp(khungEmp, 450, 600);
+										}
+										else
+										{
+											ThongBao(780, 130, Fail[0], LIGHTRED, MAU_MENU);
+										}
 									}
 									else
 									{

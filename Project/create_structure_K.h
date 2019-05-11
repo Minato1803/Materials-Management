@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cstring>
+#include <string.h>
 #include "Functions.h"
 using namespace std;
 
@@ -9,15 +9,24 @@ using namespace std;
 struct Materials
 {
 	char code[11];
-	char name[50];
-	char type[25];
-	char amount[18];
+	char name[51];
+	char type[26];
+	char amount[19];
+	int  RealAmount;
+	Materials()
+	{
+		code[0] = '\0';
+		name[0] = '\0';
+		type[0] = '\0';
+		amount[0] = '\0';
+		RealAmount = 0;
+	}
 };
 
 struct Node
 {
-	char key;
-	char info;
+	char key[];
+	Materials info;
 	Node *left;
 	Node *right;
 };
@@ -30,12 +39,12 @@ void Initalize (NODEPTR &root)
 
 
 
-void Insert(NODEPTR &p,char x,Materials  a)
+void Insert(NODEPTR &p,char x[],Materials  a)
 {
 	if(p==NULL)
 	{
-		p = new node;
-		strcopy(p->key, x);
+		p = new Node;
+		strcpy(p->key, x);
 		strcpy(p->info.code, a.code);
 		strcpy(p->info.name, a.name);
 		strcpy(p->info.type, a.type);
@@ -57,19 +66,21 @@ void Insert(NODEPTR &p,char x,Materials  a)
 
 void RemoveCase (NODEPTR &r, NODEPTR &rp)
 {
-	if(p->left = NULL)
-		RemoveCase(r->left);
+	if(rp->left = NULL)
+		RemoveCase(r->left,rp);
 	else
 	{
 		strcpy(rp->key, r->key);
-		strcpy(rp->info, r->info);
+		strcpy(rp->info.code, r->info.code);
+		strcpy(rp->info.name, r->info.name);
+		strcpy(rp->info.type, r->info.type);
+		strcpy(rp->info.amount, r->info.amount);
 		rp = r;
 		r = rp->right;
-		
 	}
 }
 
-void Remove(char x, NODEPTR &p)
+void Remove(char x[], NODEPTR &p)
 {
 	NODEPTR rp;
 	if(p = NULL)
@@ -91,23 +102,24 @@ void Remove(char x, NODEPTR &p)
 				else if(rp->left == NULL)
 						p = p->right;
 					else
-						RemoveCase(rp->right);					
+						RemoveCase(rp->right,rp);					
 			}
 		delete rp;	
 	}
+}
 	
 	bool Empty(NODEPTR &root)
 	{
 		return (root == NULL ? 1 : 0);
 	}
 	
-	void Search(NODEPTR &root, char x)
+	NODEPTR Search(NODEPTR &root, char x[])
 	{
 		NODEPTR p;
 		p = root;
-		while(p!=NULL && strcmp(p->key, x) != 0)
+		while(p!=NULL && stricmp(p->key, x) != 0)
 		{
-			if(strcmp(x, p->left) < 0)
+			if(stricmp(p->key,x) < 0)
 				p = p-> left;
 			else
 			 	p = p->right;			 	
@@ -166,4 +178,3 @@ void Remove(char x, NODEPTR &p)
 	}
 */	
 					
-}
