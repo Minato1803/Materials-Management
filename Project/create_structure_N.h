@@ -11,7 +11,7 @@ struct Employees
 	char firstName[31];
 	char lastName[31];
 	bool sex; //1: male
-	Emplyees()
+	Employees()
 	{
 		ID[0] = '\0';
 		firstName[0] = '\0';
