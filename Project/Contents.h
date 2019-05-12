@@ -16,7 +16,10 @@ char MenuStat[][30] = {"Bills", "Top Materials"};
 char MenuHelp[][30] = {"Guild", "About"};
 char Success[][50] = {"Added Successfully!", ""};
 char Fail[][50] = {"Empty Field"};
-char Noti[][50] = {"Error: The same  material already exists","Error: The same employee already exists", "Yes", "No","Would you like to replace the existing object?"};
+
+//error 
+char sameMat[][50] = {"Error: The same  Material's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
+char sameEmp[][50] = {"Error: The same  Employees's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
 
 //thong so
 int ViTriMucMenu[MAX_MENU+1] = {10};
