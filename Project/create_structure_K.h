@@ -39,7 +39,7 @@ void Initalize (NODEPTR &root)
 
 
 
-void Insert(NODEPTR &p,char x[],Materials  a)
+int Insert(NODEPTR &p,char x[],Materials  a)
 {
 	if(p==NULL)
 	{
@@ -58,8 +58,7 @@ void Insert(NODEPTR &p,char x[],Materials  a)
 				Insert(p->right,x,a);
 			else
 			{
-				// existed, asked for edit
-				//cong info;
+				return 0;
 			}		
 		
 }
@@ -117,7 +116,7 @@ void Remove(char x[], NODEPTR &p)
 	{
 		NODEPTR p;
 		p = root;
-		while(p!=NULL && stricmp(p->key, x) != 0)
+		while(p!=NULL && strcmp(p->key, x) != 0)
 		{
 			if(stricmp(p->key,x) < 0)
 				p = p-> left;
@@ -139,42 +138,4 @@ void Remove(char x[], NODEPTR &p)
 		}
 	}
 	
-/*	void CreateTree(NODEPTR &root)
-	{
-		Materials info;
-		while(1)
-		{
-			if(kbhit())
-			{
-				char key = getch();
-				
-			}
-		}
-		loopcode:
-		char c;
-		c = NhapSo();
-		
-		if(Search(root,info.code) != NULL)
-		{
-			//code existed 
-			goto loopcode:;
-		}
-		loopname:
-		cin>> info.name;
-		if(Search(root,info.name) != NULL)
-		{
-			//name existed
-			goto loopname:;
-		}
-		looptype:
-		cin>>info.type;
-		if(!CheckLetter(info.type))
-				goto looptype:;
-		loopamount:
-		cin>>info.amount;
-		if(!CheckNum(info.amount))
-			goto loopamount:;
-		Insert(root,info.name,info);
-	}
-*/	
 					

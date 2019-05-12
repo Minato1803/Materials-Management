@@ -36,8 +36,9 @@ void Guild();
 //=========================
 
 //==========DUCKHAI========
+	NODEPTR tree = NULL;
 // Cau a:
-void VeKhungAddMat(char khungNoiDung[][30], int H, int W);
+	void VeKhungAddMat(char khungNoiDung[][30], int H, int W);
 //=========================
 
 //==========CHINHAN========
@@ -951,54 +952,63 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 									if (buttonL == 1)
 									{
 										NotiY:
+										//===thong bao loi===//
 										if(strlen(tmp.code) != 0 && strlen(tmp.name) != 0 && strlen(tmp.type) != 0 && strlen(tmp.amount) != 0)
 										{
-											ThongBao(725, 130, Success[0], GREEN, MAU_MENU);	
-											return VeKhungAddMat(khungMat, 450, 600);
+											if(Search(tree, tmp.code) == NULL)
+											{
+												ThongBao(725, 130, Success[0], GREEN, MAU_MENU);
+												Insert(tree,tmp.code,tmp);	
+												return VeKhungAddMat(khungMat, 450, 600);	
+											}
+											else
+											{
+												bool x = 1;
+												notiBool(Noti, x,0);
+												while(1)
+												{
+													if(kbhit())
+													{
+														char keyNoti = getch();
+														char ckeyNoti;
+														if(keyNoti==0)
+														{
+															ckeyNoti = getch();
+															if(ckeyNoti == KEY_LEFT || ckeyNoti == KEY_RIGHT)
+															{
+																x ^= 1;
+																notiBool(Noti, x,0);
+															}
+														}
+														else if(keyNoti == '\r')
+														{
+															if(x==1)
+															{
+																goto NotiY;
+															}
+															else
+															{
+																
+																goto NotiN;
+															}
+														}
+														else if(keyNoti == 27)
+														{
+															
+															goto NotiN;
+														}
+															
+													}
+												}
+											}
 										}
 										else
 										{
 											ThongBao(780, 130, Fail[0], LIGHTRED, MAU_MENU);
 											goto NotiN;
 										}
-										//===thong bao loi===//
-										bool x = 1;
-										notiBool(Noti, x,0);
-										while(1)
-										{
-											if(kbhit())
-											{
-												char keyNoti = getch();
-												char ckeyNoti;
-												if(keyNoti==0)
-												{
-													ckeyNoti = getch();
-													if(ckeyNoti == KEY_LEFT || ckeyNoti == KEY_RIGHT)
-													{
-														x ^= 1;
-														notiBool(Noti, x,0);
-													}
-												}
-												else if(keyNoti == '\r')
-												{
-													if(x==1)
-													{
-														goto NotiY;
-													}
-													else
-													{
-														
-														goto NotiN;
-													}
-												}
-												else if(keyNoti == 27)
-												{
-													
-													goto NotiN;
-												}
-													
-											}
-										}
+										
+										
 									}
 									else
 									{
@@ -1020,6 +1030,9 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 		
 	}
 }
+
+
+
 //===========endDUCKHAI=========
 
 //===========CHINHAN============
