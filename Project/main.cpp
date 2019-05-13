@@ -37,7 +37,9 @@ void Guild();
 
 //==========DUCKHAI========
 	NODEPTR tree = NULL;
-// Cau a:
+	int CountM = 2;
+	struct Namesinfo NameM[2];
+	// Cau a:
 	void VeKhungAddMat(char khungNoiDung[][30], int H, int W);
 //=========================
 
@@ -222,7 +224,6 @@ void Materials()
 			}
 		case 3:
 			{
-				
 				break;
 			}
 	}
@@ -954,6 +955,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 					{
 						veKhung(380, 380, khungNoiDung[6], 1, NEN_KHUNG, WHITE);
 						Nhap(560,380,0, key, tmp.amount,18);
+						
 						break;
 					}
 				case 5:
@@ -1009,22 +1011,21 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 											if(Search(tree, tmp.code) == NULL)
 											{
 												NotiY:
-												ThongBao(725, 130, Success[0], GREEN, MAU_MENU);
-												Insert(tree,tmp.code,tmp);	
+												ThongBao(725, 130, Success[0], GREEN, MAU_MENU);	
+												
+												tmp.RealAmount =  (tmp.amount,tmp.RealAmount);
+												Insert(tree,tmp.code,tmp);													
 												return VeKhungAddMat(khungMat, 450, 600);	
 											}
 											else
 											{
 												bool x = 1;
 												notiBool(sameMat, x, 0);
-												if (x)
-												{
+												if(x)
 													goto NotiY;
-												}	
 												else
-												{
 													goto NotiN;
-												}
+													
 											}
 										}
 										else
@@ -1032,9 +1033,13 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 											ThongBao(780, 130, Fail[0], LIGHTRED, MAU_MENU);
 											goto NotiN;
 										}
+										
+										
 									}
 									else
 									{
+										
+										saveFile(tree);
 										VeMenu();
 										return;
 									}
@@ -1056,9 +1061,11 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 
 
 
+
 //===========endDUCKHAI=========
 
 //===========CHINHAN============
+
 void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 {
 	int soLuongKhung = 4;

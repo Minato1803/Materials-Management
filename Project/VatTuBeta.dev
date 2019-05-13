@@ -80,16 +80,6 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit8]
-FileName=DucKhai.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit9]
 FileName=Functions.h
 CompileCpp=1

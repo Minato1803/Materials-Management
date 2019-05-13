@@ -1,4 +1,7 @@
+
 #include "Functions.h"
+#define DELAY_NOTI 1000
+
 
 bool CheckLetter(char s)
 {
@@ -18,11 +21,36 @@ bool CheckNum(char s)
 	return 0;	 
 }
 
+int ChangeCharToNum (char s[],int n)
+{
+	n = 0;
+	for(int i =0; i<strlen(s);i++)
+	{
+		n = n*10 + s[i];
+	}
+	return n;
+}
+
 void AddChuoi(char c, char s[])
 {
 	strncat(s, &c,1);
 }
 
+void delBlank(char *s)
+{
+	for(int i = 0 ; i< strlen(s);i++)
+	{
+		if(s[i]==' ')
+		{
+			s[i] = s[i+1];
+			for(int j = i+1;j<strlen(s)-1;j++)
+			{
+				s[j] = s[j+1];
+			}
+			s[strlen(s)-1] = '\0';
+		}
+	}
+}
 
 int KiemtraNhapLieu(char c, char s[])
 {
@@ -97,6 +125,36 @@ void Nhap(int x, int y,int check, char c, char s[], int n)
 	outtextxy(x,y,s);
 }
 
+void Qsort(Namesinfo info[], int left, int right )
+{
+	Namesinfo mid = info[(left + right) / 2];
+	int i = left, j = right;
+	do
+	{
+		while(strcmp(info[i].name, mid.name) < 0)
+			i++;
+		while(strcmp(info[i].name, mid.name) > 0)
+			j++;
+		if(i <= j)
+		{
+			if(i < j)
+			{
+				Namesinfo tmp;
+				tmp = info[i];
+				info[i] = info[j];
+				info[j] = tmp;
+			}
+			i++; j--;
+		}
+	} while(i<=j);
+	if(left < j)
+		Qsort(info,left,j);
+	if(right > i)
+		Qsort(info,i,right);
+}
+
+//Ham do hoa
+
 void InThongTin(int x, int y, const char *s)
 {
 	setcolor(WHITE);
@@ -108,7 +166,7 @@ void ThongBao(int x, int y, char noti[50], int mauChu, int mauNen)
 	setbkcolor(mauNen);
 	setcolor(mauChu);
 	outtextxy(x, y, noti);
-	Sleep(1500);
+	Sleep(DELAY_NOTI);
 	setfillstyle(SOLID_FILL, mauNen);
 	bar(x, y, x + textwidth(noti), y + textheight(noti));
 }
