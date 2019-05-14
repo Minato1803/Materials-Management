@@ -157,16 +157,13 @@ char* toChars(int num)
 {
 	//bug
 	int l = floor(log10(num)+1);
-	int tmp = l;
-	char* a;
-	char res[100];
-	res[l--] = '\0';
+	char* a = new char[100];
+	a[l--] = '\0';
 	while(num>0)
 	{
-		res[l--] = num%10+48; //to char
+		a[l--] = num%10+48; //to char
 		num/=10;
 	}
-	strncpy(a, res, tmp);
 	return a;
 }
 

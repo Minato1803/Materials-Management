@@ -41,11 +41,13 @@ void Guild();
 	struct NamesInfo NameM[2];
 	// Cau a:
 	void VeKhungAddMat(char khungNoiDung[][30], int H, int W);
+	void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size);
 //=========================
 
 //==========CHINHAN========
 struct listEmp ListEmployees;
 void VeKhungAddEmp(char khungNoiDung[][30], int H, int W);
+void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size);
 //=========================
 
 
@@ -249,6 +251,11 @@ void Employees()
 		case 3:
 			{
 				About();
+				break;
+			}
+		case 4:
+			{
+				return inDanhSachEmp(danhSachEmp, sizeDanhSachEmp, NameM, 0, CountM);
 				break;
 			}
 	}
@@ -817,88 +824,6 @@ void notiBool(char khungNoiDung[][50], bool &choice, int n)
 	}
 }
 
-void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size)
-{
-	int kichThuocSTT = 30;
-	int kichThuocNut = 40;
-	int h = textheight(khungNoiDung[0]);
-	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
-	int W = 0;
-	for (int i = 0; i < 5; i++)
-	{
-		W += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i]*2;
-	}
-	
-	setusercharsize(1, 2, 1, 2);
-	//tinh kich thuoc khung
-	int U = WD_HEIGHT/2 - H/2;
-	int D =	WD_HEIGHT/2 + H/2;
-	int L =	WD_WIDTH/2 - W/2;
-	int R =	WD_WIDTH/2 + W/2;
-	
-	//in nen phan noi dung
-	setfillstyle(SOLID_FILL, NEN_KHUNG);
-	bar (L, U, R, D);
-	//in nen phan danh sach
-	setbkcolor(MAU_MENU);
-	setfillstyle(SOLID_FILL, MAU_MENU);
-	bar (L, U, R, U+kichThuocSTT);
-	
-	//in duong ke phan menu + vien
-	setcolor(BLACK);
-	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
-	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								
-	rectangle(L-1, U-1, R+1, D+1);
-	
-	//in phan noi dung + gach doc
-	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-	int dis = L;
-	for (int i = 0; i < 5; i++)
-	{
-		dis += sizeKhungNoiDung[i];
-		setcolor(MAU_TEXT_KHUNG);
-		outtextxy(dis, U+(kichThuocSTT-h)/2, khungNoiDung[i]);
-		dis += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i];
-		setcolor(BLACK);
-		line(dis, U, dis, D);
-	}
-	//in gach ngang
-	dis = U + kichThuocSTT;
-	for (int i = 0; i < 20; i++)
-	{
-		dis += h+5*2;
-		line(L, dis, R, dis);
-	}
-	// tim thong tin
-	
-	// in thong tin
-	setcolor(WHITE);
-	setbkcolor(NEN_KHUNG);
-	dis = U + kichThuocSTT;
-	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
-	{
-		dis += 5;
-		int disW = L;
-		for (int j = 0; j < 5; j++)
-		{
-			if (j == 0)
-			{
-				char *d = toChars(99+i);
-				outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
-				disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j];
-			}
-			else
-			{
-				disW += 10;
-				//outtextxy(disW, dis, khungNoiDung[j]);
-				disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2 - 10;
-				
-			}
-		}
-		dis += h+5;
-	}
-	
-}
 //=============endUI============//
 
 
@@ -1144,7 +1069,96 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 	}
 }
 
-
+void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size)
+{
+	int kichThuocSTT = 30;
+	int kichThuocNut = 40;
+	int h = textheight(khungNoiDung[0]);
+	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
+	int W = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		W += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i]*2;
+	}
+	
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	//in nen phan noi dung
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+	//in nen phan danh sach
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	//in duong ke phan menu + vien
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								
+	rectangle(L-1, U-1, R+1, D+1);
+	
+	//in phan noi dung + gach doc
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	int dis = L;
+	for (int i = 0; i < 5; i++)
+	{
+		dis += sizeKhungNoiDung[i];
+		setcolor(MAU_TEXT_KHUNG);
+		outtextxy(dis, U+(kichThuocSTT-h)/2, khungNoiDung[i]);
+		dis += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i];
+		setcolor(BLACK);
+		line(dis, U, dis, D);
+	}
+	//in gach ngang
+	dis = U + kichThuocSTT;
+	for (int i = 0; i < 20; i++)
+	{
+		dis += h+5*2;
+		line(L, dis, R, dis);
+	}
+	// tim thong tin
+	
+	// in thong tin
+	setcolor(WHITE);
+	setbkcolor(NEN_KHUNG);
+	dis = U + kichThuocSTT;
+	//Size = 20;
+	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
+	{
+		dis += 5;
+		int disW = L;
+		for (int j = 0; j < 5; j++)
+		{
+			if (j == 0)
+			{
+				char *d = toChars(i+1);
+				outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
+				disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+			}
+			else
+			{
+				if (j != 2)	//can le giua
+				{
+					outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, khungNoiDung[j]);
+					disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+				}
+				else
+				{
+					outtextxy(disW + 10, dis, khungNoiDung[j]);
+					disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+				}
+				
+			}
+		}
+		dis += h+5;
+	}
+	
+}
 
 
 //===========endDUCKHAI=========
@@ -1424,6 +1438,98 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 			}
 		}
 	}
+}
+
+
+void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size)
+{
+	int kichThuocSTT = 30;
+	int kichThuocNut = 40;
+	int h = textheight(khungNoiDung[0]);
+	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
+	int W = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		W += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i]*2;
+	}
+	
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	//in nen phan noi dung
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+	//in nen phan danh sach
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	//in duong ke phan menu + vien
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								
+	rectangle(L-1, U-1, R+1, D+1);
+	
+	//in phan noi dung + gach doc
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	int dis = L;
+	for (int i = 0; i < 5; i++)
+	{
+		dis += sizeKhungNoiDung[i];
+		setcolor(MAU_TEXT_KHUNG);
+		outtextxy(dis, U+(kichThuocSTT-h)/2, khungNoiDung[i]);
+		dis += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i];
+		setcolor(BLACK);
+		line(dis, U, dis, D);
+	}
+	//in gach ngang
+	dis = U + kichThuocSTT;
+	for (int i = 0; i < 20; i++)
+	{
+		dis += h+5*2;
+		line(L, dis, R, dis);
+	}
+	// tim thong tin
+	
+	// in thong tin
+	setcolor(WHITE);
+	setbkcolor(NEN_KHUNG);
+	dis = U + kichThuocSTT;
+	//Size = 20;
+	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
+	{
+		dis += 5;
+		int disW = L;
+		for (int j = 0; j < 5; j++)
+		{
+			if (j == 0)
+			{
+				char *d = toChars(i+1);
+				outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
+				disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+			}
+			else
+			{
+				if (j != 2)	//can le giua
+				{
+					outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, khungNoiDung[j]);
+					disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+				}
+				else
+				{
+					outtextxy(disW + 10, dis, khungNoiDung[j]);
+					disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+				}
+				
+			}
+		}
+		dis += h+5;
+	}
+	
 }
 //==========endCHINHAN========
 
