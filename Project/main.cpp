@@ -215,19 +215,19 @@ void Materials()
 	{
 		case 1:
 			{
-				VeKhungAddMat(khungMat, 450, 600);
-				VeMenu();
-				break;
+				return VeKhungAddMat(khungMat, 450, 600);
 			}
 		case 2:
 			{
-				VeKhungAddEmp(khungEmp, 450, 600);
-				break;
+				return VeKhungAddEmp(khungEmp, 450, 600);
 			}
 		case 3:
 			{
-				inDanhSachMat(danhSachMat, sizeDanhSachMat, NameM, 0, CountM);
-				break;
+				return inDanhSachMat(danhSachMat, sizeDanhSachMat, NameM, 0, CountM);
+			}
+		case 4:
+			{
+				return inDanhSachMat(danhSachMat, sizeDanhSachMat, NameM, 0, CountM);
 			}
 	}
 }
@@ -246,17 +246,14 @@ void Employees()
 		case 2:
 			{
 				return VeKhungAddMat(khungMat, 450, 600);
-				break;
 			}
 		case 3:
 			{
-				About();
-				break;
+				return About();
 			}
 		case 4:
 			{
 				return inDanhSachEmp(danhSachEmp, sizeDanhSachEmp, NameM, 0, CountM);
-				break;
 			}
 	}
 }
@@ -1494,11 +1491,13 @@ void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct Names
 		line(L, dis, R, dis);
 	}
 	// tim thong tin
+	struct Material tmp;
 	
 	// in thong tin
 	setcolor(WHITE);
 	setbkcolor(NEN_KHUNG);
 	dis = U + kichThuocSTT;
+
 	//Size = 20;
 	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
 	{
@@ -1527,6 +1526,28 @@ void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct Names
 				
 			}
 		}
+		// disW tinh khoang cach ngang, dis khoang cach doc
+		// in STT
+//		char *d = toChars(i+1);
+//		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		
+//		// in ID
+//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->code);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		
+//		// in Ten
+//		outtextxy(disW + 10, dis, tmp->name);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		
+//		// in Unit
+//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->type);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		
+//		// in Amout
+//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->amount);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+		
 		dis += h+5;
 	}
 	
