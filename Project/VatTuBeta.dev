@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=3
 CompilerSettings=0000000100000000000000000
-UnitCount=7
+UnitCount=11
 
 [VersionInfo]
 Major=1
@@ -61,7 +61,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=colors.h
+FileName=include\colors.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -71,7 +71,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
-FileName=Contents.h
+FileName=include\Contents.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -81,7 +81,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit9]
-FileName=Functions.h
+FileName=include\graphics.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -91,7 +91,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit10]
-FileName=Functions.cpp
+FileName=include\UI.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -101,7 +101,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit11]
-FileName=Functions.h
+FileName=include\UI.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -121,7 +121,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=create_structure_K.h
+FileName=include\create_structure_K.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -131,7 +131,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit5]
-FileName=Functions.h
+FileName=include\create_structure_N.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -141,7 +141,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit6]
-FileName=Functions.cpp
+FileName=include\Functions.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -151,7 +151,17 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit7]
-FileName=create_structure_N.h
+FileName=include\Functions.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit8]
+FileName=include\GlobleVariables.h
 CompileCpp=1
 Folder=
 Compile=1

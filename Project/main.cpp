@@ -1,9 +1,8 @@
-//#include "UI.h"
-#include "Contents.h"
-#include "colors.h"
-#include "Functions.h"
-#include "create_structure_K.h"
-#include "create_structure_N.h"
+#include "include/Contents.h"
+#include "include/colors.h"
+#include "include/Functions.h"
+#include "include/create_structure_K.h"
+#include "include/create_structure_N.h"
 
 using namespace std;
 
@@ -21,6 +20,7 @@ void veKhung(int x, int y, char noiDung[], bool daChon, int mauNen, int mauChu);
 void veMuc2Chon(int x, int y, char noiDung[], char noiDungMucChon[][30], bool chonTrai, int mauNen, int mauChu);
 void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset);
 void notiBool(char khungNoiDung[][50], bool &choice, int n);
+void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size);
 
 // Cac ham Menu
 void Menu();
@@ -38,7 +38,7 @@ void Guild();
 //==========DUCKHAI========
 	NODEPTR tree = NULL;
 	int CountM = 2;
-	struct Namesinfo NameM[2];
+	struct NamesInfo NameM[2];
 	// Cau a:
 	void VeKhungAddMat(char khungNoiDung[][30], int H, int W);
 //=========================
@@ -224,6 +224,7 @@ void Materials()
 			}
 		case 3:
 			{
+				inDanhSachMat(danhSachMat, sizeDanhSachMat, NameM, 0, CountM);
 				break;
 			}
 	}
@@ -815,13 +816,96 @@ void notiBool(char khungNoiDung[][50], bool &choice, int n)
 		}
 	}
 }
+
+void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size)
+{
+	int kichThuocSTT = 30;
+	int kichThuocNut = 40;
+	int h = textheight(khungNoiDung[0]);
+	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
+	int W = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		W += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i]*2;
+	}
+	
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	//in nen phan noi dung
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+	//in nen phan danh sach
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	//in duong ke phan menu + vien
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								
+	rectangle(L-1, U-1, R+1, D+1);
+	
+	//in phan noi dung + gach doc
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	int dis = L;
+	for (int i = 0; i < 5; i++)
+	{
+		dis += sizeKhungNoiDung[i];
+		setcolor(MAU_TEXT_KHUNG);
+		outtextxy(dis, U+(kichThuocSTT-h)/2, khungNoiDung[i]);
+		dis += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i];
+		setcolor(BLACK);
+		line(dis, U, dis, D);
+	}
+	//in gach ngang
+	dis = U + kichThuocSTT;
+	for (int i = 0; i < 20; i++)
+	{
+		dis += h+5*2;
+		line(L, dis, R, dis);
+	}
+	// tim thong tin
+	
+	// in thong tin
+	setcolor(WHITE);
+	setbkcolor(NEN_KHUNG);
+	dis = U + kichThuocSTT;
+	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
+	{
+		dis += 5;
+		int disW = L;
+		for (int j = 0; j < 5; j++)
+		{
+			if (j == 0)
+			{
+				char *d = toChars(99+i);
+				outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
+				disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j];
+			}
+			else
+			{
+				disW += 10;
+				//outtextxy(disW, dis, khungNoiDung[j]);
+				disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2 - 10;
+				
+			}
+		}
+		dis += h+5;
+	}
+	
+}
 //=============endUI============//
 
 
 //============DUCKHAI===========//
 void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 {
-	struct Materials tmp;
+	struct Material tmp;
 	NotiN:
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
@@ -925,6 +1009,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 			{
 				veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
 			}
+			setbkcolor(NEN_TEXT);
 			InThongTin(560, ViTriKhung[1], tmp.code);
 			InThongTin(560, ViTriKhung[2], tmp.name);
 			InThongTin(560, ViTriKhung[3], tmp.type);
@@ -1126,7 +1211,7 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 	int pos = 1;
 	int fst = 1;			//SEX
 	
-	struct Employees *tmpE = new struct Employees;
+	struct Employee *tmpE = new struct Employee;
 	while(1)
 	{
 		if(kbhit())
@@ -1166,6 +1251,7 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 				return;
 			}
 			
+			setbkcolor(NEN_TEXT);	
 			for (int i = 1; i <= 4; i++)
 			{
 				if (i != 4)
@@ -1174,10 +1260,10 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 					veMuc2Chon(380, ViTriKhung[i], khungNoiDung[i+2], Sex, fst, NEN_KHUNG, WHITE);
 				setcolor(WHITE);
 			}
+			setbkcolor(NEN_TEXT);
 			InThongTin(560, ViTriKhung[1], tmpE->ID);
 			InThongTin(560, ViTriKhung[2], tmpE->firstName);
 			InThongTin(560, ViTriKhung[3], tmpE->lastName);
-			
 			switch(pos)
 			{
 				case 1:
@@ -1340,4 +1426,5 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 	}
 }
 //==========endCHINHAN========
+
 
