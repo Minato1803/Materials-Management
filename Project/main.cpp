@@ -1070,122 +1070,130 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 	}
 }
 
-void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size)
-{
-	int kichThuocSTT = 30;
-	int kichThuocNut = 40;
-	int h = textheight(khungNoiDung[0]);
-	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
-	int W = 0;
-	for (int i = 0; i < 5; i++)
-	{
-		W += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i]*2;
-	}
-	
-	setusercharsize(1, 2, 1, 2);
-	//tinh kich thuoc khung
-	int U = WD_HEIGHT/2 - H/2;
-	int D =	WD_HEIGHT/2 + H/2;
-	int L =	WD_WIDTH/2 - W/2;
-	int R =	WD_WIDTH/2 + W/2;
-	
-	//in nen phan noi dung
-	setfillstyle(SOLID_FILL, NEN_KHUNG);
-	bar (L, U, R, D);
-	//in nen phan danh sach
-	setbkcolor(MAU_MENU);
-	setfillstyle(SOLID_FILL, MAU_MENU);
-	bar (L, U, R, U+kichThuocSTT);
-	
-	//in duong ke phan menu + vien
-	setcolor(BLACK);
-	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
-	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								
-	rectangle(L-1, U-1, R+1, D+1);
-	
-	//in phan noi dung + gach doc
-	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-	int dis = L;
-	for (int i = 0; i < 5; i++)
-	{
-		dis += sizeKhungNoiDung[i];
-		setcolor(MAU_TEXT_KHUNG);
-		outtextxy(dis, U+(kichThuocSTT-h)/2, khungNoiDung[i]);
-		dis += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i];
-		setcolor(BLACK);
-		line(dis, U, dis, D);
-	}
-	//in gach ngang
-	dis = U + kichThuocSTT;
-	for (int i = 0; i < 20; i++)
-	{
-		dis += h+5*2;
-		line(L, dis, R, dis);
-	}
-	// tim thong tin
-	struct Material tmp;
-	
-	// in thong tin
-	setcolor(WHITE);
-	setbkcolor(NEN_KHUNG);
-	dis = U + kichThuocSTT;
 
-	//Size = 20;
-	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
-	{
-		dis += 5;
-		int disW = L;
-		for (int j = 0; j < 5; j++)
-		{
-			if (j == 0)
-			{
-				char *d = toChars(i+1);
-				outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
-				disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-			}
-			else
-			{
-				if (j != 2)	//can le giua
-				{
-					outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, khungNoiDung[j]);
-					disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-				}
-				else
-				{
-					outtextxy(disW + 10, dis, khungNoiDung[j]);
-					disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-				}
-				
-			}
-		}
-		// disW tinh khoang cach ngang, dis khoang cach doc
-		// in STT
+//====================chinh sua==========================
+
+
+//void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start)
+//{
+//	int kichThuocSTT = 30;
+//	int kichThuocNut = 40;
+//	int h = textheight(khungNoiDung[0]);
+//	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
+//	int W = 0;
+//	for (int i = 0; i < 5; i++)
+//	{
+//		W += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i]*2;
+//	}
+//	
+//	setusercharsize(1, 2, 1, 2);
+//	//tinh kich thuoc khung
+//	int U = WD_HEIGHT/2 - H/2;
+//	int D =	WD_HEIGHT/2 + H/2;
+//	int L =	WD_WIDTH/2 - W/2;
+//	int R =	WD_WIDTH/2 + W/2;
+//	
+//	//in nen phan noi dung
+//	setfillstyle(SOLID_FILL, NEN_KHUNG);
+//	bar (L, U, R, D);
+//	
+//	//in nen phan danh sach
+//	setbkcolor(MAU_MENU);
+//	setfillstyle(SOLID_FILL, MAU_MENU);
+//	bar (L, U, R, U+kichThuocSTT);
+//	
+//	//in duong ke phan menu + vien
+//	setcolor(BLACK);
+//	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+//	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								
+//	rectangle(L-1, U-1, R+1, D+1);
+//	
+//	//in phan noi dung + gach doc
+//	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+//	int dis = L;
+//	for (int i = 0; i < 5; i++)
+//	{
+//		dis += sizeKhungNoiDung[i];
+//		setcolor(MAU_TEXT_KHUNG);
+//		outtextxy(dis, U+(kichThuocSTT-h)/2, khungNoiDung[i]);
+//		dis += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i];
+//		setcolor(BLACK);
+//		line(dis, U, dis, D);
+//	}
+//	//in gach ngang
+//	dis = U + kichThuocSTT;
+//	for (int i = 0; i < 20; i++)
+//	{
+//		dis += h+5*2;
+//		line(L, dis, R, dis);
+//	}
+//	
+//	// in thong tin
+//	setcolor(WHITE);
+//	setbkcolor(NEN_KHUNG);
+//	dis = U + kichThuocSTT;
+//	int Size = list.n;
+//	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
+//	{
+//		dis += 5;	
+//		// in STT
+//		int disW = L;
 //		char *d = toChars(i+1);
-//		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[0])+sizeKhungNoiDung[0]*2), dis, d);
+//		disW += textwidth(khungNoiDung[0]) + sizeKhungNoiDung[0]*2;
 //		
-//		// in ID
-//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->code);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		inNhanVien(list.Search_ID(arr[i].ID), disW, dis);
 //		
-//		// in Ten
-//		outtextxy(disW + 10, dis, tmp->name);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		dis += h+5;
+//	}
+//}
+//
+//void inNhanVien(struct Employee *NV, int posX, int posY)
+//{
+//	// in ID
+//	outtextxy(posX + canLeGiua(NV->ID, textwidth(danhSachEmp[1])+sizeDanhSachEmp[1]*2), posY, NV->ID);
+//	posX += textwidth(danhSachEmp[1]) + sizeDanhSachEmp[1]*2;
+//	
+//	// in Last Name
+//	outtextxy(posX + 10, posY, NV->lastName);
+//	posX += textwidth(danhSachEmp[2]) + sizeDanhSachEmp[2]*2;
+//	
+//	// in First Name
+//	outtextxy(posX + 10, posY, NV->firstName);
+//	posX += textwidth(danhSachEmp[3]) + sizeDanhSachEmp[3]*2;
+//	
+//	// in Sex
+//	if (NV->sex) // is Male
+//		outtextxy(posX + canLeGiua(danhSachEmp[5] , textwidth(danhSachEmp[4])+sizeDanhSachEmp[4]*2), posY, danhSachEmp[5]);
+//	else
+//		outtextxy(posX + canLeGiua(danhSachEmp[6] , textwidth(danhSachEmp[4])+sizeDanhSachEmp[4]*2), posY, danhSachEmp[6]);
 //		
-//		// in Unit
-//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->type);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-//		
-//		// in Amout
-//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->amount);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-		
-		dis += h+5;
-	}
-
-	
-}
-
+//	posX += textwidth(danhSachEmp[4]) + sizeDanhSachEmp[4]*2;
+//}
+//
+//void taoMangEmp(struct listEmp &ListEmployees, struct NamesInfoEmp *arr)
+//{
+//	for (int i = 0; i < ListEmployees.n; i++)
+//	{
+//		strcpy(arr[i].fName, ListEmployees.nodeListEmp[i]->firstName);
+//		strcpy(arr[i].lName, ListEmployees.nodeListEmp[i]->lastName);
+//		strcpy(arr[i].ID, ListEmployees.nodeListEmp[i]->ID);
+//	}
+//}
+//
+//void inDanhSachEmp(struct listEmp &ListEmployees)
+//{
+//	NamesInfoEmp *arrEmp = new NamesInfoEmp[ListEmployees.n];
+//	
+//	taoMangEmp(ListEmployees, arrEmp);
+//	// sort bla bla;
+//	
+//	//in danh sach
+//	inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, 0);
+//	// chuyen trang bla bla
+//	
+//	delete (arrEmp);
+//}
 
 //===========endDUCKHAI=========
 
