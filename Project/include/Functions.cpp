@@ -125,7 +125,7 @@ void Nhap(int x, int y,int check, char c, char s[], int n)
 	outtextxy(x,y,s);
 }
 
-void Qsort(NamesInfo info[], int left, int right )
+void Qsort(NamesInfo info[], int left, int right)
 {
 	NamesInfo mid = info[(left + right) / 2];
 	int i = left, j = right;

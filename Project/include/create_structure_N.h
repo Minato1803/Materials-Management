@@ -203,6 +203,10 @@ struct listEmp
 {
 	int n;
 	struct Employee *nodeListEmp[500];
+	listEmp()
+	{
+		n = 0;
+	}
 	
 	bool isEmpty()
 	{
@@ -243,6 +247,19 @@ struct listEmp
 		}
 		return -1;
 	}
+	
+	struct Employee* Search_ID(char tmpID[11])
+	{
+		for (int i = 0; i < n; i++)
+		{
+			if (strcmp(nodeListEmp[i]->ID, tmpID) == 0)
+			{
+				return nodeListEmp[i];
+			}
+		}
+		return NULL;
+	}
+	
 };
 
 

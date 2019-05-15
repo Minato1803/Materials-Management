@@ -23,11 +23,11 @@ void notiBool(char khungNoiDung[][50], bool &choice, int n);
 void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size);
 
 // Cac ham Menu
-void Menu();
+void Menu(struct listEmp &ListEmployees);
 void MenuPhu(int viTriMenuPhu, char menu[][30], int MAXMENU, int &chonMuc);
-void ChonMenuPhu(int x);
+void ChonMenuPhu(int x, struct listEmp &ListEmployees);
 void Materials();
-void Employees();
+void Employees(struct listEmp &ListEmployees);
 void Bill();
 void Statistics();
 void Help();
@@ -45,9 +45,11 @@ void Guild();
 //=========================
 
 //==========CHINHAN========
-struct listEmp ListEmployees;
-void VeKhungAddEmp(char khungNoiDung[][30], int H, int W);
-void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size);
+void VeKhungAddEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H, int W);
+void taoMangEmp(struct listEmp &ListEmployees, struct NamesInfoEmp *arr);
+void inDanhSachEmp(struct listEmp &ListEmployees);
+void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start);
+void inNhanVien(struct Employee *NV, int posX, int posY);
 //=========================
 
 
@@ -55,7 +57,9 @@ void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct Names
 int main()
 {
 	KhoiTaoChuongTrinh();
-	Menu();
+	
+	struct listEmp ListEmployees;
+	Menu(ListEmployees);
 	return 0;
 }
 
@@ -219,7 +223,7 @@ void Materials()
 			}
 		case 2:
 			{
-				return VeKhungAddEmp(khungEmp, 450, 600);
+				return VeKhungAddMat(khungEmp, 450, 600);
 			}
 		case 3:
 			{
@@ -232,7 +236,7 @@ void Materials()
 	}
 }
 
-void Employees()
+void Employees(struct listEmp &ListEmployees)
 {
 	VeMenuPhu(1, MenuEmp);
 	int thaoTac;
@@ -241,11 +245,11 @@ void Employees()
 	{
 		case 1:
 			{
-				return VeKhungAddEmp(khungEmp, 450, 600);
+				return VeKhungAddEmp(ListEmployees, khungEmp, 450, 600);
 			}
 		case 2:
 			{
-				return VeKhungAddMat(khungMat, 450, 600);
+				return VeKhungAddEmp(ListEmployees, khungEmp, 450, 600);
 			}
 		case 3:
 			{
@@ -253,7 +257,7 @@ void Employees()
 			}
 		case 4:
 			{
-				return inDanhSachEmp(danhSachEmp, sizeDanhSachEmp, NameM, 0, CountM);
+				return inDanhSachEmp(ListEmployees);
 			}
 	}
 }
@@ -296,12 +300,12 @@ void Help()
 	}
 }
 
-void ChonMenuPhu(int x)
+void ChonMenuPhu(int x, struct listEmp &ListEmployees)
 {
 	switch(x)
 	{
 		case 0:	return Materials();
-		case 1: return Employees();
+		case 1: return Employees(ListEmployees);
 		case 2:	return Bill();
 		case 3:	return Statistics();
 		case 4:	return Help();
@@ -322,7 +326,7 @@ void KhoiTaoChuongTrinh()
 	TaoManHinhLamViec();
 }
 
-void Menu()
+void Menu(struct listEmp &ListEmployees)
 {
 	VeMenu();
 	int chiMuc = 0;
@@ -357,7 +361,7 @@ void Menu()
 			else if (key == 13)
 			{
 				VeMenu();
-				ChonMenuPhu(chiMuc);
+				ChonMenuPhu(chiMuc, ListEmployees);
 			}
 			NoiBatMuc(chiMuc, 0, MenuChinh, HIGHTLIGHT, USER_CHAR_SIZE);
 		}
@@ -1187,7 +1191,7 @@ void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct Names
 
 //===========CHINHAN============
 
-void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
+void VeKhungAddEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H, int W)
 {
 	int soLuongKhung = 4;
 	int kichThuocSTT = 30;
@@ -1435,7 +1439,7 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 													About();  //Adjust------
 												}
 											}	
-											return VeKhungAddEmp(khungEmp, 450, 600);
+											return VeKhungAddEmp(ListEmployees, khungEmp, 450, 600);
 										}
 										else
 										{
@@ -1463,7 +1467,7 @@ void VeKhungAddEmp(char khungNoiDung[][30], int H, int W)
 }
 
 
-void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size)
+void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start)
 {
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
@@ -1485,6 +1489,7 @@ void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct Names
 	//in nen phan noi dung
 	setfillstyle(SOLID_FILL, NEN_KHUNG);
 	bar (L, U, R, D);
+	
 	//in nen phan danh sach
 	setbkcolor(MAU_MENU);
 	setfillstyle(SOLID_FILL, MAU_MENU);
@@ -1515,67 +1520,71 @@ void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct Names
 		dis += h+5*2;
 		line(L, dis, R, dis);
 	}
-	// tim thong tin
-	struct Employee tmp;
 	
 	// in thong tin
 	setcolor(WHITE);
 	setbkcolor(NEN_KHUNG);
 	dis = U + kichThuocSTT;
-
-	//Size = 20;
+	int Size = list.n;
 	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
 	{
-		dis += 5;
-		int disW = L;
-		for (int j = 0; j < 5; j++)
-		{
-			if (j == 0)
-			{
-				char *d = toChars(i+1);
-				outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
-				disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-			}
-			else
-			{
-				if (j != 2)	//can le giua
-				{
-					outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, khungNoiDung[j]);
-					disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-				}
-				else
-				{
-					outtextxy(disW + 10, dis, khungNoiDung[j]);
-					disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-				}
-				
-			}
-		}
-		// disW tinh khoang cach ngang, dis khoang cach doc
+		dis += 5;	
 		// in STT
-//		char *d = toChars(i+1);
-//		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-//		
-//		// in ID
-//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->code);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-//		
-//		// in Ten
-//		outtextxy(disW + 10, dis, tmp->name);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-//		
-//		// in Unit
-//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->type);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
-//		
-//		// in Amout
-//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->amount);
-//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+		int disW = L;
+		char *d = toChars(i+1);
+		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[0])+sizeKhungNoiDung[0]*2), dis, d);
+		disW += textwidth(khungNoiDung[0]) + sizeKhungNoiDung[0]*2;
+		
+		inNhanVien(list.Search_ID(arr[i].ID), disW, dis);
 		
 		dis += h+5;
 	}
+}
+
+void inNhanVien(struct Employee *NV, int posX, int posY)
+{
+	// in ID
+	outtextxy(posX + canLeGiua(NV->ID, textwidth(danhSachEmp[1])+sizeDanhSachEmp[1]*2), posY, NV->ID);
+	posX += textwidth(danhSachEmp[1]) + sizeDanhSachEmp[1]*2;
 	
+	// in Last Name
+	outtextxy(posX + 10, posY, NV->lastName);
+	posX += textwidth(danhSachEmp[2]) + sizeDanhSachEmp[2]*2;
+	
+	// in First Name
+	outtextxy(posX + 10, posY, NV->firstName);
+	posX += textwidth(danhSachEmp[3]) + sizeDanhSachEmp[3]*2;
+	
+	// in Sex
+	if (NV->sex) // is Male
+		outtextxy(posX + canLeGiua(danhSachEmp[5] , textwidth(danhSachEmp[4])+sizeDanhSachEmp[4]*2), posY, danhSachEmp[5]);
+	else
+		outtextxy(posX + canLeGiua(danhSachEmp[6] , textwidth(danhSachEmp[4])+sizeDanhSachEmp[4]*2), posY, danhSachEmp[6]);
+		
+	posX += textwidth(danhSachEmp[4]) + sizeDanhSachEmp[4]*2;
+}
+
+void taoMangEmp(struct listEmp &ListEmployees, struct NamesInfoEmp *arr)
+{
+	for (int i = 0; i < ListEmployees.n; i++)
+	{
+		strcpy(arr[i].fName, ListEmployees.nodeListEmp[i]->firstName);
+		strcpy(arr[i].lName, ListEmployees.nodeListEmp[i]->lastName);
+		strcpy(arr[i].ID, ListEmployees.nodeListEmp[i]->ID);
+	}
+}
+
+void inDanhSachEmp(struct listEmp &ListEmployees)
+{
+	NamesInfoEmp *arrEmp = new NamesInfoEmp[ListEmployees.n];
+	
+	taoMangEmp(ListEmployees, arrEmp);
+	// sort bla bla;
+	
+	//in danh sach
+	inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, 0);
+	// chuyen trang bla bla
+	delete (arrEmp);
 }
 //==========endCHINHAN========
 
