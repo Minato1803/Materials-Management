@@ -1119,11 +1119,13 @@ void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct Names
 		line(L, dis, R, dis);
 	}
 	// tim thong tin
+	struct Material tmp;
 	
 	// in thong tin
 	setcolor(WHITE);
 	setbkcolor(NEN_KHUNG);
 	dis = U + kichThuocSTT;
+
 	//Size = 20;
 	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
 	{
@@ -1152,8 +1154,31 @@ void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct Names
 				
 			}
 		}
+		// disW tinh khoang cach ngang, dis khoang cach doc
+		// in STT
+//		char *d = toChars(i+1);
+//		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, d);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		
+//		// in ID
+//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->code);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		
+//		// in Ten
+//		outtextxy(disW + 10, dis, tmp->name);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		
+//		// in Unit
+//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->type);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+//		
+//		// in Amout
+//		outtextxy(disW + canLeGiua(khungNoiDung[j], textwidth(khungNoiDung[j])+sizeKhungNoiDung[j]*2), dis, tmp->amount);
+//		disW += textwidth(khungNoiDung[j]) + sizeKhungNoiDung[j]*2;
+		
 		dis += h+5;
 	}
+
 	
 }
 
@@ -1491,7 +1516,7 @@ void inDanhSachEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct Names
 		line(L, dis, R, dis);
 	}
 	// tim thong tin
-	struct Material tmp;
+	struct Employee tmp;
 	
 	// in thong tin
 	setcolor(WHITE);
