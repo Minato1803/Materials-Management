@@ -20,7 +20,7 @@ void veKhung(int x, int y, char noiDung[], bool daChon, int mauNen, int mauChu);
 void veMuc2Chon(int x, int y, char noiDung[], char noiDungMucChon[][30], bool chonTrai, int mauNen, int mauChu);
 void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset);
 void notiBool(char khungNoiDung[][50], bool &choice, int n);
-void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size);
+
 
 // Cac ham Menu
 void Menu(struct listEmp &ListEmployees);
@@ -41,7 +41,7 @@ void Guild();
 	struct NamesInfo NameM[2];
 	// Cau a:
 	void VeKhungAddMat(char khungNoiDung[][30], int H, int W);
-	void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size);
+	//void inDanhSachMat(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start, int Size);
 //=========================
 
 //==========CHINHAN========
@@ -227,11 +227,11 @@ void Materials()
 			}
 		case 3:
 			{
-				return inDanhSachMat(danhSachMat, sizeDanhSachMat, NameM, 0, CountM);
+				//return inDanhSachMat();
 			}
 		case 4:
 			{
-				return inDanhSachMat(danhSachMat, sizeDanhSachMat, NameM, 0, CountM);
+				//return inDanhSachMat();
 			}
 	}
 }
@@ -1074,7 +1074,7 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 //====================chinh sua==========================
 
 
-//void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start)
+//void inTrangMat(****, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfo arr[], int start)
 //{
 //	int kichThuocSTT = 30;
 //	int kichThuocNut = 40;
@@ -1142,57 +1142,49 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 //		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[0])+sizeKhungNoiDung[0]*2), dis, d);
 //		disW += textwidth(khungNoiDung[0]) + sizeKhungNoiDung[0]*2;
 //		
-//		inNhanVien(list.Search_ID(arr[i].ID), disW, dis);
+//		inVatTu(con tro chi toi vat tu, disW, dis);
 //		
 //		dis += h+5;
 //	}
 //}
 //
-//void inNhanVien(struct Employee *NV, int posX, int posY)
+//void inVatTu(struct Material *VT, int posX, int posY)
 //{
 //	// in ID
-//	outtextxy(posX + canLeGiua(NV->ID, textwidth(danhSachEmp[1])+sizeDanhSachEmp[1]*2), posY, NV->ID);
+//	outtextxy(posX + canLeGiua(VT->code, textwidth(danhSachEmp[1])+sizeDanhSachEmp[1]*2), posY, VT->code);
 //	posX += textwidth(danhSachEmp[1]) + sizeDanhSachEmp[1]*2;
 //	
-//	// in Last Name
-//	outtextxy(posX + 10, posY, NV->lastName);
+//	// in Name
+//	outtextxy(posX + 10, posY, VT->name);
 //	posX += textwidth(danhSachEmp[2]) + sizeDanhSachEmp[2]*2;
 //	
-//	// in First Name
-//	outtextxy(posX + 10, posY, NV->firstName);
+//	// in type
+//	outtextxy(posX + canLeGiua(VT->type , textwidth(danhSachEmp[3])+sizeDanhSachEmp[3]*2), posY, VT->type);
 //	posX += textwidth(danhSachEmp[3]) + sizeDanhSachEmp[3]*2;
 //	
-//	// in Sex
-//	if (NV->sex) // is Male
-//		outtextxy(posX + canLeGiua(danhSachEmp[5] , textwidth(danhSachEmp[4])+sizeDanhSachEmp[4]*2), posY, danhSachEmp[5]);
-//	else
-//		outtextxy(posX + canLeGiua(danhSachEmp[6] , textwidth(danhSachEmp[4])+sizeDanhSachEmp[4]*2), posY, danhSachEmp[6]);
-//		
+//	// in Amount
+//	outtextxy(posX + canLeGiua(VT->amount , textwidth(danhSachEmp[4])+sizeDanhSachEmp[4]*2), posY, VT->amount);		
 //	posX += textwidth(danhSachEmp[4]) + sizeDanhSachEmp[4]*2;
 //}
 //
-//void taoMangEmp(struct listEmp &ListEmployees, struct NamesInfoEmp *arr)
+//void taoMangMat()
 //{
-//	for (int i = 0; i < ListEmployees.n; i++)
-//	{
-//		strcpy(arr[i].fName, ListEmployees.nodeListEmp[i]->firstName);
-//		strcpy(arr[i].lName, ListEmployees.nodeListEmp[i]->lastName);
-//		strcpy(arr[i].ID, ListEmployees.nodeListEmp[i]->ID);
-//	}
+//		
 //}
 //
-//void inDanhSachEmp(struct listEmp &ListEmployees)
+//void inDanhSachMat()
 //{
-//	NamesInfoEmp *arrEmp = new NamesInfoEmp[ListEmployees.n];
+//	NamesInfo *arrMat = new NamesInfo[so luong phan tu trong cay];
 //	
-//	taoMangEmp(ListEmployees, arrEmp);
+//	//lay cac phan tu trong cay vao mang
+//	taoMangEmp();
 //	// sort bla bla;
 //	
 //	//in danh sach
-//	inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, 0);
+//	inTrangMat(******, danhSachMat, sizeDanhSachMat, arrMat, 0);
 //	// chuyen trang bla bla
 //	
-//	delete (arrEmp);
+//	delete (arrMat);
 //}
 
 //===========endDUCKHAI=========
