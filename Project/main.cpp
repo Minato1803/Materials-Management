@@ -262,7 +262,7 @@ void Employees(struct listEmp &ListEmployees)
 			}
 		case 3:
 			{
-				return showPage(300, 300 , 1, ceil(4/4));
+				return saveEmp(ListEmployees);
 			}
 		case 4:
 			{

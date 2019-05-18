@@ -8,8 +8,6 @@
 using namespace std;
 
 
-// create BST
-
 struct Dates
 {
 	int day;
@@ -42,9 +40,7 @@ struct Dates
 			}
 		}
 		return true;
-	}
-	
-	
+	}	
 };
 
 
@@ -68,6 +64,11 @@ struct listBillDeta
 {
 	int n;
 	struct Details nodeListDeta[20];
+	
+	listBillDeta()
+	{
+		n = 0;
+	}
 	
 	bool isEmpty()
 	{
@@ -117,7 +118,7 @@ struct Bills
 	char Num[20];
 	struct Dates date;
 	char type;
-	struct listBillDeta *listMat;
+	struct listBillDeta *details;
 	
 	bool operator == (struct Bills other)
 	{
@@ -132,47 +133,55 @@ struct nodeListBill
 };
 typedef struct nodeListBill* NODE_LB;
 
-void Initialize_LB(NODE_LB &First)
-{
-	First = NULL;
-}
 
-NODE_LB newNode_LB()
+struct ListBill
 {
-	NODE_LB p = new nodeListBill;
-	return p;
-}
-
-bool Empty_LB(NODE_LB First)
-{
-	return (First == NULL);
-}
-
-void InsertFirst_LB(NODE_LB &First, Bills nodeN)
-{
-	NODE_LB p = newNode_LB();
-	p->info = nodeN;
-	p->next = First;
-	First = p;
-}
-
-void InsertAfter_LB(NODE_LB pos, Bills nodeN)
-{
-	NODE_LB tmp = newNode_LB();
-	tmp->info = nodeN;
-	tmp->next = pos->next;
-	pos->next = tmp;	
-}
-
-NODE_LB Search_LB(NODE_LB First, Bills nodeN)\
-{
-	for (NODE_LB p = First; p != NULL; p = p->next)
+	int Size;
+	NODE_LB firstNode;
+	
+	ListBill()
 	{
-		if (p->info == nodeN)
-			return p;
+		Size = 0;
+		firstNode = NULL;
 	}
-	return NULL;
-}
+	
+//	void Initialize_LB()
+//	{
+//		firstNode = NULL;
+//	}
+	
+	bool isEmpty()
+	{
+		return (firstNode == NULL);
+	}
+	
+	void insertFirst(Bills nodeN)
+	{
+		NODE_LB p = new nodeListBill;
+		p->info = nodeN;
+		p->next = firstNode;
+		firstNode = p;
+	}
+	
+	void insertAfter(NODE_LB pos, Bills nodeN)
+	{
+		NODE_LB tmp = new nodeListBill;
+		tmp->info = nodeN;
+		tmp->next = pos->next;
+		pos->next = tmp;	
+	}
+	
+	NODE_LB Search_LB(Bills nodeN)
+	{
+		for (NODE_LB p = firstNode; p != NULL; p = p->next)
+		{
+			if (p->info == nodeN)
+				return p;
+		}
+		return NULL;
+	}
+};
+
 
 
 
@@ -185,7 +194,7 @@ struct Employee
 	char firstName[31];
 	char lastName[31];
 	bool sex; //1: male
-	NODE_LB listBill;
+	struct ListBill listBill;
 	Employee()
 	{
 		ID[0] = '\0';
@@ -261,7 +270,59 @@ struct listEmp
 	}
 	
 };
-
-
-
 //==============endNHANVIEN============
+
+//=============SAVE-and-LOAD===========
+
+void writeDetail(ofstream &file, Details node)
+{
+	file << node.ID << endl;
+	file << node.amount << endl;
+	file << node.unit << endl;
+	file << node.VAT << endl;
+}
+
+void writeBill(ofstream &file, NODE_LB node)
+{
+	file << node->info.Num << endl;
+	file << node->info.date.day << " " << node->info.date.month << " " << node->info.date.year << endl;
+	file << node->info.type << endl;
+	file << node->info.details->n << endl;
+}
+
+void writeEmp(ofstream &file, struct Employee *node)
+{
+	file << node->ID << endl;
+	file << node->firstName << endl;
+	file << node->lastName << endl;
+	file << node->sex << endl;
+	file << node->listBill.Size << endl;
+}
+void saveEmp(struct listEmp &ListEmployees)
+{
+	ofstream fileListEmp;
+	ofstream fileListBill;
+	ofstream fileListDetail;
+	fileListEmp.open("data/EmployeesList.txt", ios::out);
+	fileListBill.open("data/BillsList.txt", ios::out);
+	fileListDetail.open("data/DetailList.txt", ios::out);
+	for (int i = 0; i < ListEmployees.n; i++)
+	{
+		writeEmp(fileListEmp, ListEmployees.nodeListEmp[i]);
+		struct ListBill tmpLB = ListEmployees.nodeListEmp[i]->listBill;
+		for (NODE_LB p = tmpLB.firstNode; p != NULL; p = p->next)
+		{
+			writeBill(fileListBill, p);
+			struct listBillDeta *tmpDT = new listBillDeta;
+			tmpDT = p->info.details;
+			for (int j = 0; j < tmpDT->n; j++)
+			{
+				writeDetail(fileListDetail, tmpDT->nodeListDeta[j]);
+			}
+			delete(tmpDT);
+		}
+	}
+	fileListEmp.close();
+	fileListBill.close();
+	fileListDetail.close();
+}
