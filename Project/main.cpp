@@ -20,6 +20,7 @@ void veKhung(int x, int y, char noiDung[], bool daChon, int mauNen, int mauChu);
 void veMuc2Chon(int x, int y, char noiDung[], char noiDungMucChon[][30], bool chonTrai, int mauNen, int mauChu);
 void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset);
 void notiBool(char khungNoiDung[][50], bool &choice, int n);
+void noti(char khungNoiDung[][50]);
 
 // Cac ham Menu
 void Menu(struct listEmp &ListEmployees);
@@ -191,12 +192,12 @@ void MenuPhu(int viTriMenuPhu, char menu[][30], int MAXMENU, int &chonMuc)
 						chonMuc++;
 						break;
 					}
-					default:
-						{
-							VeMenu();
-							chonMuc = -1;
-							return;
-						}
+//					default:
+//						{
+//							VeMenu();
+//							chonMuc = -1;
+//							return;
+//						}
 				}
 				if (chonMuc > MAXMENU)
 					chonMuc = 1;
@@ -205,8 +206,13 @@ void MenuPhu(int viTriMenuPhu, char menu[][30], int MAXMENU, int &chonMuc)
 			}
 			else if (key == '\r')
 			{
-
 				return VeMenu();
+			}
+			else if (key == 27)
+			{
+				chonMuc = -1;
+				VeMenu();
+				return;
 			}
 			NoiBatMuc(viTriMenuPhu, chonMuc, menu, HL_MENU_PHU, 2);
 		}
@@ -361,7 +367,7 @@ void Menu(struct listEmp &ListEmployees)
 				if (chiMuc < 0)
 					chiMuc = MAX_MENU-1;
 			}
-			else if (key == 13)
+			else if (key == '\r')
 			{
 				VeMenu();
 				ChonMenuPhu(chiMuc, ListEmployees);
@@ -828,6 +834,31 @@ void notiBool(char khungNoiDung[][50], bool &choice, int n)
 	}
 }
 
+void noti(char khungNoiDung[])
+{
+	int kichThuocSTT = 30;
+	int kichThuocNut = 40;
+	int H = 100;
+	int W = 250;
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, D);
+	
+	setcolor(BLACK);
+	rectangle(L-1, U-1, R+1, D+1);
+	
+	//in thong bao
+	setcolor(WHITE);
+	outtextxy(L+canLeGiua(khungNoiDung, W), U+(H-textheight(khungNoiDung))/2, khungNoiDung);
+}
+
 //=============endUI============//
 
 
@@ -887,9 +918,9 @@ void VeKhungAddMat(char khungNoiDung[][30], int H, int W)
 			veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
 	}
 	InThongTin(560, ViTriKhung[1], tmp.code);
-			InThongTin(560, ViTriKhung[2], tmp.name);
-			InThongTin(560, ViTriKhung[3], tmp.type);
-			InThongTin(560, ViTriKhung[4], tmp.amount);
+	InThongTin(560, ViTriKhung[2], tmp.name);
+	InThongTin(560, ViTriKhung[3], tmp.type);
+	InThongTin(560, ViTriKhung[4], tmp.amount);
 	//===== Chon vi tri ======//
 	int pos = 1;
 	while(1)
@@ -1936,43 +1967,51 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 	// sort bla bla;
 	
 	//in danh sach
-	inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, 0);
 	int startPage = 1;
 	int limitPage = ceil(ListEmployees.n*1.0/OBJ_PER_PAGE);
-	showPage(830, 650, startPage, limitPage);
-	while(1)
+	if (limitPage == 0)
 	{
-		if(kbhit())
+		noti(thongBao[0]);
+	}
+	else
+	{
+		inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, 0);
+		showPage(830, 650, startPage, limitPage);
+		while(1)
 		{
-			char key = getch();
-			if (key == 0)
+			if(kbhit())
 			{
-				char nextK = getch();
-				switch(nextK)
+				char key = getch();
+				if (key == 0)
 				{
-					case KEY_PGUP:
-						{
-							startPage--;
-							if (startPage < 1)
-								startPage = limitPage;
-							inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
-							showPage(830, 650, startPage, limitPage);
-							break;
-						}
-					case KEY_PGDN:
-						{
-							startPage++;
-							if (startPage > limitPage)
-								startPage = 1;
-							inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
-							showPage(830, 650, startPage, limitPage);
-							break;
-						}
+					char nextK = getch();
+					switch(nextK)
+					{
+						case KEY_PGUP:
+							{
+								startPage--;
+								if (startPage < 1)
+									startPage = limitPage;
+								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+								showPage(830, 650, startPage, limitPage);
+								break;
+							}
+						case KEY_PGDN:
+							{
+								startPage++;
+								if (startPage > limitPage)
+									startPage = 1;
+								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+								showPage(830, 650, startPage, limitPage);
+								break;
+							}
+					}
 				}
-			}
-			else if(key == 27) //exit
-			{
-				return;
+				else if(key == 27) //exit
+				{
+					VeMenu();
+					return;
+				}
 			}
 		}
 	}

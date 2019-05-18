@@ -38,4 +38,7 @@ char danhSachMat[][30] = {"STT", "ID", "Name", "Unit", "Amount"};
 int  sizeDanhSachMat[] = {10, 50, 100, 50, 20};
 char danhSachEmp[][30] = {"STT", "ID", "Last Name", "First Name", "Sex", "Nam", "Nu"};
 int  sizeDanhSachEmp[] = {10, 50, 100, 50, 20};
+
+//thong bao
+char thongBao[][50] = {"Empty List"};
 #endif
