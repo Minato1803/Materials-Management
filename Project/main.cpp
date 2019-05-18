@@ -256,7 +256,7 @@ void Employees(struct listEmp &ListEmployees)
 			}
 		case 3:
 			{
-				return About();
+				return showPage(300, 300 , 1, ceil(4/4));
 			}
 		case 4:
 			{
@@ -1891,6 +1891,8 @@ void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiD
 		
 		dis += h+5;
 	}
+	
+	setbkcolor(MAU_NEN);
 }
 
 void inNhanVien(struct Employee *NV, int posX, int posY)
@@ -1935,7 +1937,45 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 	
 	//in danh sach
 	inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, 0);
-	// chuyen trang bla bla
+	int startPage = 1;
+	int limitPage = ceil(ListEmployees.n*1.0/OBJ_PER_PAGE);
+	showPage(830, 650, startPage, limitPage);
+	while(1)
+	{
+		if(kbhit())
+		{
+			char key = getch();
+			if (key == 0)
+			{
+				char nextK = getch();
+				switch(nextK)
+				{
+					case KEY_PGUP:
+						{
+							startPage--;
+							if (startPage < 1)
+								startPage = limitPage;
+							inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+							showPage(830, 650, startPage, limitPage);
+							break;
+						}
+					case KEY_PGDN:
+						{
+							startPage++;
+							if (startPage > limitPage)
+								startPage = 1;
+							inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+							showPage(830, 650, startPage, limitPage);
+							break;
+						}
+				}
+			}
+			else if(key == 27) //exit
+			{
+				return;
+			}
+		}
+	}
 	delete (arrEmp);
 }
 //==========endCHINHAN========

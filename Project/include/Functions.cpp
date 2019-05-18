@@ -155,14 +155,21 @@ void Qsort(NamesInfo info[], int left, int right)
 
 char* toChars(int num)
 {
-	//bug
-	int l = floor(log10(num)+1);
 	char* a = new char[100];
-	a[l--] = '\0';
-	while(num>0)
+	if (num == 0)
 	{
-		a[l--] = num%10+48; //to char
-		num/=10;
+		a[1] = '\0';
+		a[0] = '0';
+	}
+	else
+	{
+		int l = floor(log10(num)+1);
+		a[l--] = '\0';
+		while(num>0)
+		{
+			a[l--] = num%10+48; //to char
+			num/=10;
+		}
 	}
 	return a;
 }
@@ -171,6 +178,7 @@ int canLeGiua(char *S, int dis)
 {
 	return (dis-textwidth(S))/2;
 }
+
 
 //Ham do hoa
 
@@ -188,5 +196,21 @@ void ThongBao(int x, int y, char noti[50], int mauChu, int mauNen)
 	Sleep(DELAY_NOTI);
 	setfillstyle(SOLID_FILL, mauNen);
 	bar(x, y, x + textwidth(noti), y + textheight(noti));
+}
+
+void showPage(int x, int y, int page, int limit)
+{
+	//  Page: page / limit
+	setcolor(MAU_TEXT_KHUNG);
+	outtextxy(x, y, "Page: ");
+	x += textwidth("Page: ");
+	
+	outtextxy(x, y, toChars(page));
+	x += textwidth(toChars(page));
+	
+	outtextxy(x, y, " / ");
+	x += textwidth(" / ");	
+	
+	outtextxy(x, y, toChars(limit));
 }
 
