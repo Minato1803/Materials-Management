@@ -63,6 +63,7 @@ int main()
 	KhoiTaoChuongTrinh();
 	
 	struct listEmp ListEmployees;
+	loadEmp(ListEmployees);
 	Menu(ListEmployees);
 	return 0;
 }

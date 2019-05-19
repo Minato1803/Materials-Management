@@ -161,6 +161,7 @@ struct ListBill
 		p->info = nodeN;
 		p->next = firstNode;
 		firstNode = p;
+		Size++;
 	}
 	
 	void insertAfter(NODE_LB pos, Bills nodeN)
@@ -168,7 +169,8 @@ struct ListBill
 		NODE_LB tmp = new nodeListBill;
 		tmp->info = nodeN;
 		tmp->next = pos->next;
-		pos->next = tmp;	
+		pos->next = tmp;
+		Size++;	
 	}
 	
 	NODE_LB Search_LB(Bills nodeN)
@@ -298,14 +300,19 @@ void writeEmp(ofstream &file, struct Employee *node)
 	file << node->sex << endl;
 	file << node->listBill.Size << endl;
 }
+
 void saveEmp(struct listEmp &ListEmployees)
 {
+	ofstream numList;
 	ofstream fileListEmp;
 	ofstream fileListBill;
 	ofstream fileListDetail;
+	numList.open("data/numList.txt", ios::out);
 	fileListEmp.open("data/EmployeesList.txt", ios::out);
 	fileListBill.open("data/BillsList.txt", ios::out);
 	fileListDetail.open("data/DetailList.txt", ios::out);
+	
+	numList << ListEmployees.n << endl;
 	for (int i = 0; i < ListEmployees.n; i++)
 	{
 		writeEmp(fileListEmp, ListEmployees.nodeListEmp[i]);
@@ -318,6 +325,70 @@ void saveEmp(struct listEmp &ListEmployees)
 			for (int j = 0; j < tmpDT->n; j++)
 			{
 				writeDetail(fileListDetail, tmpDT->nodeListDeta[j]);
+			}
+			delete(tmpDT);
+		}
+	}
+	fileListEmp.close();
+	fileListBill.close();
+	fileListDetail.close();
+}
+
+void readDetail(ifstream &file, struct Details &node)
+{
+	file >> node.ID;
+	file >> node.amount;
+	file >> node.unit;
+	file >> node.VAT;
+}
+
+void readBill(ifstream &file, NODE_LB node)
+{
+	file >> node->info.Num;
+	file >> node->info.date.day >> node->info.date.month >> node->info.date.year;
+	file >> node->info.type;
+	file >> node->info.details->n;
+}
+
+void readEmp(ifstream &file, struct Employee *node)
+{
+	file >> node->ID;
+	file.ignore();
+	file.getline(node->firstName, sizeof(node->firstName));
+	file.getline(node->lastName, sizeof(node->lastName));
+	file >> node->sex;
+	file >> node->listBill.Size;
+}
+
+
+void loadEmp(struct listEmp &ListEmployees)
+{
+	ifstream numList;
+	ifstream fileListEmp;
+	ifstream fileListBill;
+	ifstream fileListDetail;
+	numList.open("data/numList.txt", ios::in);
+	fileListEmp.open("data/EmployeesList.txt", ios::in);
+	fileListBill.open("data/BillsList.txt", ios::in);
+	fileListDetail.open("data/DetailList.txt", ios::in);
+	
+	numList >> ListEmployees.n;
+	for (int i = 0; i < ListEmployees.n; i++)
+	{
+		ListEmployees.nodeListEmp[i] = new Employee;
+		readEmp(fileListEmp, ListEmployees.nodeListEmp[i]);
+		struct ListBill tmpLB = ListEmployees.nodeListEmp[i]->listBill;
+		for (int j = 0; j < tmpLB.Size; i++)
+		{
+			NODE_LB p = new nodeListBill;
+			readBill(fileListBill, p);
+			ListEmployees.nodeListEmp[i]->listBill.insertFirst(p->info);
+			
+			struct listBillDeta *tmpDT = new listBillDeta;
+			tmpDT = p->info.details;
+			for (int j = 0; j < tmpDT->n; j++)
+			{
+				readDetail(fileListDetail, tmpDT->nodeListDeta[j]);	
 			}
 			delete(tmpDT);
 		}
