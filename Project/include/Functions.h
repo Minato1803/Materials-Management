@@ -15,12 +15,6 @@ struct NamesInfo
 	char name[51];
 };
 
-struct NamesInfoEmp
-{
-	char fName[31];
-	char lName[31];
-	char ID[11];
-};
 
 bool CheckLetter(char s);
 bool CheckNum(char s);

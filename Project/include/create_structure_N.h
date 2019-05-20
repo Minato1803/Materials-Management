@@ -7,6 +7,83 @@
 #define MAXL_EMP 500
 using namespace std;
 
+//=====funtions======
+struct NamesInfoEmp
+{
+	char fName[31];
+	char lName[31];
+	char ID[11];
+	
+	bool operator > (const struct NamesInfoEmp &other)
+	{
+		if (strcmp(this->fName, other.fName) > 0)
+		{
+			return true;
+		}
+		else if (strcmp(this->fName, other.fName) == 0)
+		{
+			if (strcmp(this->lName, other.lName) > 0)
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		else 
+			return false;
+	}
+	
+	bool operator < (const struct NamesInfoEmp &other)
+	{
+		if (strcmp(this->fName, other.fName) < 0)
+		{
+			return true;
+		}
+		else if (strcmp(this->fName, other.fName) == 0)
+		{
+			if (strcmp(this->lName, other.lName) < 0)
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		else 
+			return false;
+	}
+};
+
+void sortEmp(struct NamesInfoEmp *arr, int left, int right)
+{
+	NamesInfoEmp mid = arr[(left + right) / 2];
+	int i = left, j = right;
+	do
+	{
+		while(arr[i] < mid)
+			i++;
+		while(arr[j] > mid)
+			j--;
+		if(i <= j)
+		{
+			if(i < j)
+			{
+				NamesInfoEmp tmp;
+				tmp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = tmp;
+			}
+			i++; j--;
+		}
+	} while(i<=j);
+	if(left < j)
+		sortEmp(arr, left, j);
+	if(right > i)
+		sortEmp(arr, i, right);
+}
+
+
+//==========Struct============
+
 
 struct Dates
 {
@@ -360,7 +437,6 @@ void readEmp(ifstream &file, struct Employee *node)
 	file >> node->listBill.Size;
 }
 
-
 void loadEmp(struct listEmp &ListEmployees)
 {
 	ifstream numList;
@@ -397,3 +473,4 @@ void loadEmp(struct listEmp &ListEmployees)
 	fileListBill.close();
 	fileListDetail.close();
 }
+

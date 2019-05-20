@@ -22,6 +22,7 @@ void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset);
 void notiBool(char khungNoiDung[][50], bool &choice, int n);
 void noti(char khungNoiDung[][50]);
 
+
 // Cac ham Menu
 void Menu(struct listEmp &ListEmployees);
 void MenuPhu(int viTriMenuPhu, char menu[][30], int MAXMENU, int &chonMuc);
@@ -53,7 +54,10 @@ void VeKhungAddEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H
 void taoMangEmp(struct listEmp &ListEmployees, struct NamesInfoEmp *arr);
 void inDanhSachEmp(struct listEmp &ListEmployees);
 void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start);
+//void chonTuTrangEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start, int &selection);
 void inNhanVien(struct Employee *NV, int posX, int posY);
+void chonTuDanhSach(struct listEmp &ListEmployees, int &stt);
+
 //=========================
 
 
@@ -259,7 +263,8 @@ void Employees(struct listEmp &ListEmployees)
 			}
 		case 2:
 			{
-				return VeKhungAddEmp(ListEmployees, khungEmp, 450, 600);
+				int stt = 0;
+				return chonTuDanhSach(ListEmployees, stt);
 			}
 		case 3:
 			{
@@ -1854,7 +1859,6 @@ void VeKhungAddEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H
 void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start)
 {
 	int kichThuocSTT = 30;
-	int kichThuocNut = 40;
 	int h = textheight(khungNoiDung[0]);
 	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
 	int W = 0;
@@ -1955,7 +1959,9 @@ void taoMangEmp(struct listEmp &ListEmployees, struct NamesInfoEmp *arr)
 	for (int i = 0; i < ListEmployees.n; i++)
 	{
 		strcpy(arr[i].fName, ListEmployees.nodeListEmp[i]->firstName);
+		delBlank(arr[i].fName);
 		strcpy(arr[i].lName, ListEmployees.nodeListEmp[i]->lastName);
+		delBlank(arr[i].lName);
 		strcpy(arr[i].ID, ListEmployees.nodeListEmp[i]->ID);
 	}
 }
@@ -1966,6 +1972,7 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 	
 	taoMangEmp(ListEmployees, arrEmp);
 	// sort bla bla;
+	sortEmp(arrEmp, 0, ListEmployees.n-1);
 	
 	//in danh sach
 	int startPage = 1;
@@ -2018,6 +2025,111 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 	}
 	delete (arrEmp);
 }
+
+void chonTuDanhSach(struct listEmp &ListEmployees, int &stt)
+{
+	NamesInfoEmp *arrEmp = new NamesInfoEmp[ListEmployees.n];
+	
+	taoMangEmp(ListEmployees, arrEmp);
+	// sort bla bla;
+	sortEmp(arrEmp, 0, ListEmployees.n-1);
+	
+	//in danh sach
+	int startPage = 1;
+	int limitPage = ceil(ListEmployees.n*1.0/OBJ_PER_PAGE);
+	if (limitPage == 0)
+	{
+		noti(thongBao[0]);
+	}
+	else
+	{
+		// tinh thong so
+		int kichThuocSTT = 30;
+		int h = textheight(danhSachEmp[0]) + 5*2;
+		int H = (h)*OBJ_PER_PAGE + kichThuocSTT;
+		int W = 0;
+		for (int i = 0; i < 5; i++)
+		{
+			W += textwidth(danhSachEmp[i]) + sizeDanhSachEmp[i]*2;
+		}
+		int U = WD_HEIGHT/2 - H/2;
+		int L =	WD_WIDTH/2 - W/2;
+		
+		int x = L, y = U+kichThuocSTT+(stt%OBJ_PER_PAGE)*h;
+		int yOld = y;
+				
+		inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, 0);
+		showPage(830, 650, startPage, limitPage);
+		
+		setcolor(GREEN);
+		rectangle(x, y, x+W, y+h);
+		while(1)
+		{
+			if(kbhit())
+			{
+				char key = getch();
+				if (key == 0)
+				{
+					char nextK = getch();
+					switch(nextK)
+					{
+						case KEY_PGUP:
+							{
+								startPage--;
+								if (startPage < 1)
+									startPage = limitPage;
+								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+								showPage(830, 650, startPage, limitPage);
+								stt = (startPage-1)*OBJ_PER_PAGE;
+								break;
+							}
+						case KEY_PGDN:
+							{
+								startPage++;
+								if (startPage > limitPage)
+									startPage = 1;
+								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+								showPage(830, 650, startPage, limitPage);
+								stt = (startPage-1)*OBJ_PER_PAGE;
+								break;
+							}
+						case KEY_UP:
+							{
+								stt--;
+								break;
+							}
+						case KEY_DOWN:
+							{
+								stt++;
+								break;
+							}
+					}
+					if (stt < (startPage-1)*OBJ_PER_PAGE)
+						stt = min((startPage-1)*OBJ_PER_PAGE+(OBJ_PER_PAGE-1), ListEmployees.n-1);
+					else if (stt > (startPage-1)*OBJ_PER_PAGE+(OBJ_PER_PAGE-1) || stt > ListEmployees.n-1)
+						stt = (startPage-1)*OBJ_PER_PAGE;
+						
+					y = U+kichThuocSTT+(stt%OBJ_PER_PAGE)*h;
+					// to den hinh chu nhat cu
+					setcolor(BLACK);
+					rectangle(x, yOld, x+W, yOld+h);
+					// ve hinh chu nhat moi
+					setcolor(GREEN);
+					rectangle(x, y, x+W, y+h);
+					yOld = y;
+				}
+				else if(key == 27) //exit
+				{
+					VeMenu();
+					return;
+				}
+			}
+		}
+	}
+	delete (arrEmp);
+}
+
+
 //==========endCHINHAN========
 
 
