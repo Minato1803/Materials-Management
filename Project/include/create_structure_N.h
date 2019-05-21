@@ -317,6 +317,19 @@ struct listEmp
 		{
 			nodeListEmp[j-1] = nodeListEmp[j];
 		}
+		n--;
+	}
+	
+	void DeteleID(char tmpID[11])
+	{
+		for (int i = 0; i < n; i++)
+		{
+			if (strcmp(nodeListEmp[i]->ID, tmpID) == 0)
+			{
+				this->Detele(i);
+				break;
+			}
+		}
 	}
 	
 	void Clear()

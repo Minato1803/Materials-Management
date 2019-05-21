@@ -16,7 +16,7 @@ char MenuBill[][30] = {"Create Bill", "Bills List"};
 char MenuStat[][30] = {"Bills", "Top Materials"};
 char MenuHelp[][30] = {"Guild", "About"};
 char Success[][50] = {"Added Successfully!", "Remove Successfully!"};
-char Fail[][50] = {"Empty Field","Not Found"};
+char Fail[][50] = {"Empty Field", "Not Found", "Empty List"};
 
 //error 
 char sameMat[][50] = {"Error: The same  Material's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
@@ -33,7 +33,8 @@ char khungMat[][30] = {"Material's Informations", "Add Material", "Exit", "ID", 
 char khungEmp[][30] = {"Employee's Informations", "Add Employee", "Exit", "ID", "First Name", "Last Name", "Sex"};
 char Sex[][30] 		= {"Male", "Female"};
 char checkMat[][30] = {"Material's Informations", "Confirm", "Exit", "ID", "Name", "Unit", "Amount"};
-char RemoveObject[][30] = {"ID", "Materials List", "Employee List", "Check info", "Exit" };
+char checkEmp[][30] = {"Material's Informations", "Confirm", "Exit", "ID", "Name", "Unit", "Amount"};
+char RemoveObject[][30] = {"ID", "Materials List", "Employee List", "Check info", "Exit"};
 char danhSachMat[][30] = {"STT", "ID", "Name", "Unit", "Amount"};
 int  sizeDanhSachMat[] = {10, 50, 100, 50, 20};
 char danhSachEmp[][30] = {"STT", "ID", "Last Name", "First Name", "Sex", "Nam", "Nu"};

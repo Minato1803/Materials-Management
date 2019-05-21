@@ -56,7 +56,9 @@ void inDanhSachEmp(struct listEmp &ListEmployees);
 void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start);
 //void chonTuTrangEmp(char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start, int &selection);
 void inNhanVien(struct Employee *NV, int posX, int posY);
-void chonTuDanhSach(struct listEmp &ListEmployees, int &stt);
+void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &stt, int &startPage, bool &selected);
+void hienThiInfoEmp(char khungNoiDung[][30], int H, int W, struct Employee *Info);
+void inRemoveEmp(char khungNoiDung[][30], struct listEmp &ListEmployees);
 
 //=========================
 
@@ -263,8 +265,9 @@ void Employees(struct listEmp &ListEmployees)
 			}
 		case 2:
 			{
-				int stt = 0;
-				return chonTuDanhSach(ListEmployees, stt);
+				return inRemoveEmp(RemoveObject, ListEmployees);
+//				int stt = 0;
+//				return chonTuDanhSach(ListEmployees, stt);
 			}
 		case 3:
 			{
@@ -1217,7 +1220,6 @@ void hienThiInfoMat(char khungNoiDung[][30], int H, int W, char keyword[])
 				 }
 		}
 	}
-	
 }
 
 
@@ -2026,16 +2028,11 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 	delete (arrEmp);
 }
 
-void chonTuDanhSach(struct listEmp &ListEmployees, int &stt)
-{
-	NamesInfoEmp *arrEmp = new NamesInfoEmp[ListEmployees.n];
-	
-	taoMangEmp(ListEmployees, arrEmp);
-	// sort bla bla;
-	sortEmp(arrEmp, 0, ListEmployees.n-1);
-	
+void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &stt, int &startPage, bool &selected)
+{	
 	//in danh sach
-	int startPage = 1;
+	//int startPage = 1;
+	selected = false;
 	int limitPage = ceil(ListEmployees.n*1.0/OBJ_PER_PAGE);
 	if (limitPage == 0)
 	{
@@ -2118,16 +2115,385 @@ void chonTuDanhSach(struct listEmp &ListEmployees, int &stt)
 					rectangle(x, y, x+W, y+h);
 					yOld = y;
 				}
-				else if(key == 27) //exit
+				else if (key == 27) //exit
 				{
 					VeMenu();
+					return;
+				}
+				else if (key == '\r')
+				{
+					selected = true;
 					return;
 				}
 			}
 		}
 	}
-	delete (arrEmp);
 }
+
+void danhSachRemoveEmp(struct listEmp &ListEmployees)
+{
+	//tao mang 1 chieu
+	NamesInfoEmp *arrEmp = new NamesInfoEmp[ListEmployees.n];
+	taoMangEmp(ListEmployees, arrEmp);
+	sortEmp(arrEmp, 0, ListEmployees.n-1);
+	
+	int removePos = 0;
+	int page = 1;
+	bool select;
+	while(1)
+	{
+		chonTuDanhSach(ListEmployees, arrEmp, removePos, page, select);
+		if(select)
+		{
+			ListEmployees.DeteleID(arrEmp[removePos].ID);
+			for (int i = removePos; i < ListEmployees.n; arrEmp[i]=arrEmp[++i]);
+		}
+		else
+		{
+			break;
+		}
+	}
+	delete (arrEmp);
+	VeMenu();
+}
+
+void inRemoveEmp(char khungNoiDung[][30], struct listEmp &ListEmployees)
+{
+	bool choice = 1;
+	bool choiceN = 1; 
+	int posR = 0;
+	int kichThuocSTT = 30;
+	int kichThuocNut = 40;
+	int H = 200;
+	int W = 450;
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+	
+	setcolor(BLACK);
+	rectangle(L-1, U-1, R+1, D+1);
+			
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								//top line
+	
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	setcolor(MAU_TEXT_KHUNG);
+	
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);
+	line(L, D-kichThuocNut, R, D-kichThuocNut);								//bottom line
+	line(WD_WIDTH/2, D-kichThuocNut, WD_WIDTH/2, D);						//center line
+	
+	setbkcolor(NEN_KHUNG);
+	int midText1 = ((R-L)/2 - textwidth(khungNoiDung[3]))/2;
+	int midText2 = ((R-L)/2 - textwidth(khungNoiDung[4]))/2;
+	int midText3 = ((R-L)/2 - textwidth(khungNoiDung[1]))/2;
+	int midTextH = (kichThuocNut - textheight(khungNoiDung[1]))/2 + textheight(khungNoiDung[1]);
+	setcolor(WHITE);
+	// ve khung chon id
+	rectangle(L+14, ViTriKhung[3]-11,WD_WIDTH/2 , ViTriKhung[3]+10+ textheight(khungNoiDung[0]));
+	setbkcolor(HL_MENU_PHU);
+	setfillstyle(SOLID_FILL, HL_MENU_PHU);
+	bar (L+15, ViTriKhung[3]-10,WD_WIDTH/2 , ViTriKhung[3]+10+ textheight(khungNoiDung[0]));
+	outtextxy(L+25, ViTriKhung[3], khungNoiDung[0]);
+	setfillstyle(SOLID_FILL, TEXTBOX);
+	bar (L+25+2*textwidth(khungNoiDung[0]), ViTriKhung[3]-2, WD_WIDTH/2-15, ViTriKhung[3]+2+ textheight(khungNoiDung[0]));
+	rectangle(L+25+2*textwidth(khungNoiDung[0]), ViTriKhung[3]-2, WD_WIDTH/2-15, ViTriKhung[3]+2+ textheight(khungNoiDung[0]));
+	//nhap o day
+	// ve khung chon materials list 
+	rectangle(WD_WIDTH/2-1, ViTriKhung[3]-11, WD_WIDTH/2 + (R-L)/2-15, ViTriKhung[3]+10+ textheight(khungNoiDung[0]));
+	setbkcolor(NEN_KHUNG);
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar(WD_WIDTH/2, ViTriKhung[3]-10, WD_WIDTH/2 + (R-L)/2-15, ViTriKhung[3]+10+ textheight(khungNoiDung[0]));
+	outtextxy(WD_WIDTH/2 +	midText3, ViTriKhung[3], khungNoiDung[1]);	
+	setfillstyle(SOLID_FILL, HL_MENU_PHU);	
+	// 2 nut check and exit
+	outtextxy(L+midText1, D-midTextH, khungNoiDung[3]);
+	outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[4]);
+	//make ur choice
+	char findID[11];
+	findID[0] = '\0';
+	while(1)
+	{
+		InThongTin(L+30+2*textwidth(khungNoiDung[0]),ViTriKhung[3],findID);
+		if(kbhit())
+		{
+			char keyR = getch();
+			if(keyR==0)
+			{
+				char ckeyR = getch();
+				switch(ckeyR)
+				{
+					case KEY_LEFT:
+					{
+						if(posR==1 || posR==0)
+							choice ^= 1; // 1: trai 0: phai
+						if(posR==2 || posR==3)
+							choiceN ^= 1;	
+						break;
+					}
+					case KEY_RIGHT:
+					{
+						if(posR==1 || posR==0)
+							choice ^= 1; // 1: trai 0: phai
+						if(posR==2 || posR==3)
+							choiceN ^= 1;	
+						break;
+					}
+					case KEY_UP:
+					{
+						if(posR == 0 || posR == 1)
+						{
+							posR = 2;
+							break;
+						}
+						else if(posR == 2 || posR == 3)
+						{
+							posR =0;
+							break;
+						}		
+					}
+					case KEY_DOWN:
+					{
+						if(posR == 0 || posR == 1)
+						{
+							posR = 2;
+							break;
+						}
+						else if(posR == 2 || posR == 3)
+						{
+							posR =0;
+							break;
+						}	
+					}	
+				}
+			}
+			if(keyR == '\r')
+			{
+				if(posR == 0 || posR == 1)
+				{
+					posR = 2;
+				}
+				else
+				{
+					if(posR == 2)
+					{
+						if(choice == 1)
+						{
+							struct Employee *tmp = new Employee;
+							tmp = ListEmployees.Search_ID(findID);
+							if(tmp == NULL)
+							{
+								//loi ko ton tai
+								ThongBao(740, 255, Fail[1], LIGHTRED, MAU_MENU);
+							}
+							else
+							{	
+								return hienThiInfoEmp(checkMat, 450, 600, tmp); // den khung check info 1 Mats
+							}
+							delete(tmp);
+						}
+						else
+						{
+							return danhSachRemoveEmp(ListEmployees);
+						}	
+					}
+					if(posR == 3)
+					{
+						return;
+					}
+				}
+			}
+			if(keyR == 27)
+			{
+				return;
+			}
+		// hien thi
+		 if(posR==0 || posR == 1)
+		{
+			setcolor(WHITE);
+			setfillstyle(SOLID_FILL, NEN_KHUNG);
+			if(choice)
+			{
+				// ID
+				setbkcolor(NEN_KHUNG);
+				bar(WD_WIDTH/2, ViTriKhung[3]-10, WD_WIDTH/2 + (R-L)/2-15, ViTriKhung[3]+10+ textheight(khungNoiDung[0]));
+				outtextxy(WD_WIDTH/2 +	midText3, ViTriKhung[3], khungNoiDung[1]);
+				setbkcolor(HL_MENU_PHU);
+				setfillstyle(SOLID_FILL, HL_MENU_PHU);									//do mau nen cho nut
+				bar (L+15, ViTriKhung[3]-10,WD_WIDTH/2 , ViTriKhung[3]+10+ textheight(khungNoiDung[0]));
+				outtextxy(L+25, ViTriKhung[3], khungNoiDung[0]);
+				setfillstyle(SOLID_FILL, TEXTBOX);
+				bar (L+25+2*textwidth(khungNoiDung[0]), ViTriKhung[3]-2, WD_WIDTH/2-15, ViTriKhung[3]+2+ textheight(khungNoiDung[0]));
+				rectangle(L+25+2*textwidth(khungNoiDung[0]), ViTriKhung[3]-2, WD_WIDTH/2-15, ViTriKhung[3]+2+ textheight(khungNoiDung[0]));
+				Nhap(L+30+2*textwidth(khungNoiDung[0]),ViTriKhung[3],-1,keyR,findID,10);
+			}
+			else
+			{
+				// material list
+				setbkcolor(NEN_KHUNG);
+				bar (L+15, ViTriKhung[3]-10,WD_WIDTH/2 , ViTriKhung[3]+10+ textheight(khungNoiDung[0]));
+				outtextxy(L+25, ViTriKhung[3], khungNoiDung[0]);
+				setfillstyle(SOLID_FILL, TEXTBOX);
+				bar (L+25+2*textwidth(khungNoiDung[0]), ViTriKhung[3]-2, WD_WIDTH/2-15, ViTriKhung[3]+2+ textheight(khungNoiDung[0]));
+				rectangle(L+25+2*textwidth(khungNoiDung[0]), ViTriKhung[3]-2, WD_WIDTH/2-15, ViTriKhung[3]+2+ textheight(khungNoiDung[0]));
+				setbkcolor(HL_MENU_PHU);
+				setfillstyle(SOLID_FILL, HL_MENU_PHU);
+				bar(WD_WIDTH/2, ViTriKhung[3]-10, WD_WIDTH/2 + (R-L)/2-15, ViTriKhung[3]+10+ textheight(khungNoiDung[0]));
+				outtextxy(WD_WIDTH/2 +	midText3, ViTriKhung[3], khungNoiDung[1]);
+			}
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL, NEN_KHUNG);
+				bar (L, D-kichThuocNut, WD_WIDTH/2, D);
+				bar (WD_WIDTH/2, D-kichThuocNut, R, D);				
+				setbkcolor(NEN_KHUNG);
+				line(L, D-kichThuocNut, R, D-kichThuocNut);								//bottom line
+				line(WD_WIDTH/2, D-kichThuocNut, WD_WIDTH/2, D);
+				setcolor(WHITE);
+				outtextxy(L+midText1, D-midTextH, khungNoiDung[3]);
+				outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[4]);
+		}
+		else if(posR==2 || posR==3)
+			 {
+				setcolor(WHITE);
+				setfillstyle(SOLID_FILL, NEN_KHUNG);	
+				if(choiceN)
+				{	
+					bar (WD_WIDTH/2, D-kichThuocNut, R, D);
+					setfillstyle(SOLID_FILL, HL_MENU_PHU);
+					bar (L, D-kichThuocNut, WD_WIDTH/2, D);
+					setbkcolor(HL_MENU_PHU);
+					outtextxy(L+midText1, D-midTextH, khungNoiDung[3]);
+					setbkcolor(NEN_KHUNG);
+					outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[4]);
+				}
+				else	
+				{
+					bar (L, D-kichThuocNut, WD_WIDTH/2, D);
+					setfillstyle(SOLID_FILL, HL_MENU_PHU);
+					bar (WD_WIDTH/2, D-kichThuocNut, R, D);
+					setbkcolor(HL_MENU_PHU);
+					outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[4]);
+					setbkcolor(NEN_KHUNG);
+					outtextxy(L+midText1, D-midTextH, khungNoiDung[3]);
+				}
+				setcolor(BLACK);
+				line(L, D-kichThuocNut, R, D-kichThuocNut);								//bottom line
+				line(WD_WIDTH/2, D-kichThuocNut, WD_WIDTH/2, D);
+			 }		
+		}
+	} // while
+}
+
+void hienThiInfoEmp(char khungNoiDung[][30], int H, int W, struct Employee *Info)
+{
+	int kichThuocSTT = 30;
+	int kichThuocNut = 40;
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+			
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								//top line
+	
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	setcolor(MAU_TEXT_KHUNG);
+	outtextxy(310, 130, khungNoiDung[0]);
+	
+	//
+	//Ve cac khung ban dau===
+	int SoLuongKhung = 4;
+	int mauNut = NEN_KHUNG;
+	setfillstyle(SOLID_FILL, mauNut);
+	bar (L, D-kichThuocNut, R, D);
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);
+	line(L, D-kichThuocNut, R, D-kichThuocNut);								//bottom line
+	line(WD_WIDTH/2, D-kichThuocNut, WD_WIDTH/2, D);						//center line
+	setbkcolor(NEN_KHUNG);
+	int midText1 = ((R-L)/2 - textwidth(khungNoiDung[1]))/2;
+	int midText2 = ((R-L)/2 - textwidth(khungNoiDung[2]))/2;
+	int midTextH = (kichThuocNut - textheight(khungNoiDung[1]))/2 + textheight(khungNoiDung[1]);
+	setcolor(WHITE);
+	outtextxy(L+midText1, D-midTextH, khungNoiDung[1]);
+	outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[2]);
+	
+	
+	//info
+	infoText(380, ViTriKhung[1], khungNoiDung[1+2], Info->ID);
+	infoText(380, ViTriKhung[2], khungNoiDung[2+2], Info->firstName);
+	infoText(380, ViTriKhung[3], khungNoiDung[3+2], Info->lastName);
+	veMuc2Chon(380, ViTriKhung[4], khungNoiDung[4+2], Sex, Info->sex, NEN_KHUNG, WHITE);
+	bool buttonL = 1;
+	while(1)
+	{
+		if(kbhit())
+		{
+			veKhungNut(H, W, khungNoiDung, buttonL, 0);
+			char key = getch();
+			char ckey = getch();
+			if(key==0)
+			{
+				switch(ckey)
+				{
+					case KEY_LEFT:
+					{
+						buttonL ^= 1;
+						break;
+					}
+					case KEY_RIGHT:
+					{
+						buttonL ^= 1;
+						break;
+					}
+				}
+			}
+			else if(key == '\r')
+				 {
+				 	if(buttonL)
+				 	{
+				 		ThongBao(720, 130, Success[1], GREEN, MAU_MENU);
+				 		VeMenu();
+				 		return ;
+					}
+					else
+					{
+						VeMenu();
+						return;
+					}
+				 }
+				 if(key==27)
+				 {
+				 	VeMenu();
+				 	return;
+				 }
+		}
+	}
+}
+
 
 
 //==========endCHINHAN========
