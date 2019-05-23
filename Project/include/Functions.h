@@ -15,11 +15,18 @@ struct NamesInfo
 	char name[51];
 };
 
+//struct NamesInfoEmp
+//{
+//	char fName[31];
+//	char lName[31];
+//	char ID[11];
+//};
 
 bool CheckLetter(char s);
 bool CheckNum(char s);
 int  ChangeCharToNum (char s[],int n);
 void AddChuoi(char c, char s[]);
+void get_chuoi(char *des, char *s );
 void delBlank(char *s);
 int  KiemtraNhapLieu(char c, char s[]);
 bool KhoaNhapLieu(char s[], int n);

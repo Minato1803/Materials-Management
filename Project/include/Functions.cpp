@@ -35,6 +35,20 @@ void AddChuoi(char c, char s[])
 	strncat(s, &c,1);
 }
 
+void get_chuoi(char *des, char *s )
+{
+	int index = 0;
+	for(int i=0; i<strlen(s); i++)
+	{
+		if(s[i] != ' ')
+		{
+			des[index] = tolower(s[i]);
+			index++;
+		}
+	}
+	des[index] ='\0';
+}
+
 void delBlank(char *s)
 {
 	for(int i = 0; i < strlen(s); i++)

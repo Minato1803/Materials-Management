@@ -28,6 +28,7 @@ struct NameMats
 	char code[11];
 	char name[51];
 };
+typedef struct NameMats Name_Mat;
 
 struct Node			//AVL tree
 {
@@ -45,9 +46,10 @@ struct Node			//AVL tree
 typedef struct Node *NODEPTR;
 
 //====Functions====//
-//void Initalize (NODEPTR &root)
+//NODEPTR Initalize (NODEPTR root)
 //{
 //	root = NULL;
+//	return root;
 //}
 	//can bang lai cay 
 int Height(NODEPTR p)
@@ -172,30 +174,33 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 	return root; 
 }
 
-NODEPTR Insert(NODEPTR &root, char key[], Material a) 
+NODEPTR newNode(char key[], Material a)  
+{  
+    NODEPTR node = new Node(); 
+    strcpy(node->key,key);
+	strcpy(node->info.code,a.code);
+	strcpy(node->info.name,a.name);
+	strcpy(node->info.type,a.type);
+	strcpy(node->info.amount,a.amount);
+	node->height = 1;
+	node->info.RealAmount = a.RealAmount;
+	node->right =NULL; node->left = NULL;
+	return (node);  
+} 
+
+NODEPTR Insert(NODEPTR root, char key[], Material a) 
 { 
 	if (root == NULL) 
-	{
-		root = new Node;
-		strcpy(root->key,key);
-		strcpy(root->info.code,a.code);
-		strcpy(root->info.name,a.name);
-		strcpy(root->info.type,a.type);
-		strcpy(root->info.amount,a.amount);
-		root->height = 1;
-		root->info.RealAmount = a.RealAmount;
-		root->right =NULL; root->left = NULL;
-	}
+		return (newNode(key, a));
 	if (strcmp(key,root->key) < 0) 
 		root->left = Insert(root->left, key, a); 
 	else if (strcmp(key,root->key) > 0) 
 		root->right = Insert(root->right, key, a); 
 	else
-		return 0; 
+		return (newNode(key, a)); 
 
 	//cap nhat height
-	root->height = max(Height(root->left), 
-						Height(root->right)) + 1; 
+	root->height = max(Height(root->left), Height(root->right)) + 1; 
 
 	//can bang lai cay
 	
@@ -228,32 +233,27 @@ NODEPTR Insert(NODEPTR &root, char key[], Material a)
 	return root; 
 } 
 
-//// A utility function to print preorder 
-//// traversal of the tree. 
-//// The function also prints height 
-//// of every node 
-//void preOrder(Node *root) 
-//{ 
-//	if(root != NULL) 
-//	{ 
-//		cout << root->key << " "; 
-//		preOrder(root->left); 
-//		preOrder(root->right); 
-//	} 
-//} 
 	
 NODEPTR Search(NODEPTR &root, char x[])
 {
-	NODEPTR p;
-	p = root;
-	while(p!=NULL && strcmp(p->key, x) != 0)
-	{
-		if(strcmp(p->key,x) < 0)
-			p = p-> left;
-		else
-		 	p = p->right;			 	
-	}
-	return p;
+	if(root == NULL || strcmp(root->key, x) == 0)
+		return root;
+	else if(strcmp(root->key, x) < 0)
+		 {
+		 	Search(root->right,x);
+		 }	
+		 else if(strcmp(root->key, x) > 0)
+		 	  {
+		 	  	Search(root->left,x);
+			  }
+//	while(p != NULL && strcmp(p->key, x) != 0)
+//	{
+//		if(strcmp(p->key, x) < 0)
+//			p = p->left;
+//		else
+//		 	p = p->right;			 	
+//	}
+//	return p;
 }	
 
 void Inorder(NODEPTR &p)
@@ -267,23 +267,88 @@ void Inorder(NODEPTR &p)
 		
 	}
 }
+//functions
+
+
+
+void Qsort(Name_Mat info[], int left, int right )
+{
+	Name_Mat mid = info[(left + right) / 2];
+	int i = left, j = right;
+	do
+	{
+		while(strcmp(info[i].name, mid.name) < 0)
+			i++;
+		while(strcmp(info[i].name, mid.name) > 0)
+			j++;
+		if(i <= j)
+		{
+			if(i < j)
+			{
+				Name_Mat tmp;
+				tmp = info[i];
+				info[i] = info[j];
+				info[j] = tmp;
+			}
+			i++; j--;
+		}
+	} while(i<=j);
+	if(left < j)
+		Qsort(info,left,j);
+	if(right > i)
+		Qsort(info,i,right);
+}
+
+
 // save and load file
 
-void saveFile(NODEPTR tree)
+void saveMat(NODEPTR &tree, ofstream &outMat)
 {
-	ofstream outMat;
-	outMat.open("data/MaterialsInfo.txt", ios::out);
 	if(tree != NULL)
 	{
-		outMat << tree->key <<" ";
-		outMat << tree->height <<" ";
-		outMat << tree->info.code <<" ";
-		outMat << tree->info.name <<" ";
-		outMat << tree->info.type <<" ";
-		outMat << tree->info.amount <<" ";
-		saveFile(tree->left);
-		saveFile(tree->right);
+		outMat << tree->key <<endl;
+		outMat << tree->height <<endl;
+		outMat << tree->info.code <<endl;
+		outMat << tree->info.name <<endl;
+		outMat << tree->info.type <<endl;
+		outMat << tree->info.amount <<endl;
+		saveMat(tree->left,outMat);
+		saveMat(tree->right,outMat);
 	}
-	outMat.close();
 }	
+
+void saveFile(NODEPTR &tree, int &nMat)
+{
+	ofstream outMat;
+	outMat.open("data/MaterialsInfo.txt");
+	outMat << nMat << endl;
+	saveMat(tree, outMat);
+	outMat.close();
+}
+
+void loadMat(NODEPTR &tree, ifstream &inMat, int &nMat)
+{
+		NODEPTR tmp = new Node(); 
+		for(int i = 0; i < nMat; i++)
+		{
+			inMat.getline(tmp->key,sizeof(tmp->key));
+			inMat >> tmp->height;
+			inMat.ignore();
+			inMat.getline(tmp->info.code,sizeof(tmp->info.code));
+			inMat.getline(tmp->info.name, sizeof(tmp->info.name));
+			inMat.getline(tmp->info.type, sizeof(tmp->info.type));
+			inMat.getline(tmp->info.amount, sizeof(tmp->info.amount));
+			tmp->info.RealAmount = atoi(tmp->info.amount);
+			Insert(tree,tmp->key,tmp->info);
+		}
+}
+
+void loadFile(NODEPTR &tree, int &nMat)
+{
+	ifstream inMat;
+	inMat.open("MaterialsInfo.txt", ios::out | ios::in);
+	inMat >> nMat;
+	loadMat(tree, inMat, nMat);	
+	inMat.close();
+}
 					
