@@ -27,17 +27,22 @@ struct NameMats
 {
 	char code[11];
 	char name[51];
+	NameMats()
+	{
+		code[0] = '\0';
+		name[0] = '\0';
+	}
 };
 typedef struct NameMats Name_Mat;
 
 struct Node			//AVL tree
 {
+	
 	char key[];
 	Material info;
 	int height ;
 	Node *left;
 	Node *right;
-	
 	Node()
 	{
 		height = 1;
@@ -46,11 +51,13 @@ struct Node			//AVL tree
 typedef struct Node *NODEPTR;
 
 //====Functions====//
-//NODEPTR Initalize (NODEPTR root)
-//{
-//	root = NULL;
-//	return root;
-//}
+
+	int CountM = 0;
+	int index = 0;
+void Initalize(NODEPTR &root)
+{
+	root = NULL;
+}
 	//can bang lai cay 
 int Height(NODEPTR p)
 {
@@ -279,8 +286,8 @@ void Qsort(Name_Mat info[], int left, int right )
 	{
 		while(strcmp(info[i].name, mid.name) < 0)
 			i++;
-		while(strcmp(info[i].name, mid.name) > 0)
-			j++;
+		while(strcmp(info[j].name, mid.name) > 0)
+			j--;
 		if(i <= j)
 		{
 			if(i < j)
@@ -306,8 +313,8 @@ void saveMat(NODEPTR &tree, ofstream &outMat)
 {
 	if(tree != NULL)
 	{
-		outMat << tree->key <<endl;
-		outMat << tree->height <<endl;
+//		outMat << tree->key <<endl;
+//		outMat << tree->height <<endl;
 		outMat << tree->info.code <<endl;
 		outMat << tree->info.name <<endl;
 		outMat << tree->info.type <<endl;
@@ -326,29 +333,36 @@ void saveFile(NODEPTR &tree, int &nMat)
 	outMat.close();
 }
 
-void loadMat(NODEPTR &tree, ifstream &inMat, int &nMat)
+void loadFile(NODEPTR &tree)
 {
-		NODEPTR tmp = new Node(); 
-		for(int i = 0; i < nMat; i++)
-		{
-			inMat.getline(tmp->key,sizeof(tmp->key));
-			inMat >> tmp->height;
-			inMat.ignore();
-			inMat.getline(tmp->info.code,sizeof(tmp->info.code));
-			inMat.getline(tmp->info.name, sizeof(tmp->info.name));
-			inMat.getline(tmp->info.type, sizeof(tmp->info.type));
-			inMat.getline(tmp->info.amount, sizeof(tmp->info.amount));
-			tmp->info.RealAmount = atoi(tmp->info.amount);
-			Insert(tree,tmp->key,tmp->info);
-		}
-}
-
-void loadFile(NODEPTR &tree, int &nMat)
-{
+	Initalize(tree);
 	ifstream inMat;
-	inMat.open("MaterialsInfo.txt", ios::out | ios::in);
-	inMat >> nMat;
-	loadMat(tree, inMat, nMat);	
+	inMat.open("MaterialsInfo.txt",ios::in);
+	inMat >> CountM;
+	for(int i = 0; i < CountM; i++)
+	{
+		Material tmp;	
+//			tmp = new Node(); 
+//			inMat.getline(tmp->key,sizeof(tmp->key));
+//			inMat >> tmp->height;
+//			inMat.ignore();
+		inMat.getline(tmp.code,sizeof(tmp.code));
+		inMat.getline(tmp.name, sizeof(tmp.name));
+		inMat.getline(tmp.type, sizeof(tmp.type));
+		inMat.getline(tmp.amount, sizeof(tmp.amount));
+		tmp.RealAmount = atoi(tmp.amount);
+		tree = Insert(tree,tmp.code,tmp);
+	}
+	if(CountM==0)
+	{
+		CountM = 1;
+		Material tmp;
+		strcpy(tmp.code,"ERROR");
+		strcpy(tmp.name,"error");
+		strcpy(tmp.type,"error");
+		strcpy(tmp.amount,"404");
+		tree = Insert(tree,tmp.code,tmp);
+	}	
 	inMat.close();
 }
 					

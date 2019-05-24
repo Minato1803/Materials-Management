@@ -37,16 +37,16 @@ void AddChuoi(char c, char s[])
 
 void get_chuoi(char *des, char *s )
 {
-	int index = 0;
+	int it = 0;
 	for(int i=0; i<strlen(s); i++)
 	{
 		if(s[i] != ' ')
 		{
-			des[index] = tolower(s[i]);
-			index++;
+			des[it] = tolower(s[i]);
+			it++;
 		}
 	}
-	des[index] ='\0';
+	des[it] ='\0';
 }
 
 void delBlank(char *s)
@@ -139,33 +139,6 @@ void Nhap(int x, int y,int check, char c, char s[], int n)
 	outtextxy(x,y,s);
 }
 
-void Qsort(NamesInfo info[], int left, int right)
-{
-	NamesInfo mid = info[(left + right) / 2];
-	int i = left, j = right;
-	do
-	{
-		while(strcmp(info[i].name, mid.name) < 0)
-			i++;
-		while(strcmp(info[i].name, mid.name) > 0)
-			j++;
-		if(i <= j)
-		{
-			if(i < j)
-			{
-				NamesInfo tmp;
-				tmp = info[i];
-				info[i] = info[j];
-				info[j] = tmp;
-			}
-			i++; j--;
-		}
-	} while(i<=j);
-	if(left < j)
-		Qsort(info,left,j);
-	if(right > i)
-		Qsort(info,i,right);
-}
 
 char* toChars(int num)
 {

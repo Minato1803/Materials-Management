@@ -8,13 +8,6 @@
 #include "colors.h"
 
 using namespace std;
-
-struct NamesInfo
-{
-	char ID[11];
-	char name[51];
-};
-
 //struct NamesInfoEmp
 //{
 //	char fName[31];

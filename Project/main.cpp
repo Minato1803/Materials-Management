@@ -18,7 +18,7 @@ void VeKhung2(char khungNoiDung[][30], int H, int W, int mucChon, int soLuongKhu
 void veNut2(char khungNoiDung[][30], int ViTriKhung[], int SoLuongKhung, int H, int W, int mauNut, int kichThuocNut, int mucChon);
 void veKhung(int x, int y, char noiDung[], bool daChon, int mauNen, int mauChu);
 void veMuc2Chon(int x, int y, char noiDung[], char noiDungMucChon[][30], bool chonTrai, int mauNen, int mauChu);
-void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset);
+void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset, int n);
 void notiBool(char khungNoiDung[][50], bool &choice, int n);
 void noti(char khungNoiDung[][50]);
 
@@ -37,10 +37,9 @@ void Guild();
 
 //==========DUCKHAI========
 //	NODEPTR tree =  NULL;
-	int CountM = 0;
-	int index = 0;
+	
 	// Cau a:
-	void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, Material tmp);
+	void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcase,  Material tmp);
 	void infoText(int x, int y, char noiDung[],char info[]);
 	void hienThiInfoMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, char keyword[]);
 	void inChoiceMat(NODEPTR &tree, char khungNoiDung[][30],bool RoA);
@@ -66,7 +65,12 @@ void inRemoveEmp(char khungNoiDung[][30], struct listEmp &ListEmployees);
 int main()
 {
 	KhoiTaoChuongTrinh();
-	NODEPTR tree = NULL;
+	NODEPTR tree;
+	loadFile(tree);
+	if(tree == NULL)
+	{
+		About();
+	}
 	struct listEmp ListEmployees;
 	loadEmp(ListEmployees);
 	Menu(ListEmployees,tree);
@@ -227,7 +231,6 @@ void MenuPhu(int viTriMenuPhu, char menu[][30], int MAXMENU, int &chonMuc)
 
 void Materials(NODEPTR &tree)
 {
-	loadFile(tree, CountM);
 	VeMenuPhu(0, MenuMater);
 	int thaoTac;
 	MenuPhu(0, MenuMater, 4, thaoTac);
@@ -236,7 +239,7 @@ void Materials(NODEPTR &tree)
 		case 1:
 			{
 				Material newM;
-				return VeKhungAddMat(tree, khungMat, 450, 600, newM);
+				return VeKhungAddMat(tree, khungMat, 450, 600,1, newM);
 			}
 		case 2:
 			{
@@ -684,7 +687,7 @@ void veMuc2Chon(int x, int y, char noiDung[], char noiDungMucChon[][30], bool ch
 	setfillstyle(SOLID_FILL, TEXTBOX);
 }
 
-void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset)
+void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset, int n)
 {
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
@@ -694,9 +697,9 @@ void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset)
 	int D =	WD_HEIGHT/2 + H/2;
 	int L =	WD_WIDTH/2 - W/2;
 	int R =	WD_WIDTH/2 + W/2;
-	int midText1 = ((R-L)/2 - textwidth(khungNoiDung[1]))/2;
+	int midText1 = ((R-L)/2 - textwidth(khungNoiDung[n]))/2;
 	int midText2 = ((R-L)/2 - textwidth(khungNoiDung[2]))/2;
-	int midTextH = (kichThuocNut - textheight(khungNoiDung[1]))/2 + textheight(khungNoiDung[1]);
+	int midTextH = (kichThuocNut - textheight(khungNoiDung[n]))/2 + textheight(khungNoiDung[n]);
 	setfillstyle(SOLID_FILL, NEN_KHUNG);
 	bar (L, D-kichThuocNut, R, D);
 	int MAU_NUT_HL = HL_MENU_PHU;
@@ -708,7 +711,7 @@ void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset)
 		bar (L, D-kichThuocNut, WD_WIDTH/2, D);
 		setbkcolor(MAU_NUT_HL);
 		setcolor(WHITE);
-		outtextxy(L+midText1, D-midTextH, khungNoiDung[1]);
+		outtextxy(L+midText1, D-midTextH, khungNoiDung[n]);
 		setbkcolor(NEN_KHUNG);
 		outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[2]);
 	}
@@ -717,7 +720,7 @@ void veKhungNut(int H, int W, char khungNoiDung[][30], bool Left, bool reset)
 		bar (WD_WIDTH/2, D-kichThuocNut, R, D);
 		setcolor(WHITE);
 		setbkcolor(NEN_KHUNG);
-		outtextxy(L+midText1, D-midTextH, khungNoiDung[1]);
+		outtextxy(L+midText1, D-midTextH, khungNoiDung[n]);
 		setbkcolor(MAU_NUT_HL);
 		outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[2]);
 	}
@@ -872,9 +875,12 @@ void noti(char khungNoiDung[])
 
 
 //=========================================================DUCKHAI=================================================================//
-void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, Material tmp)
+void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcase, Material tmp) // 1: choose addMat 0: choose adjust
 {
 //	Material tmp;
+	int cases = 1;
+	if(Mcase == 0)
+		cases = 7;
 	NotiN:
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
@@ -912,11 +918,11 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, Materia
 	line(L, D-kichThuocNut, R, D-kichThuocNut);								//bottom line
 	line(WD_WIDTH/2, D-kichThuocNut, WD_WIDTH/2, D);						//center line
 	setbkcolor(NEN_KHUNG);
-	int midText1 = ((R-L)/2 - textwidth(khungNoiDung[1]))/2;
+	int midText1 = ((R-L)/2 - textwidth(khungNoiDung[cases]))/2;
 	int midText2 = ((R-L)/2 - textwidth(khungNoiDung[2]))/2;
-	int midTextH = (kichThuocNut - textheight(khungNoiDung[1]))/2 + textheight(khungNoiDung[1]);
+	int midTextH = (kichThuocNut - textheight(khungNoiDung[cases]))/2 + textheight(khungNoiDung[cases]);
 	setcolor(WHITE);
-	outtextxy(L+midText1, D-midTextH, khungNoiDung[1]);
+	outtextxy(L+midText1, D-midTextH, khungNoiDung[cases]);
 	outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[2]);
 	
 	for (int i = 1; i <= SoLuongKhung; i++)
@@ -983,7 +989,7 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, Materia
 			InThongTin(560, ViTriKhung[2], tmp.name);
 			InThongTin(560, ViTriKhung[3], tmp.type);
 			InThongTin(560, ViTriKhung[4], tmp.amount);
-			veKhungNut(H, W, khungNoiDung, 1, 1);
+			veKhungNut(H, W, khungNoiDung, 1, 1,cases);
 			//===di chuyen trong menu===//
 			switch(pos)
 			{
@@ -1018,7 +1024,8 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, Materia
 //						veKhung(380, 380, khungNoiDung[1], 1, NEN_KHUNG, WHITE);
 
 						bool buttonL = 1;
-						veKhungNut(H, W, khungNoiDung, buttonL, 0);
+							veKhungNut(H, W, khungNoiDung, buttonL, 0,cases);
+							
 						while(1)
 						{
 							if(kbhit())
@@ -1033,13 +1040,13 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, Materia
 										case KEY_UP:
 											{
 												pos--;
-												veKhungNut(H, W, khungNoiDung, buttonL, 1);
+												veKhungNut(H, W, khungNoiDung, buttonL, 1,cases);
 												goto cpos;
 											}
 										case KEY_DOWN:
 											{
 												pos++;
-												veKhungNut(H, W, khungNoiDung, buttonL, 1);
+												veKhungNut(H, W, khungNoiDung, buttonL, 1,cases);
 												goto cpos;
 											}
 										case KEY_LEFT:
@@ -1066,12 +1073,21 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, Materia
 											if(p == NULL)
 											{
 												NotiY:
-												++CountM;	
-												ThongBao(725, 130, Success[0], GREEN, MAU_MENU);	
+												++CountM;
 												tmp.RealAmount =  ChangeCharToNum(tmp.amount,tmp.RealAmount);
 												tree = Insert(tree,tmp.code,tmp);
-												Material newM;													
-												return VeKhungAddMat(tree, khungMat, 450, 600,newM);	
+												if(Mcase == 1)	
+												{
+													ThongBao(725, 130, Success[0], GREEN, MAU_MENU);
+													Material newM;													
+													return VeKhungAddMat(tree, khungMat, 450, 600,1,newM);	
+												}
+												else
+												{
+													ThongBao(720, 130, Success[2], GREEN, MAU_MENU);
+													VeMenu();		
+													return inChoiceMat(tree, choiceObject, 0);
+												}
 											}
 											else
 											{
@@ -1106,7 +1122,7 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, Materia
 									VeMenu();
 									return;
 								}
-								veKhungNut(H, W, khungNoiDung, buttonL, 0);
+								veKhungNut(H, W, khungNoiDung, buttonL, 0,cases);
 							}
 						}
 					}
@@ -1177,12 +1193,12 @@ void hienThiInfoMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, char k
 	infoText(380, ViTriKhung[3], khungNoiDung[3+2],tmp->info.type);
 	infoText(380, ViTriKhung[4], khungNoiDung[4+2],tmp->info.amount);
 	bool buttonL = 1;
-	veKhungNut(H, W, khungNoiDung, buttonL, 0);
+	veKhungNut(H, W, khungNoiDung, buttonL, 0,1);
 	while(1)
 	{
 		if(kbhit())
 		{
-			veKhungNut(H, W, khungNoiDung, buttonL, 0);
+			veKhungNut(H, W, khungNoiDung, buttonL, 0,1);
 			char key = getch();
 			char ckey = getch();
 			if(key==0)
@@ -1377,7 +1393,9 @@ void inChoiceMat(NODEPTR &tree, char khungNoiDung[][30],bool RoA) // RoA = 1  re
 									else
 									{
 										NODEPTR findM = Search(tree,findID);
-										return VeKhungAddMat(tree, khungMat, 450, 600,findM->info);	
+										--CountM;
+										tree = deleteNode(tree, findID);
+										return VeKhungAddMat(tree, khungMat, 450, 600,0,findM->info);	
 									}
 								}
 							}
@@ -1537,6 +1555,7 @@ void inTrangMat(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], 
 	setbkcolor(NEN_KHUNG);
 	dis = U + kichThuocSTT;
 	int Size = CountM;
+	NODEPTR p; 
 	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
 	{
 		dis += 5;	
@@ -1545,11 +1564,11 @@ void inTrangMat(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], 
 		char *d = toChars(i+1);
 		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[0])+sizeKhungNoiDung[0]*2), dis, d);
 		disW += textwidth(khungNoiDung[0]) + sizeKhungNoiDung[0]*2;
-		NODEPTR p; 
 		p = Search(tree, arr[i].code);
 		if(p != NULL)
-			inVatTu(Search(tree, arr[i].code)->info, disW, dis);
-		
+		{
+			inVatTu(p->info, disW, dis);
+		}
 		dis += h+5;
 	}
 }
@@ -1557,43 +1576,95 @@ void inTrangMat(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], 
 void inVatTu(Material VT, int posX, int posY)
 {
 	// in ID
-	outtextxy(posX + canLeGiua(VT.code, textwidth(danhSachEmp[1])+sizeDanhSachEmp[1]*2), posY, VT.code);
-	posX += textwidth(danhSachEmp[1]) + sizeDanhSachEmp[1]*2;
+	outtextxy(posX + canLeGiua(VT.code, textwidth(danhSachMat[1])+sizeDanhSachMat[1]*2), posY, VT.code);
+	posX += textwidth(danhSachMat[1]) + sizeDanhSachMat[1]*2;
 	
 	// in Name
 	outtextxy(posX + 10, posY, VT.name);
-	posX += textwidth(danhSachEmp[2]) + sizeDanhSachEmp[2]*2;
+	posX += textwidth(danhSachMat[2]) + sizeDanhSachMat[2]*2;
 	
 	// in type
-	outtextxy(posX + canLeGiua(VT.type , textwidth(danhSachEmp[3])+sizeDanhSachEmp[3]*2), posY, VT.type);
-	posX += textwidth(danhSachEmp[3]) + sizeDanhSachEmp[3]*2;
+	outtextxy(posX + canLeGiua(VT.type , textwidth(danhSachMat[3])+sizeDanhSachMat[3]*2), posY, VT.type);
+	posX += textwidth(danhSachMat[3]) + sizeDanhSachMat[3]*2;
 	
 	// in Amount
-	outtextxy(posX + canLeGiua(VT.amount , textwidth(danhSachEmp[4])+sizeDanhSachEmp[4]*2), posY, VT.amount);		
-	posX += textwidth(danhSachEmp[4]) + sizeDanhSachEmp[4]*2;
+	outtextxy(posX + canLeGiua(VT.amount , textwidth(danhSachMat[4])+sizeDanhSachMat[4]*2), posY, VT.amount);		
+	posX += textwidth(danhSachMat[4]) + sizeDanhSachMat[4]*2;
 }
 
 void taoMangMat(NODEPTR &tree, Name_Mat arrM[])
 {
-	if(tree == NULL)
+	if(tree != NULL)
+	{	
+		taoMangMat(tree->left,arrM);
+		get_chuoi(arrM[index].name, tree->info.name);
+		strcpy(arrM[index++].code, tree->info.code);
+		taoMangMat(tree->right,arrM);
+	}
+	else
 		return;
-	taoMangMat(tree->left,arrM);
-	get_chuoi(arrM[index].name, tree->info.name);
-	get_chuoi(arrM[index++].code, tree->info.code);
-	taoMangMat(tree->right,arrM);
 }
 void inDanhSachMat(NODEPTR &tree)
 {
 	Name_Mat* arrM = new Name_Mat[CountM];
+	index = 0;
 	taoMangMat(tree,arrM);
 	Qsort(arrM,0,CountM);
 	//in danh sach
-	inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, 0);
 	// chuyen trang bla bla
+		int startPage = 1;
+	int limitPage = ceil(CountM*1.0/OBJ_PER_PAGE);
+	if (limitPage == 0)
+	{
+		VeMenu();
+		noti(thongBao[0]);
+	}
+	else
+	{
+		inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, 0);
+		showPage(830, 650, startPage, limitPage);
+		while(1)
+		{
+			if(kbhit())
+			{
+				char key = getch();
+				if (key == 0)
+				{
+					char nextK = getch();
+					switch(nextK)
+					{
+						case KEY_PGUP:
+							{
+								startPage--;
+								if (startPage < 1)
+									startPage = limitPage;
+								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE);	
+								showPage(830, 650, startPage, limitPage);
+								break;
+							}
+						case KEY_PGDN:
+							{
+								startPage++;
+								if (startPage > limitPage)
+									startPage = 1;
+								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE);
+								showPage(830, 650, startPage, limitPage);
+								break;
+							}
+					}
+				}
+				else if(key == 27) //exit
+				{
+					VeMenu();
+					return;
+				}
+			}
+		}
+	}
 	delete[] (arrM);
 }
 
-//===================================================endDUCKHAI=========
+//===================================================endDUCKHAI=========================================//
 
 //===========CHINHAN============
 
@@ -1788,7 +1859,7 @@ void VeKhungAddEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H
 				case 5:
 					{
 						bool buttonL = 1;
-						veKhungNut(H, W, khungNoiDung, buttonL, 0);
+						veKhungNut(H, W, khungNoiDung, buttonL, 0,1);
 						while(1)
 						{
 							if(kbhit())
@@ -1803,13 +1874,13 @@ void VeKhungAddEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H
 										case KEY_UP:
 											{
 												pos--;
-												veKhungNut(H, W, khungNoiDung, buttonL, 1);
+												veKhungNut(H, W, khungNoiDung, buttonL, 1,1);
 												goto cpos;
 											}
 										case KEY_DOWN:
 											{
 												pos++;
-												veKhungNut(H, W, khungNoiDung, buttonL, 1);
+												veKhungNut(H, W, khungNoiDung, buttonL, 1,1);
 												goto cpos;
 											}
 										case KEY_LEFT:
@@ -1863,7 +1934,7 @@ void VeKhungAddEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H
 									VeMenu();
 									return;
 								}
-								veKhungNut(H, W, khungNoiDung, buttonL, 0);
+								veKhungNut(H, W, khungNoiDung, buttonL, 0,1);
 							}
 						}
 					}
@@ -2467,7 +2538,7 @@ void hienThiInfoEmp(char khungNoiDung[][30], int H, int W, struct Employee *Info
 	{
 		if(kbhit())
 		{
-			veKhungNut(H, W, khungNoiDung, buttonL, 0);
+			veKhungNut(H, W, khungNoiDung, buttonL, 0,1);
 			char key = getch();
 			char ckey = getch();
 			if(key==0)
