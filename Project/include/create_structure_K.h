@@ -1,11 +1,12 @@
 #include <iostream>
+#include <fstream>
 #include <string.h>
 #include "Functions.h"
 
 using namespace std;
 
 //=== create structures=== //
-
+int CountM = 0;
 struct Material	// info Materials
 {
 	char code[11];
@@ -52,10 +53,10 @@ typedef struct Node *NODEPTR;
 
 //====Functions====//
 
-	int CountM = 0;
-	int index = 0;
-void Initalize(NODEPTR &root)
+
+void Initalize(NODEPTR &root, int &CountM)
 {
+	CountM = 0;
 	root = NULL;
 }
 	//can bang lai cay 
@@ -136,15 +137,16 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 				root = NULL; 
 			} 
 			else 				// neu co 1 nut con 
-			root = tmp; 
-			free(tmp); 
+				root = tmp; 
+//			free(tmp); 
 		} 
 		else
 		{ 
 			// node with two children: Get the inorder 
 			// successor (smallest in the right subtree) 
 			NODEPTR tmp = minValueNode(root->right); 
-			strcpy(root->key,tmp->key); 
+//			strcpy(root->key,tmp->key);
+			tmp->info = root->info;  
 			// Delete the inorder successor 
 			root->right = deleteNode(root->right, tmp->key); 
 		} 
@@ -152,7 +154,7 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 	// If the tree had only one node 
 	// then return 
 	if (root == NULL) 
-	return root; 
+		return root; 
 	
 	//update node hien tai 
 	root->height =max(Height(root->left), Height(root->right)) + 1; 
@@ -327,18 +329,19 @@ void saveMat(NODEPTR &tree, ofstream &outMat)
 void saveFile(NODEPTR &tree, int &nMat)
 {
 	ofstream outMat;
-	outMat.open("data/MaterialsInfo.txt");
+	outMat.open("data/MaterialsInfo.txt", ios::out);
 	outMat << nMat << endl;
 	saveMat(tree, outMat);
 	outMat.close();
 }
 
-void loadFile(NODEPTR &tree)
+void loadFile(NODEPTR &tree, int &CountM)
 {
-	Initalize(tree);
+	Initalize(tree, CountM);
 	ifstream inMat;
-	inMat.open("MaterialsInfo.txt",ios::in);
+	inMat.open("data/MaterialsInfo.txt",ios::in);
 	inMat >> CountM;
+	inMat.ignore();
 	for(int i = 0; i < CountM; i++)
 	{
 		Material tmp;	
@@ -351,16 +354,6 @@ void loadFile(NODEPTR &tree)
 		inMat.getline(tmp.type, sizeof(tmp.type));
 		inMat.getline(tmp.amount, sizeof(tmp.amount));
 		tmp.RealAmount = atoi(tmp.amount);
-		tree = Insert(tree,tmp.code,tmp);
-	}
-	if(CountM==0)
-	{
-		CountM = 1;
-		Material tmp;
-		strcpy(tmp.code,"ERROR");
-		strcpy(tmp.name,"error");
-		strcpy(tmp.type,"error");
-		strcpy(tmp.amount,"404");
 		tree = Insert(tree,tmp.code,tmp);
 	}	
 	inMat.close();

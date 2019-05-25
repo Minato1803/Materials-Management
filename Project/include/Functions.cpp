@@ -42,7 +42,7 @@ void get_chuoi(char *des, char *s )
 	{
 		if(s[i] != ' ')
 		{
-			des[it] = tolower(s[i]);
+			des[it] = toupper(s[i]);
 			it++;
 		}
 	}

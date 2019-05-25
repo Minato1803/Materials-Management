@@ -35,15 +35,17 @@ void About();
 void Guild();
 //=========================
 
-//==========DUCKHAI========
-//	NODEPTR tree =  NULL;
-	
+//==========DUCKHAI==============================================================================
+	int index = 0;
 	// Cau a:
 	void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcase,  Material tmp);
 	void infoText(int x, int y, char noiDung[],char info[]);
 	void hienThiInfoMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, char keyword[]);
 	void inChoiceMat(NODEPTR &tree, char khungNoiDung[][30],bool RoA);
+	void danhSachRoAMat(NODEPTR &tree, int &CountM, bool RoA);
+	void chonTuDanhSachMat(NODEPTR &tree, Name_Mat *arrM, int CountM, int &stt, int &startPage, bool &selected);
 	void inTrangMat(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], Name_Mat arr[], int start);
+	void taoMangMat(NODEPTR &tree, Name_Mat arrM[]);
 	void inVatTu(Material VT, int posX, int posY);
 	void inDanhSachMat(NODEPTR &tree);
 //=========================
@@ -65,12 +67,8 @@ void inRemoveEmp(char khungNoiDung[][30], struct listEmp &ListEmployees);
 int main()
 {
 	KhoiTaoChuongTrinh();
-	NODEPTR tree;
-	loadFile(tree);
-	if(tree == NULL)
-	{
-		About();
-	}
+	NODEPTR tree = NULL;
+	loadFile(tree, CountM);
 	struct listEmp ListEmployees;
 	loadEmp(ListEmployees);
 	Menu(ListEmployees,tree);
@@ -1094,7 +1092,10 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcas
 												bool x = 1;
 												notiBool(sameMat, x, 0);
 												if(x)
+												{
+													--CountM;
 													goto NotiY;
+												}
 												else
 													goto NotiN;
 													
@@ -1143,8 +1144,6 @@ void infoText(int x, int y, char noiDung[],char info[])
 
 void hienThiInfoMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, char keyword[])
 {
-	NODEPTR tmp;
-	tmp = Search(tree,keyword);
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
 	setusercharsize(1, 2, 1, 2);
@@ -1188,42 +1187,45 @@ void hienThiInfoMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, char k
 	outtextxy(L+midText1, D-midTextH, khungNoiDung[1]);
 	outtextxy(WD_WIDTH/2+midText2, D-midTextH, khungNoiDung[2]);
 	//info
+	NODEPTR tmp;
+	tmp = Search(tree,keyword);
 	infoText(380, ViTriKhung[1], khungNoiDung[1+2],tmp->info.code);
 	infoText(380, ViTriKhung[2], khungNoiDung[2+2],tmp->info.name);
 	infoText(380, ViTriKhung[3], khungNoiDung[3+2],tmp->info.type);
 	infoText(380, ViTriKhung[4], khungNoiDung[4+2],tmp->info.amount);
-	bool buttonL = 1;
-	veKhungNut(H, W, khungNoiDung, buttonL, 0,1);
+	bool button = 1;
+	veKhungNut(H, W, khungNoiDung, button, 0,1);
 	while(1)
 	{
 		if(kbhit())
 		{
-			veKhungNut(H, W, khungNoiDung, buttonL, 0,1);
 			char key = getch();
-			char ckey = getch();
-			if(key==0)
+			char ckey; 
+			if(key == 0)
 			{
+				ckey = getch();
 				switch(ckey)
 				{
 					case KEY_LEFT:
 					{
-						buttonL ^= 1;
+						button ^= 1;
 						break;
 					}
 					case KEY_RIGHT:
 					{
-						buttonL ^= 1;
+						button ^= 1;
 						break;
 					}
 				}
 			}
-			else if(key == '\r')
+			if(key == '\r')
 				 {
-				 	if(buttonL)
+				 	if(button == 1)
 				 	{
-				 		--CountM;
 				 		ThongBao(720, 130, Success[1], GREEN, MAU_MENU);
-				 		tree = deleteNode(tree,keyword);
+				 		--CountM;
+				 		tree = deleteNode(tree,tmp->key);
+						saveFile(tree, CountM);
 				 		VeMenu();
 				 		return inChoiceMat(tree, choiceObject,1);
 					}
@@ -1231,13 +1233,16 @@ void hienThiInfoMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, char k
 					{
 						VeMenu();
 						return inChoiceMat(tree, choiceObject,1);
+//						return; 
 					}
 				 }
-				 if(key==27)
-				 {
-				 	VeMenu();
-				 	return inChoiceMat(tree, choiceObject,1);
-				 }
+			if(key==27)
+			{
+			 	VeMenu();
+				return inChoiceMat(tree, choiceObject,1);
+	//				 	return; 
+			}
+			veKhungNut(H, W, khungNoiDung, button, 0,1);
 		}
 	}
 	
@@ -1381,27 +1386,37 @@ void inChoiceMat(NODEPTR &tree, char khungNoiDung[][30],bool RoA) // RoA = 1  re
 						{
 							if(choice == 1)
 							{
-								if(Search(tree,findID)==NULL)
+								if(strlen(findID) != 0)
 								{
-									//loi ko ton tai
-									ThongBao(740, 255, Fail[1], LIGHTRED, MAU_MENU);
+									if(Search(tree,findID)==NULL)
+									{
+										//loi ko ton tai
+										ThongBao(740, 255, Fail[1], LIGHTRED, MAU_MENU);
+									}
+									else
+									{	
+										if(RoA == 1)
+											return hienThiInfoMat(tree, checkMat, 450, 600, findID); // den khung check info 1 Mats
+										else
+										{
+											NODEPTR findM = Search(tree,findID);
+											--CountM;
+											Material CurrentM;
+											CurrentM = findM->info;
+											tree = deleteNode(tree, findID);
+											return VeKhungAddMat(tree, khungMat, 450, 600,0,CurrentM);	
+										}
+									}
 								}
 								else
-								{	
-									if(RoA == 1)
-										return hienThiInfoMat(tree, checkMat, 450, 600, findID); // den khung check info 1 Mats
-									else
-									{
-										NODEPTR findM = Search(tree,findID);
-										--CountM;
-										tree = deleteNode(tree, findID);
-										return VeKhungAddMat(tree, khungMat, 450, 600,0,findM->info);	
-									}
+								{
+									ThongBao(720, 255, Fail[0], LIGHTRED, MAU_MENU);
+									posR = 0;
 								}
 							}
 							else
 							{
-								return inDanhSachMat(tree); //den khung danh sach
+								return danhSachRoAMat(tree, CountM,RoA); //den khung danh sach
 							}	
 						}
 						else
@@ -1493,8 +1508,153 @@ void inChoiceMat(NODEPTR &tree, char khungNoiDung[][30],bool RoA) // RoA = 1  re
 	} // while
 }
 
-//====================chinh sua==========================
+void danhSachRoAMat(NODEPTR &tree, int &CountM, bool RoA) //1: Remove 2: Adjust
+{
+	//tao mang 1 chieu
+	Name_Mat* arrM = new Name_Mat[CountM];
+	index = 0;
+	taoMangMat(tree, arrM);
+	Qsort(arrM,0,CountM);
+	int removePos = 0;
+	int page = 1;
+	bool select;
+	while(1)
+	{
+		chonTuDanhSachMat(tree, arrM, CountM, removePos, page, select);
+		if(select)
+		{
+			if(RoA)
+			{
+				--CountM;
+				tree = deleteNode(tree, arrM[removePos].code);
+				for (int i = removePos; i < CountM; arrM[i]=arrM[++i]);
+			}
+			else
+			{
+				NODEPTR findM = Search(tree,arrM[removePos].code);
+				--CountM;
+				Material CurrentM;
+				CurrentM = findM->info;
+				tree = deleteNode(tree, findM->key);
+				VeMenu();
+				return VeKhungAddMat(tree, khungMat, 450, 600,0,CurrentM);
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+	saveFile(tree, CountM);
+	delete (arrM);
+	VeMenu();
+}
 
+
+
+void chonTuDanhSachMat(NODEPTR &tree, Name_Mat *arrM, int CountM, int &stt, int &startPage, bool &selected)
+{	
+	//in danh sach
+	//int startPage = 1;
+	selected = false;
+	int limitPage = ceil(CountM*1.0/OBJ_PER_PAGE);
+	if (limitPage == 0)
+	{
+		noti(thongBao[0]);
+	}
+	else
+	{
+		// tinh thong so
+		int kichThuocSTT = 30;
+		int h = textheight(danhSachMat[0]) + 5*2;
+		int H = (h)*OBJ_PER_PAGE + kichThuocSTT;
+		int W = 0;
+		for (int i = 0; i < 5; i++)
+		{
+			W += textwidth(danhSachMat[i]) + sizeDanhSachMat[i]*2;
+		}
+		int U = WD_HEIGHT/2 - H/2;
+		int L =	WD_WIDTH/2 - W/2;
+		
+		int x = L, y = U+kichThuocSTT+(stt%OBJ_PER_PAGE)*h;
+		int yOld = y;
+				
+		inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, 0);
+		showPage(830, 650, startPage, limitPage);
+		
+		setcolor(GREEN);
+		rectangle(x, y, x+W, y+h);
+		while(1)
+		{
+			if(kbhit())
+			{
+				char key = getch();
+				if (key == 0)
+				{
+					char nextK = getch();
+					switch(nextK)
+					{
+						case KEY_PGUP:
+							{
+								startPage--;
+								if (startPage < 1)
+									startPage = limitPage;
+								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE);
+								showPage(830, 650, startPage, limitPage);
+								stt = (startPage-1)*OBJ_PER_PAGE;
+								break;
+							}
+						case KEY_PGDN:
+							{
+								startPage++;
+								if (startPage > limitPage)
+									startPage = 1;
+								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE);
+								showPage(830, 650, startPage, limitPage);
+								stt = (startPage-1)*OBJ_PER_PAGE;
+								break;
+							}
+						case KEY_UP:
+							{
+								stt--;
+								break;
+							}
+						case KEY_DOWN:
+							{
+								stt++;
+								break;
+							}
+					}
+					if (stt < (startPage-1)*OBJ_PER_PAGE)
+						stt = min((startPage-1)*OBJ_PER_PAGE+(OBJ_PER_PAGE-1), CountM-1);
+					else if (stt > (startPage-1)*OBJ_PER_PAGE+(OBJ_PER_PAGE-1) || stt > CountM-1)
+						stt = (startPage-1)*OBJ_PER_PAGE;
+						
+					y = U+kichThuocSTT+(stt%OBJ_PER_PAGE)*h;
+					// to den hinh chu nhat cu
+					setcolor(BLACK);
+					rectangle(x, yOld, x+W, yOld+h);
+					// ve hinh chu nhat moi
+					setcolor(GREEN);
+					rectangle(x, y, x+W, y+h);
+					yOld = y;
+				}
+				else if (key == 27) //exit
+				{
+					VeMenu();
+					return;
+				}
+				else if (key == '\r')
+				{
+					selected = true;
+					return;
+				}
+			}
+		}
+	}
+}
+
+//====================Material List==========================
 
 void inTrangMat(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], Name_Mat arr[], int start)
 {
@@ -1595,7 +1755,7 @@ void inVatTu(Material VT, int posX, int posY)
 void taoMangMat(NODEPTR &tree, Name_Mat arrM[])
 {
 	if(tree != NULL)
-	{	
+	{
 		taoMangMat(tree->left,arrM);
 		get_chuoi(arrM[index].name, tree->info.name);
 		strcpy(arrM[index++].code, tree->info.code);
@@ -1612,7 +1772,7 @@ void inDanhSachMat(NODEPTR &tree)
 	Qsort(arrM,0,CountM);
 	//in danh sach
 	// chuyen trang bla bla
-		int startPage = 1;
+	int startPage = 1;
 	int limitPage = ceil(CountM*1.0/OBJ_PER_PAGE);
 	if (limitPage == 0)
 	{

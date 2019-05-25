@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=3
 CompilerSettings=0000000100000000000000000
-UnitCount=11
+UnitCount=8
 
 [VersionInfo]
 Major=1
@@ -90,26 +90,6 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit10]
-FileName=include\UI.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit11]
-FileName=include\UI.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit12]
 FileName=Functions.cpp
 CompileCpp=1
@@ -161,7 +141,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit8]
-FileName=include\GlobleVariables.h
+FileName=include\graphics.h
 CompileCpp=1
 Folder=
 Compile=1
