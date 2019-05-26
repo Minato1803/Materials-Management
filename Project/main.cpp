@@ -267,11 +267,11 @@ void Employees(struct listEmp &ListEmployees)
 			}
 		case 2:
 			{
-				return VeKhungAddEmp(ListEmployees, khungEmp, 450, 600);
+				return inRemoveEmp(choiceObject, ListEmployees);
 			}
 		case 3:
 			{
-				return showPage(300, 300 , 1, ceil(4/4));
+				return saveEmp(ListEmployees);
 			}
 		case 4:
 			{

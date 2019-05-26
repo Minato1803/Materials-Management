@@ -1,0 +1,110 @@
+N17DCCN124
+Phat
+Nguyen Ngoc
+1
+0
+N17DCCN123
+Phat
+Nguyen Kim
+1
+0
+N17DCCN121
+Phat
+Duong Tan
+1
+0
+N17DCCN118
+Nhat
+Nguyen
+1
+0
+N17DCCN116
+Nhan
+Tran Thanh
+1
+0
+N17DCCN115
+Nhan
+Tran Nguyen Chi
+1
+0
+N17DCCN113
+Nguyen
+Nguyen Tuan
+1
+0
+N17DCCN111
+Nguyen
+Huynh Ho
+1
+0
+N17DCCN109
+Ngoc
+Tran Thi My
+0
+0
+N17DCCN127
+Phi
+Nguyen Ngoc
+1
+0
+N17DCCN129
+Phong
+Nguyen Thanh
+1
+0
+N17DCCN106
+Nam
+Tran Hoai
+1
+0
+N17DCCN105
+Nam
+Tang Thanh
+1
+0
+N17DCCN103
+Nam
+Pham Hoai
+1
+0
+N17DCCN102
+Nam
+Nguyen Hoang
+1
+0
+N17DCCN098
+My
+Bo Van
+1
+0
+N17DCCN097
+Minh
+Vo Trong
+1
+0
+N17DCCN096
+Minh
+To Khai
+1
+0
+N17DCCN095
+Minh
+Nguyen Pham Nhat
+1
+0
+N17DCCN093
+Minh
+Co Hoang
+1
+0
+N17DCCN092
+Minh
+Cao Anh
+1
+0
+N17DCCN091
+Minh
+Bui Nhat
+1
+0
