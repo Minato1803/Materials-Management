@@ -7,8 +7,10 @@
 #define MAXL_EMP 500
 using namespace std;
 
-//=====funtions======
+//Global Vaiable
+int numOfBill = 0;
 
+//=====funtions======
 
 struct NamesInfoEmp
 {
@@ -300,6 +302,7 @@ struct ListBill
 		p->next = firstNode;
 		firstNode = p;
 		Size++;
+		numOfBill++;
 	}
 	
 	void insertAfter(NODE_LB pos, Bills nodeN)
