@@ -30,6 +30,26 @@ int ChangeCharToNum (char s[],int n)
 	return n;
 }
 
+char* toChars(int num)
+{
+	char* a = new char[100];
+	if (num == 0)
+	{
+		a[1] = '\0';
+		a[0] = '0';
+	}
+	else
+	{
+		int l = floor(log10(num)+1);
+		a[l--] = '\0';
+		while(num>0)
+		{
+			a[l--] = num%10+48; //to char
+			num/=10;
+		}
+	}
+	return a;
+}
 void AddChuoi(char c, char s[])
 {
 	strncat(s, &c,1);
@@ -140,43 +160,10 @@ void Nhap(int x, int y,int check, char c, char s[], int n)
 }
 
 
-char* toChars(int num)
-{
-	char* a = new char[100];
-	if (num == 0)
-	{
-		a[1] = '\0';
-		a[0] = '0';
-	}
-	else
-	{
-		int l = floor(log10(num)+1);
-		a[l--] = '\0';
-		while(num>0)
-		{
-			a[l--] = num%10+48; //to char
-			num/=10;
-		}
-	}
-	return a;
-}
 
 int canLeGiua(char *S, int dis)
 {
 	return (dis-textwidth(S))/2;
-}
-
-int toInt(char *s)
-{
-	int res = 0;
-	int len = strlen(s);
-	int base = 1;
-	for (int i = len-1; i >= 0; i--)
-	{
-		res += (s[i]-48)*base;
-		base *= 10;
-	}
-	return res;
 }
 
 

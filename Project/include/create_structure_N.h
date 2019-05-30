@@ -7,11 +7,7 @@
 #define MAXL_EMP 500
 using namespace std;
 
-//Global Vaiable
-int numOfBill = 0;
-
 //=====funtions======
-
 struct NamesInfoEmp
 {
 	char fName[31];
@@ -85,6 +81,10 @@ void sortEmp(struct NamesInfoEmp *arr, int left, int right)
 		sortEmp(arr, i, right);
 }
 
+
+//==========Struct============
+
+
 struct Dates
 {
 	int day;
@@ -117,71 +117,8 @@ struct Dates
 			}
 		}
 		return true;
-	}
-};
-
-
-struct billDate
-{
-	char billNum[20];
-	struct Dates date;
-	
-	bool operator > (const struct billDate &other)
-	{
-		if (this->date.year > other.date.year)
-			return true;
-		else if (this->date.month > other.date.month)
-			return true;
-		else if (this->date.day > other.date.day)
-			return true;
-		else
-			return false;
-	}
-	
-	bool operator < (const struct billDate &other)
-	{
-		if (this->date.year < other.date.year)
-			return true;
-		else if (this->date.month < other.date.month)
-			return true;
-		else if (this->date.day < other.date.day)
-			return true;
-		else
-			return false;
 	}	
 };
-
-void sortBill(struct billDate *arr, int left, int right)
-{
-	billDate mid = arr[(left + right) / 2];
-	int i = left, j = right;
-	do
-	{
-		while(arr[i] < mid)
-			i++;
-		while(arr[j] > mid)
-			j--;
-		if(i <= j)
-		{
-			if(i < j)
-			{
-				billDate tmp;
-				tmp = arr[i];
-				arr[i] = arr[j];
-				arr[j] = tmp;
-			}
-			i++; j--;
-		}
-	} while(i<=j);
-	if(left < j)
-		sortBill(arr, left, j);
-	if(right > i)
-		sortBill(arr, i, right);
-}
-
-
-//==========Struct============
-
 
 
 // CT_HOADON
@@ -302,7 +239,6 @@ struct ListBill
 		p->next = firstNode;
 		firstNode = p;
 		Size++;
-		numOfBill++;
 	}
 	
 	void insertAfter(NODE_LB pos, Bills nodeN)
@@ -427,9 +363,6 @@ struct listEmp
 	
 };
 //==============endNHANVIEN============
-
-
-
 
 //=============SAVE-and-LOAD===========
 

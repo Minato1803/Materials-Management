@@ -1,4 +1,4 @@
-2
+3
 KHAI
 khai
 khai
@@ -7,3 +7,7 @@ HIEN
 Hien
 Hien
 121
+NHAN
+Nhan
+Nhan
+1213
