@@ -17,7 +17,7 @@ char MenuStat[][30] = {"Bills", "Top Materials"};
 char MenuHelp[][30] = {"Guild", "About"};
 
 // noti
-char Success[][50] = {"Added Successfully!", "Remove Successfully!", "Adjust Successfully!"};
+char Success[][50] = {"Added Successfully!", "Remove Successfully!", "Adjust Successfully!", "Save Successfully!"};
 char Fail[][50] = {"Empty Field", "Not Found", "Empty List"};
 
 //error 
@@ -34,6 +34,7 @@ int KichThuocMenuPhu[MAX_MENU+1] = {200, 200, 180, 180, 120};
 //noi dung khung 
 char khungMat[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Name", "Unit", "Amount", "Confirm"};
 char khungEmp[][30] = {"Employee's Informations", "Add Employee", "Exit", "ID", "First Name", "Last Name", "Sex"};
+char khungAdjustEmp[][30] = {"Employee's Informations", "Save", "Exit", "ID", "First Name", "Last Name", "Sex"};
 char khungBill[][30]= {"Bill's Informations", "Material List", "Exit", "ID", "Date (DD/MM/YYYY)", "Type", "Biller", "Type"};
 char type[][30] 	={"N", "X","/"};
 int  sizeKhungDate[] = {55, 110, 165, 220, 275};
@@ -47,5 +48,5 @@ char danhSachEmp[][30] = {"STT", "ID", "Last Name", "First Name", "Sex", "Nam", 
 int  sizeDanhSachEmp[] = {10, 50, 100, 50, 20};
 
 //thong bao
-char thongBao[][50] = {"Empty List"};
+//char thongBao[][50] = {"Empty List"};
 #endif
