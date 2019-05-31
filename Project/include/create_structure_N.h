@@ -91,6 +91,12 @@ struct Dates
 	int month;
 	int year;
 	
+	Dates()
+	{
+		day = 1;
+		month = 1;
+		year = 1;
+	}
 	bool isValid()
 	{
 		if(month<1 || month>12 || year<0 || day<0 || day>31)
@@ -118,67 +124,40 @@ struct Dates
 		}
 		return true;
 	}
-};
-
-
-struct billDate
-{
-	char billNum[20];
-	struct Dates date;
 	
-	bool operator > (const struct billDate &other)
+	bool operator > (const struct Dates &other)
 	{
-		if (this->date.year > other.date.year)
+		if (this->year > other.year)
 			return true;
-		else if (this->date.month > other.date.month)
+		else if (this->month > other.month)
 			return true;
-		else if (this->date.day > other.date.day)
+		else if (this->day > other.day)
 			return true;
 		else
 			return false;
 	}
 	
-	bool operator < (const struct billDate &other)
+	bool operator < (const struct Dates &other)
 	{
-		if (this->date.year < other.date.year)
+		if (this->year < other.year)
 			return true;
-		else if (this->date.month < other.date.month)
+		else if (this->month < other.month)
 			return true;
-		else if (this->date.day < other.date.day)
+		else if (this->day < other.day)
 			return true;
 		else
 			return false;
-	}	
-};
-
-void sortBill(struct billDate *arr, int left, int right)
-{
-	billDate mid = arr[(left + right) / 2];
-	int i = left, j = right;
-	do
+	}
+	
+	bool operator == (const struct Dates &other)
 	{
-		while(arr[i] < mid)
-			i++;
-		while(arr[j] > mid)
-			j--;
-		if(i <= j)
-		{
-			if(i < j)
-			{
-				billDate tmp;
-				tmp = arr[i];
-				arr[i] = arr[j];
-				arr[j] = tmp;
-			}
-			i++; j--;
-		}
-	} while(i<=j);
-	if(left < j)
-		sortBill(arr, left, j);
-	if(right > i)
-		sortBill(arr, i, right);
-}
-
+		if (this->year == other.year)
+			if (this->month == other.month)
+				if (this->day == other.day)
+					return true;
+		return false;
+	}
+};
 
 //==========Struct============
 
@@ -284,11 +263,6 @@ struct ListBill
 		Size = 0;
 		firstNode = NULL;
 	}
-	
-//	void Initialize_LB()
-//	{
-//		firstNode = NULL;
-//	}
 	
 	bool isEmpty()
 	{
@@ -458,6 +432,50 @@ struct listEmp
 //==============endNHANVIEN============
 
 
+//=====================================
+struct billDateNode
+{
+	struct Bills *info;
+	struct billDateNode *next;
+};
+typedef struct billDateNode* NODE_BDate;
+
+
+struct listBillDate
+{
+	int Size;
+	NODE_BDate firstNode;
+	
+	listBillDate()
+	{
+		Size = 0;
+		firstNode = NULL;
+	}
+	
+	void insert(struct Bills bill)
+	{
+		NODE_BDate newNode, before, after;
+		newNode = new billDateNode;
+		newNode->info = &bill;
+		for (after = firstNode; 
+			after != NULL && after->info->date < newNode->info->date;
+			before = after, after = after->next)
+		if (after == firstNode)
+		{
+			newNode->next = firstNode;
+			firstNode = newNode;
+		}
+		else
+		{
+			before->next = newNode;
+			newNode->next = after;
+		}
+		Size++;
+	}
+};
+//=====================================
+
+
 
 
 //=============SAVE-and-LOAD===========
@@ -499,6 +517,7 @@ void saveEmp(struct listEmp &ListEmployees)
 	fileListDetail.open("data/DetailList.txt", ios::out);
 	
 	numList << ListEmployees.n << endl;
+//	numList << numOfBill << endl;
 	for (int i = 0; i < ListEmployees.n; i++)
 	{
 		writeEmp(fileListEmp, ListEmployees.nodeListEmp[i]);
@@ -558,6 +577,7 @@ void loadEmp(struct listEmp &ListEmployees)
 	fileListDetail.open("data/DetailList.txt", ios::in);
 	
 	numList >> ListEmployees.n;
+//	numList >> numOfBill;
 	for (int i = 0; i < ListEmployees.n; i++)
 	{
 		ListEmployees.nodeListEmp[i] = new Employee;
