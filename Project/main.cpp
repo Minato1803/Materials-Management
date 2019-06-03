@@ -3056,7 +3056,8 @@ void thongKeBill(struct listEmp &ListEmployees)
 
 void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 {
-	int soLuongKhung = 5;
+	Material tmp;
+	int soLuongKhung = 4;
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
 	setusercharsize(1, 2, 1, 2);
@@ -3105,7 +3106,7 @@ void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 				veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 1, NEN_KHUNG, WHITE);
 			else
 			{
-				if(i==2)
+				if(i==2) // date
 					VeMucChonNgay(380, ViTriKhung[i], khungNoiDung, 0, NEN_KHUNG, WHITE);
 				else
 					veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
@@ -3142,13 +3143,13 @@ void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 				}
 				cpos:
 				if (pos == 0)
-					pos = 6;
-				if (pos > 6)
+					pos = 5;
+				if (pos > 5)
 					pos = 1;
 			}
 			else if (key == '\r')
 			{
-				if (pos <= 5)
+				if (pos <= 4)
 					pos++;
 			}
 			else if (key == 27)
@@ -3158,9 +3159,9 @@ void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 			}
 			
 			setbkcolor(NEN_TEXT);	
-			for (int i = 1; i <= 5; i++)
+			for (int i = 1; i <= 4; i++)
 			{
-				if (i != 5)
+				if (i != 4)
 				{
 					if (i == 1)
 						veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 1, NEN_KHUNG, WHITE);
@@ -3185,7 +3186,7 @@ void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 				case 1:
 					{
 						veKhung(380, 200, khungNoiDung[3], 1, NEN_KHUNG, WHITE);
-//						Nhap(560, 200, -1, key, tmpE->ID, 10);
+//						Nhap(560, 200, -1, key, tmpE, 10);
 						break;
 					}
 				case 2:
@@ -3254,22 +3255,16 @@ void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 					}
 				case 4:
 					{
-						veKhung(380, 380, khungNoiDung[6], 1, NEN_KHUNG, WHITE);
-//								tmpE->sex = fst;
-						break;
-					}
-				case 5:
-					{
-						veMuc2Chon(380, 440, khungNoiDung[7], type, fst, NEN_KHUNG, WHITE);
+						veMuc2Chon(380, 380, khungNoiDung[6], type, fst, NEN_KHUNG, WHITE);
 						while(1)
 						{
 							if (kbhit())
 							{
-								char key5 = getch();
-								if (key5 == 0)
+								char key4 = getch();
+								if (key4 == 0)
 								{
-									char c5Next = getch();
-									switch(c5Next)
+									char c4Next = getch();
+									switch(c4Next)
 									{
 										case KEY_LEFT:
 											{
@@ -3293,25 +3288,26 @@ void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 											}
 									}
 								}
-								else if (key5 == '\r')
+								else if (key4 == '\r')
 								{
 									pos++;
 									goto cpos;
 									break;
 								}
-								else if (key5 == 27)
+								else if (key4 == 27)
 								{
+									VeMenu();
 									return;
 								}
 								if (fst == -1)
 									fst = 1;
 								if (fst > 1)
 									fst = 0;								
-								veMuc2Chon(380, 440, khungNoiDung[7], type, fst, NEN_KHUNG, WHITE);
+								veMuc2Chon(380, 380, khungNoiDung[6], type, fst, NEN_KHUNG, WHITE);
 							}
 						}
 					}	
-				case 6:
+				case 5:
 					{
 						bool buttonL = 1;
 						veKhungNut(H, W, khungNoiDung, buttonL, 0,1);
@@ -3319,12 +3315,12 @@ void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 						{
 							if(kbhit())
 							{
-								char key6 = getch();
-								char c6Next;
-								if (key6 == 0)
+								char key5 = getch();
+								char c5Next;
+								if (key5 == 0)
 								{
-									c6Next = getch();
-									switch(c6Next)
+									c5Next = getch();
+									switch(c5Next)
 									{
 										case KEY_UP:
 											{
@@ -3350,13 +3346,13 @@ void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 											}
 									}
 								}
-								else if (key6 == '\r')
+								else if (key5 == '\r')
 								{
 									//return;
 									if (buttonL == 1)
 									{
 										// den material list
-										danhSachBill(tree,CountM,1);
+										return danhSachBill(tree,CountM,1);
 									}
 									else
 									{
@@ -3364,7 +3360,7 @@ void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 										return;
 									}
 								}
-								else if (key6 == 27)
+								else if (key5 == 27)
 								{
 									VeMenu();
 									return;

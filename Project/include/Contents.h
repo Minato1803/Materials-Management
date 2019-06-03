@@ -34,9 +34,9 @@ int KichThuocMenuPhu[MAX_MENU+1] = {200, 200, 180, 180, 120};
 //noi dung khung 
 char khungMat[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Name", "Unit", "Amount", "Confirm"};
 char khungEmp[][30] = {"Employee's Informations", "Add Employee", "Exit", "ID", "First Name", "Last Name", "Sex"};
+char khungBill[][30]= {"Bill's Informations", "Material List", "Exit", "ID", "Date (DD/MM/YYYY)", "Biller", "Type"};
 char khungListBill[][30] = {"Add Material", "Confirm", "Exit"};
 char khungchooseBill[][30] = {"Remove", "Adjust", "Exit"};
-char khungBill[][30]= {"Bill's Informations", "Material List", "Exit", "ID", "Date (DD/MM/YYYY)", "Type", "Biller", "Type"};
 char type[][30] 	={"N", "X","/"};
 int  sizeKhungDate[] = {55, 110, 165, 220, 275};
 char Sex[][30] 		= {"Male", "Female"};

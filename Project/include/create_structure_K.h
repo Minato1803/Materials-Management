@@ -34,6 +34,7 @@ struct NameMats
 		name[0] = '\0';
 	}
 };
+
 typedef struct NameMats Name_Mat;
 
 struct Node			//AVL tree
