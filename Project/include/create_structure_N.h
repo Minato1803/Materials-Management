@@ -7,7 +7,11 @@
 #define MAXL_EMP 500
 using namespace std;
 
+//Global Vaiable
+int numOfBill = 0;
+
 //=====funtions======
+
 struct NamesInfoEmp
 {
 	char fName[31];
@@ -81,16 +85,18 @@ void sortEmp(struct NamesInfoEmp *arr, int left, int right)
 		sortEmp(arr, i, right);
 }
 
-
-//==========Struct============
-
-
 struct Dates
 {
 	int day;
 	int month;
 	int year;
 	
+	Dates()
+	{
+		day = 1;
+		month = 1;
+		year = 1;
+	}
 	bool isValid()
 	{
 		if(month<1 || month>12 || year<0 || day<0 || day>31)
@@ -117,8 +123,44 @@ struct Dates
 			}
 		}
 		return true;
-	}	
+	}
+	
+	bool operator > (const struct Dates &other)
+	{
+		if (this->year > other.year)
+			return true;
+		else if (this->month > other.month)
+			return true;
+		else if (this->day > other.day)
+			return true;
+		else
+			return false;
+	}
+	
+	bool operator < (const struct Dates &other)
+	{
+		if (this->year < other.year)
+			return true;
+		else if (this->month < other.month)
+			return true;
+		else if (this->day < other.day)
+			return true;
+		else
+			return false;
+	}
+	
+	bool operator == (const struct Dates &other)
+	{
+		if (this->year == other.year)
+			if (this->month == other.month)
+				if (this->day == other.day)
+					return true;
+		return false;
+	}
 };
+
+//==========Struct============
+
 
 
 // CT_HOADON
@@ -222,11 +264,6 @@ struct ListBill
 		firstNode = NULL;
 	}
 	
-//	void Initialize_LB()
-//	{
-//		firstNode = NULL;
-//	}
-	
 	bool isEmpty()
 	{
 		return (firstNode == NULL);
@@ -239,6 +276,7 @@ struct ListBill
 		p->next = firstNode;
 		firstNode = p;
 		Size++;
+		numOfBill++;
 	}
 	
 	void insertAfter(NODE_LB pos, Bills nodeN)
@@ -258,6 +296,16 @@ struct ListBill
 				return p;
 		}
 		return NULL;
+	}
+	
+	bool checkID(char ID[20])
+	{
+		for (NODE_LB p = firstNode; p != NULL; p = p->next)
+		{
+			if (strcmp(p->info.Num, ID) == 0)
+				return false;
+		}
+		return true;
 	}
 };
 
@@ -349,6 +397,7 @@ struct listEmp
 		return -1;
 	}
 	
+	//check ID nhan vien, tra ve NULL neu k trung
 	struct Employee* Search_ID(char tmpID[11])
 	{
 		for (int i = 0; i < n; i++)
@@ -361,8 +410,73 @@ struct listEmp
 		return NULL;
 	}
 	
+	//return false neu co ID trung
+	bool checkIDBill(char idBill[20])
+	{
+		for (int numE = 0; numE < n; numE++)
+		{
+			if (nodeListEmp[numE]->listBill.checkID(idBill) == false) // co ID trung
+				return false;
+		}
+		return true;
+	}
+	
+	
+	void addBill(char idEmp[11], Bills newBill)
+	{
+		struct Employee* p = Search_ID(idEmp);
+		p->listBill.insertFirst(newBill);
+	}
+	
 };
 //==============endNHANVIEN============
+
+
+//=====================================
+struct billDateNode
+{
+	struct Bills *info;
+	struct billDateNode *next;
+};
+typedef struct billDateNode* NODE_BDate;
+
+
+struct listBillDate
+{
+	int Size;
+	NODE_BDate firstNode;
+	
+	listBillDate()
+	{
+		Size = 0;
+		firstNode = NULL;
+	}
+	
+	void insert(struct Bills bill)
+	{
+		NODE_BDate newNode, before, after;
+		newNode = new billDateNode;
+		newNode->info = &bill;
+		for (after = firstNode; 
+			after != NULL && after->info->date < newNode->info->date;
+			before = after, after = after->next)
+		if (after == firstNode)
+		{
+			newNode->next = firstNode;
+			firstNode = newNode;
+		}
+		else
+		{
+			before->next = newNode;
+			newNode->next = after;
+		}
+		Size++;
+	}
+};
+//=====================================
+
+
+
 
 //=============SAVE-and-LOAD===========
 
@@ -403,6 +517,7 @@ void saveEmp(struct listEmp &ListEmployees)
 	fileListDetail.open("data/DetailList.txt", ios::out);
 	
 	numList << ListEmployees.n << endl;
+//	numList << numOfBill << endl;
 	for (int i = 0; i < ListEmployees.n; i++)
 	{
 		writeEmp(fileListEmp, ListEmployees.nodeListEmp[i]);
@@ -462,6 +577,7 @@ void loadEmp(struct listEmp &ListEmployees)
 	fileListDetail.open("data/DetailList.txt", ios::in);
 	
 	numList >> ListEmployees.n;
+//	numList >> numOfBill;
 	for (int i = 0; i < ListEmployees.n; i++)
 	{
 		ListEmployees.nodeListEmp[i] = new Employee;

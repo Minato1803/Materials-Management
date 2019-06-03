@@ -61,6 +61,11 @@ void inNhanVien(struct Employee *NV, int posX, int posY);
 void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &stt, int &startPage, bool &selected);
 void hienThiInfoEmp(char khungNoiDung[][30], int H, int W, struct Employee *Info);
 void inRemoveEmp(char khungNoiDung[][30], struct listEmp &ListEmployees);
+void thongKeBill(struct listEmp &ListEmployees);
+void taoMangBillDate(struct listEmp &List, struct listBillDate *arr, struct Dates dayBegin, struct Dates dayEnd);
+void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start);
+
+
 //=========================
 void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W);
 void danhSachBill(NODEPTR &tree, int &CountM, bool choice);
@@ -2890,7 +2895,164 @@ void hienThiInfoEmp(char khungNoiDung[][30], int H, int W, struct Employee *Info
 	}
 }
 
+
+void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start)
+{
+	int kichThuocSTT = 30;
+	int h = textheight(trangBill[0]);
+	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
+	int W = 0;
+	for (int i = 0; i < 7; i++)
+	{
+		W += textwidth(trangBill[i]) + sizeTrangBill[i]*2;
+	}
+	
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	//in nen phan noi dung
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+	
+	//in nen phan danh sach
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	//in duong ke phan menu + vien
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								
+	rectangle(L-1, U-1, R+1, D+1);
+	
+	//in phan noi dung + gach doc
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	int dis = L;
+	for (int i = 0; i < 7; i++)
+	{
+		dis += sizeTrangBill[i];
+		setcolor(MAU_TEXT_KHUNG);
+		outtextxy(dis, U+(kichThuocSTT-h)/2, trangBill[i]);
+		dis += textwidth(trangBill[i]) + sizeTrangBill[i];
+		setcolor(BLACK);
+		line(dis, U, dis, D);
+	}
+	//in gach ngang
+	dis = U + kichThuocSTT;
+	for (int i = 0; i < 20; i++)
+	{
+		dis += h+5*2;
+		line(L, dis, R, dis);
+	}
+	
+	// in thong tin
+	setcolor(WHITE);
+	setbkcolor(NEN_KHUNG);
+	dis = U + kichThuocSTT;
+	int Size = arr->Size;
+	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
+	{
+		dis += 5;	
+		// in STT
+		int disW = L;
+		char *d = toChars(i+1);
+		outtextxy(disW + canLeGiua(d, textwidth(trangBill[0])+sizeTrangBill[0]*2), dis, d);
+		disW += textwidth(trangBill[0]) + sizeTrangBill[0]*2;
+		
+		//inNhanVien(list.Search_ID(arr[i].ID), disW, dis);
+		
+		dis += h+5;
+	}
+	
+	setbkcolor(MAU_NEN);
+}
+
+
+void taoMangBillDate(struct listEmp &List, struct listBillDate *arr, struct Dates dayBegin, struct Dates dayEnd)
+{
+	for (int i = 0; i < List.n; i++)
+	{
+		NODE_LB p;
+		for (p = List.nodeListEmp[i]->listBill.firstNode; p != NULL; p = p->next)
+		{
+			struct Dates curDate = p->info.date;
+			if ((curDate < dayEnd || curDate == dayEnd) && (curDate > dayBegin || curDate == dayBegin))
+				arr->insert(p->info);
+		}
+	}
+}
+
+void thongKeBill(struct listEmp &ListEmployees)
+{
+	struct listBillDate *arrBill = new listBillDate;
+	Dates dayBegin, dayEnd;
+	
+	//get day
+	//bla bla
+	
+	taoMangBillDate(ListEmployees, arrBill, dayBegin, dayEnd);
+	
+	//in danh sach
+	int startPage = 1;
+	int limitPage = ceil(arrBill->Size*1.0/OBJ_PER_PAGE);
+	//fix here first
+	if (limitPage != 0)
+	{
+		noti(Fail[2]);
+	}
+	else
+	{
+		inTrangBill(ListEmployees, arrBill, 0);
+		showPage(830, 650, startPage, limitPage);
+		while(1)
+		{
+			if(kbhit())
+			{
+				char key = getch();
+				if (key == 0)
+				{
+					char nextK = getch();
+					switch(nextK)
+					{
+						case KEY_PGUP:
+							{
+								startPage--;
+								if (startPage < 1)
+									startPage = limitPage;
+								inTrangBill(ListEmployees, arrBill, (startPage-1)*OBJ_PER_PAGE);
+								showPage(830, 650, startPage, limitPage);
+								break;
+							}
+						case KEY_PGDN:
+							{
+								startPage++;
+								if (startPage > limitPage)
+									startPage = 1;
+								inTrangBill(ListEmployees, arrBill, (startPage-1)*OBJ_PER_PAGE);
+								showPage(830, 650, startPage, limitPage);
+								break;
+							}
+					}
+				}
+				else if(key == 27) //exit
+				{
+					VeMenu();
+					return;
+				}
+			}
+		}
+	}
+	delete (arrBill);
+}
+
 //==========endCHINHAN========
+
+
+
 
 void VeKhungAddBill(NODEPTR &tree, char khungNoiDung[][30], int H, int W)
 {
@@ -3600,8 +3762,8 @@ void inChoiceBill(NODEPTR &tree, char khungNoiDung[][30],bool NoX) // NoX = 1  n
 									else
 									{
 										NODEPTR tmp = Search(tree,findID);	
-//										return hienThiInfoBill(tree, checkMat, 450, 600, findID); // den khung add Mats	
-										return VeKhungChooseBill(tree, khungMat, 450, 600,tmp->info);
+										return hienThiInfoBill(tree, checkMat, 450, 600, findID); // den khung add Mats	
+//										return VeKhungChooseBill(tree, khungMat, 450, 600,tmp->info);
 									}
 								}
 								else
