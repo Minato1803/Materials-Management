@@ -104,7 +104,7 @@ struct Dates
 			return false;
 		}
 		
-		if (month==2 || month==4 || month==4 || month==9 || month == 11)
+		if (month==2 || month==4 || month==6 || month==9 || month == 11)
 		{
 			if (day > 30)
 				return false;
@@ -241,7 +241,7 @@ struct Bills
 	
 	bool operator == (struct Bills other)
 	{
-		return (strcmp(Num, other.Num) == 0);
+		return(strcmp(Num, other.Num) == 0);
 	}
 };
 

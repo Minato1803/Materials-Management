@@ -20,12 +20,13 @@ bool CheckNum(char s)
 	return 0;	 
 }
 
-int ChangeCharToNum (char s[],int n)
+int ChangeCharToNum (char s[])
 {
-	n = 0;
+	int n = 0;
 	for(int i =0; i<strlen(s);i++)
 	{
-		n = n*10 + s[i];
+		n *= 10;
+		n += (s[i]-48);
 	}
 	return n;
 }
