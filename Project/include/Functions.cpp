@@ -107,7 +107,7 @@ bool KhoaNhapLieu(char s[], int n)
 
 void Nhap(int x, int y,int check, char c, char s[], int n)
 {
-	c = tolower(c);
+//	c = tolower(c);
 	if(c == 8 && strlen(s) != 0)
 	{
 		s[strlen(s)-1] = '\0';
@@ -154,6 +154,28 @@ void Nhap(int x, int y,int check, char c, char s[], int n)
 			}
 		}
 	}
+	else
+	if(check == 2)
+	{
+			if((CheckNum(c) || CheckLetter(c)) && KhoaNhapLieu(s,n))
+		{
+			
+			if(KiemtraNhapLieu(c,s) == 1|| KiemtraNhapLieu(c,s) == -1)
+			{
+					if(KiemtraNhapLieu(c,s) == 1)
+					{
+						AddChuoi(c,s);
+		//				outtextxy(x,y,s);
+					}
+					else
+						if(KiemtraNhapLieu(c,s)==-1)
+						{
+							c = toupper(c);
+							AddChuoi(c,s);
+						}
+			}
+		}
+	}
 	setcolor(WHITE);
 	setbkcolor(NEN_TEXT);
 	outtextxy(x,y,s);
@@ -166,18 +188,6 @@ int canLeGiua(char *S, int dis)
 	return (dis-textwidth(S))/2;
 }
 
-int toInt(char *s)
-{
-	int res = 0;
-	int len = strlen(s);
-	int base = 1;
-	for (int i = len-1; i >= 0; i--)
-	{
-		res += (s[i]-48)*base;
-		base *= 10;
-	}
-	return res;
-}
 
 //Ham do hoa
 

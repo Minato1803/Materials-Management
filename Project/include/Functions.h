@@ -25,7 +25,6 @@ int  KiemtraNhapLieu(char c, char s[]);
 bool KhoaNhapLieu(char s[], int n);
 void Nhap(int x, int y, int check, char c, char s[], int n);
 char* toChars(int num);
-int  toInt(char *s);
 int  canLeGiua(char *S, int dis);
 
 
