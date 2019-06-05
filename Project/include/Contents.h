@@ -18,7 +18,7 @@ char MenuHelp[][30] = {"Guild", "About"};
 
 // noti
 char Success[][50] = {"Added Successfully!", "Remove Successfully!", "Adjust Successfully!"};
-char Fail[][50] = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Bill Already exists!", "Employee Not Found!", "Not Enough Material!"};
+char Fail[][50] = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Bill Already exists!", "Employee Not Found!", "Not Enough Material!",};
 
 //error 
 char sameMat[][50] = {"Error: The same  Material's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
