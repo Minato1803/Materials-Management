@@ -13,14 +13,12 @@ struct Material	// info Materials
 	char name[51];
 	char type[26];
 	char amount[19];
-	int  RealAmount;
 	Material()
 	{
 		code[0] = '\0';
 		name[0] = '\0';
 		type[0] = '\0';
 		amount[0] = '\0';
-		RealAmount = 0;
 	}
 };
 
@@ -193,7 +191,6 @@ NODEPTR newNode(char key[], Material a)
 	strcpy(node->info.type,a.type);
 	strcpy(node->info.amount,a.amount);
 	node->height = 1;
-	node->info.RealAmount = a.RealAmount;
 	node->right =NULL; node->left = NULL;
 	return (node);  
 } 
@@ -354,7 +351,6 @@ void loadFile(NODEPTR &tree, int &CountM)
 		inMat.getline(tmp.name, sizeof(tmp.name));
 		inMat.getline(tmp.type, sizeof(tmp.type));
 		inMat.getline(tmp.amount, sizeof(tmp.amount));
-		tmp.RealAmount = atoi(tmp.amount);
 		tree = Insert(tree,tmp.code,tmp);
 	}	
 	inMat.close();

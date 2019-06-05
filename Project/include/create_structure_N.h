@@ -238,7 +238,11 @@ struct Bills
 	struct Dates date;
 	char type;
 	struct listBillDeta *details;
-	
+	Bills()
+	{
+		Num[0] = '\0';
+		
+	}
 	bool operator == (struct Bills other)
 	{
 		return(strcmp(Num, other.Num) == 0);
