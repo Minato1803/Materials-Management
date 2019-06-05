@@ -4035,6 +4035,7 @@ void chonTuDanhSachBill(NODEPTR &tree, listEmp &ListEmployees, int &stt, bool &s
 					if(stt >= 0 && stt <= 19) //chon tung phan tu
 					{
 						selected = true;
+						VeMenu();
 						return;
 					}
 					if(stt == 20)
@@ -4153,7 +4154,9 @@ void inVatTuBill(Material *VT, int posX, int posY)
 
 void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, Material *ListM, int ViTri, bool NoX)
 {
-//	Material tmp;
+	NODEPTR p;
+	Material tmp;
+	tmp = *(ListM+ViTri);
 	int cases = 1;
 	NotiN:
 	int kichThuocSTT = 30;
@@ -4199,10 +4202,10 @@ void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[
 		else
 			veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
 	}
-	InThongTin(560, ViTriKhung[1], ListM->code);
-	InThongTin(560, ViTriKhung[2], ListM->name);
-	InThongTin(560, ViTriKhung[3], ListM->type);
-	InThongTin(560, ViTriKhung[4], ListM->amount);
+	InThongTin(560, ViTriKhung[1], tmp.code);
+	InThongTin(560, ViTriKhung[2], tmp.name);
+	InThongTin(560, ViTriKhung[3], tmp.type);
+	InThongTin(560, ViTriKhung[4], tmp.amount);
 	//===== Chon vi tri ======//
 	int pos = 1;
 	veMuc3Chon(H, W, khungchooseBill, 1, 1,pos);
@@ -4251,10 +4254,10 @@ void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[
 				veKhung(380, ViTriKhung[i], khungNoiDung[i+2], 0, NEN_KHUNG, WHITE);
 			}
 			setbkcolor(NEN_TEXT);
-			InThongTin(560, ViTriKhung[1], ListM->code);
-			InThongTin(560, ViTriKhung[2], ListM->name);
-			InThongTin(560, ViTriKhung[3], ListM->type);
-			InThongTin(560, ViTriKhung[4], ListM->amount);
+			InThongTin(560, ViTriKhung[1], tmp.code);
+			InThongTin(560, ViTriKhung[2], tmp.name);
+			InThongTin(560, ViTriKhung[3], tmp.type);
+			InThongTin(560, ViTriKhung[4], tmp.amount);
 			veMuc3Chon(H, W, khungchooseBill, 1, 1,pos);
 			//===di chuyen trong menu===//
 			switch(pos)
@@ -4262,25 +4265,25 @@ void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[
 				case 1:
 					{
 						veKhung(380, 200, khungNoiDung[3], 1, NEN_KHUNG, WHITE);
-						Nhap(560,200,-1, key, ListM->code,10);
+						Nhap(560,200,-1, key, tmp.code,10);
 						break;
 					}
 				case 2:
 					{
 						veKhung(380, 260, khungNoiDung[4], 1, NEN_KHUNG, WHITE);
-						Nhap(560,260,1, key, ListM->name, 25);
+						Nhap(560,260,1, key, tmp.name, 25);
 						break;
 					}
 				case 3:
 					{
 						veKhung(380, 320, khungNoiDung[5], 1, NEN_KHUNG, WHITE);
-						Nhap(560,320,1, key, ListM->type,25);
+						Nhap(560,320,1, key, tmp.type,25);
 						break;
 					}
 				case 4:
 					{
 						veKhung(380, 380, khungNoiDung[6], 1, NEN_KHUNG, WHITE);
-						Nhap(560,380,0, key, ListM->amount,18);
+						Nhap(560,380,0, key, tmp.amount,18);
 						
 						break;
 					}
@@ -4337,16 +4340,64 @@ void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[
 									if (buttonL == 1||buttonL == 2)
 									{
 										//===thong bao loi===//
-										if(strlen(ListM->code) != 0 && strlen(ListM->name) != 0 && strlen(ListM->type) != 0 && strlen(ListM->amount) != 0)
+										if(strlen(tmp.code) != 0 && strlen(tmp.name) != 0 && strlen(tmp.type) != 0 && strlen(tmp.amount) != 0)
 										{
 											if(buttonL==1)
 											{
 												//remove
-												for(int i = ViTri ; i <= 20 ;ListM[ViTri] = ListM[++ViTri]);
+												ThongBao(715, 130, Success[1], GREEN, MAU_MENU);
+												for(int i = ViTri ; i <index ;ListM[i] = ListM[++i]);
+												VeMenu();
 												return danhSachBill(tree, ListEmployees, NoX, ListM,index);
 											}
-//											if(buttonL==2)
-												//adjust	
+											if(buttonL==2)
+											{
+												//adjust
+												p = Search(tree, tmp.code);
+												if(p != NULL)
+												{
+													if(strcmp(p->info.name, tmp.name) == 0 && strcmp(p->info.type, tmp.type) == 0)
+													{
+														if(NoX == 0)
+														{
+															if(ChangeCharToNum(p->info.amount) > ChangeCharToNum(tmp.amount))
+															{
+																ThongBao(715, 130, Success[0], GREEN, MAU_MENU);
+																strcpy(ListM[ViTri].code,tmp.code);
+																strcpy(ListM[ViTri].name,tmp.name);
+																strcpy(ListM[ViTri].type,tmp.type);
+																strcpy(ListM[ViTri].amount,tmp.amount);
+																VeMenu();
+																return danhSachBill(tree, ListEmployees, NoX, ListM,index);
+															}
+															else
+															{
+																ThongBao(715, 130, Fail[6], LIGHTRED, MAU_MENU);
+																
+															}
+														}
+														else
+														{
+															ThongBao(715, 130, Success[0], GREEN, MAU_MENU);
+															strcpy(ListM[ViTri].code,tmp.code);
+															strcpy(ListM[ViTri].name,tmp.name);
+															strcpy(ListM[ViTri].type,tmp.type);
+															strcpy(ListM[ViTri].amount,tmp.amount);
+															VeMenu();
+															return danhSachBill(tree, ListEmployees, NoX, ListM,index);
+														}
+													}
+													else
+													{
+														ThongBao(800, 130, Fail[1], LIGHTRED, MAU_MENU);	
+													}
+												}
+												else
+												{
+													ThongBao(800, 130, Fail[1], LIGHTRED, MAU_MENU);
+												}
+//												
+											}
 										}
 										else
 										{
@@ -4358,13 +4409,13 @@ void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[
 									{
 										
 										VeMenu();
-										return;
+										return ;
 									}
 								}
 								else if (key5 == 27)
 								{
 									VeMenu();
-									return;
+									return danhSachBill(tree, ListEmployees, NoX, ListM,index);
 								}
 								veMuc3Chon(H, W, khungchooseBill, buttonL, 0,pos);
 							}
