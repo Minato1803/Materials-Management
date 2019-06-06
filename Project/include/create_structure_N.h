@@ -167,9 +167,7 @@ struct Dates
 struct Details
 {
 	char ID[20];
-//	char amount[20];
 	int amount;
-//	char unit[20];
 	int unit;
 	int VAT;
 	
@@ -219,17 +217,17 @@ struct listBillDeta
 		n = 0;
 	}
 	
-	int Search_info(struct Details info)
-	{
-		for (int i = 0; i < n; i++)
-		{
-			if (nodeListDeta[i] == info)
-			{
-				return i;
-			}
-		}
-		return -1;
-	}
+//	int Search_info(struct Details info)
+//	{
+//		for (int i = 0; i < n; i++)
+//		{
+//			if (nodeListDeta[i] == info)
+//			{
+//				return i;
+//			}
+//		}
+//		return -1;
+//	}
 };
 //=============endDanhsachCT_HOADON========
 
@@ -243,7 +241,7 @@ struct Bills
 	Bills()
 	{
 		Num[0] = '\0';
-		
+		details = new listBillDeta;
 	}
 	bool operator == (struct Bills other)
 	{
@@ -279,6 +277,14 @@ struct ListBill
 	{
 		NODE_LB p = new nodeListBill;
 		p->info = nodeN;
+		p->next = firstNode;
+		firstNode = p;
+		Size++;
+		numOfBill++;
+	}
+	
+	void insertFirst(NODE_LB p)
+	{
 		p->next = firstNode;
 		firstNode = p;
 		Size++;
@@ -443,6 +449,12 @@ struct billDateNode
 {
 	struct Bills *info;
 	struct billDateNode *next;
+	
+	billDateNode()
+	{
+		info = NULL;
+		next = NULL;
+	}
 };
 typedef struct billDateNode* NODE_BDate;
 
@@ -465,7 +477,8 @@ struct listBillDate
 		newNode->info = &bill;
 		for (after = firstNode; 
 			after != NULL && after->info->date < newNode->info->date;
-			before = after, after = after->next)
+			before = after, after = after->next);
+			
 		if (after == firstNode)
 		{
 			newNode->next = firstNode;
@@ -477,6 +490,13 @@ struct listBillDate
 			newNode->next = after;
 		}
 		Size++;
+	}
+	
+	NODE_BDate index(int stt)
+	{
+		NODE_BDate newNode = firstNode;
+		for (int i = 0; i < stt; newNode = newNode->next);
+		return newNode;
 	}
 };
 //=====================================
@@ -583,29 +603,23 @@ void loadEmp(struct listEmp &ListEmployees)
 	fileListDetail.open("data/DetailList.txt", ios::in);
 	
 	numList >> ListEmployees.n;
-//	numList >> numOfBill;
 	for (int i = 0; i < ListEmployees.n; i++)
 	{
 		ListEmployees.nodeListEmp[i] = new Employee;
 		readEmp(fileListEmp, ListEmployees.nodeListEmp[i]);
 		struct ListBill tmpLB = ListEmployees.nodeListEmp[i]->listBill;
-		for (int j = 0; j < tmpLB.Size; i++)
+		for (int j = 0; j < tmpLB.Size; j++)
 		{
 			NODE_LB p = new nodeListBill;
 			readBill(fileListBill, p);
-			ListEmployees.nodeListEmp[i]->listBill.insertFirst(p->info);
-			
-			struct listBillDeta *tmpDT = new listBillDeta;
-			tmpDT = p->info.details;
-			for (int j = 0; j < tmpDT->n; j++)
+			ListEmployees.nodeListEmp[i]->listBill.insertFirst(p);			
+			for (int noNode = 0; noNode < p->info.details->n; noNode++)
 			{
-				readDetail(fileListDetail, tmpDT->nodeListDeta[j]);	
+				readDetail(fileListDetail, p->info.details->nodeListDeta[noNode]);	
 			}
-			delete(tmpDT);
 		}
 	}
 	fileListEmp.close();
 	fileListBill.close();
 	fileListDetail.close();
 }
-
