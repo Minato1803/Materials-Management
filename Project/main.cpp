@@ -4610,11 +4610,9 @@ void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start)
 			NODE_BDate tmpBDate = new billDateNode;
 			tmpBDate = arr->index(i);
 			tmpB = tmpBDate->info;
-			if (arr->index(i) == NULL)
-				About();
 				
 			//outtextxy(disW+5, dis, tmpB->Num);
-			outtextxy(disW+5, dis, list.nodeListEmp[0]->listBill.firstNode->info.Num);
+			outtextxy(disW+5, dis, tmpB->Num);
 			dis += textwidth(trangBill[i]) + sizeTrangBill[i]*2;
 			
 //			outtextxy(dis, disY+5, list.Search_ID(tmpB->Num)->firstName);
@@ -4878,6 +4876,8 @@ void nhapNgay(Dates &dayBegin, Dates &dayEnd, char khungNoiDung[][30], bool &sel
 						dayEnd.year = ChangeCharToNum(date2.years);
 						if (dayBegin > dayEnd || !dayBegin.isValid() || !dayEnd.isValid())
 						{
+							if (dayBegin > dayEnd)
+								About();
 							ThongBao(R-5-textwidth(Fail[3]), U+(kichThuocSTT-textheight(Fail[3]))/2, Fail[3], LIGHTRED, MAU_MENU);
 						}
 						else

@@ -129,24 +129,36 @@ struct Dates
 	{
 		if (this->year > other.year)
 			return true;
-		else if (this->month > other.month)
-			return true;
-		else if (this->day > other.day)
-			return true;
-		else
-			return false;
+		else if (this->year == other.year) 
+		{
+			if(this->month > other.month)
+				return true;
+			else if (this->month == other.month)
+			{
+				if (this->day > other.day)
+					return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	bool operator < (const struct Dates &other)
 	{
 		if (this->year < other.year)
 			return true;
-		else if (this->month < other.month)
-			return true;
-		else if (this->day < other.day)
-			return true;
-		else
-			return false;
+		else if (this->year == other.year) 
+		{
+			if(this->month < other.month)
+				return true;
+			else if (this->month == other.month)
+			{
+				if (this->day < other.day)
+					return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	bool operator == (const struct Dates &other)
@@ -449,12 +461,6 @@ struct billDateNode
 {
 	struct Bills *info;
 	struct billDateNode *next;
-	
-	billDateNode()
-	{
-		info = NULL;
-		next = NULL;
-	}
 };
 typedef struct billDateNode* NODE_BDate;
 
@@ -470,7 +476,7 @@ struct listBillDate
 		firstNode = NULL;
 	}
 	
-	void insert(struct Bills bill)
+	void insert(struct Bills &bill)
 	{
 		NODE_BDate newNode, before, after;
 		newNode = new billDateNode;
