@@ -167,8 +167,10 @@ struct Dates
 struct Details
 {
 	char ID[20];
-	char amount[20];
-	char unit[20];
+//	char amount[20];
+	int amount;
+//	char unit[20];
+	int unit;
 	int VAT;
 	
 	bool operator == (struct Details other)

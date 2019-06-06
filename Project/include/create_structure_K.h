@@ -137,7 +137,6 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 			} 
 			else 				// neu co 1 nut con 
 				root = tmp; 
-//			free(tmp); 
 		} 
 		else
 		{ 
@@ -191,7 +190,7 @@ NODEPTR newNode(char key[], Material a)
 	strcpy(node->info.type,a.type);
 	strcpy(node->info.amount,a.amount);
 	node->height = 1;
-	node->right =NULL; node->left = NULL;
+	node->right = NULL; node->left = NULL;
 	return (node);  
 } 
 
@@ -322,6 +321,8 @@ void saveMat(NODEPTR &tree, ofstream &outMat)
 		saveMat(tree->left,outMat);
 		saveMat(tree->right,outMat);
 	}
+	else
+		return;
 }	
 
 void saveFile(NODEPTR &tree, int &nMat)

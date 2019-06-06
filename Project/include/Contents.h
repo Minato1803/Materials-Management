@@ -18,7 +18,7 @@ char MenuHelp[][30] = {"Guild", "About"};
 
 // noti
 char Success[][50] = {"Added Successfully!", "Remove Successfully!", "Adjust Successfully!"};
-char Fail[][50] = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Bill Already exists!", "Employee Not Found!", "Not Enough Material!",};
+char Fail[][50] = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Already exists!", "Employee Not Found!", "Not Enough Material!","Current quantity: "};
 
 //error 
 char sameMat[][50] = {"Error: The same  Material's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
@@ -32,18 +32,19 @@ int ViTriKhung[] = {0, 200, 260, 320, 380,440};
 int KichThuocMenuPhu[MAX_MENU+1] = {200, 200, 180, 180, 120};
 
 //noi dung khung 
-char khungMat[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Name", "Unit", "Amount", "Confirm"};
+char khungMat[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Name", "Unit", "Quantity", "Confirm"};
 char khungEmp[][30] = {"Employee's Informations", "Add Employee", "Exit", "ID", "First Name", "Last Name", "Sex"};
 char khungBill[][30]= {"Bill's Informations", "Material List", "Exit", "ID", "Date (DD/MM/YYYY)", "Biller's ID", "Type"};
+char khungDetailBill[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Rate (Dong)", "VAT (%)", "Quantity",};
 char khungListBill[][30] = {"Add Material", "Confirm", "Exit"};
 char khungchooseBill[][30] = {"Remove", "Adjust", "Exit"};
 char type[][30] 	={"N", "X","/"};
 int  sizeKhungDate[] = {55, 110, 165, 220, 275};
 char Sex[][30] 		= {"Male", "Female"};
-char checkMat[][30] = {"Material's Informations", "Confirm", "Exit", "ID", "Name", "Unit", "Amount"};
-char checkEmp[][30] = {"Material's Informations", "Confirm", "Exit", "ID", "Name", "Unit", "Amount"};
+char checkMat[][30] = {"Material's Informations", "Confirm", "Exit", "ID", "Name", "Unit", "Quantity"};
+char checkEmp[][30] = {"Material's Informations", "Confirm", "Exit", "ID", "Name", "Unit", "Quantity"};
 char choiceObject[][30] = {"ID", "Materials List", "Employee List", "Check info", "Exit" };
-char danhSachMat[][30] = {"STT", "ID", "Name", "Unit", "Amount"};
+char danhSachMat[][30] = {"STT", "ID", "Name", "Unit", "Quantity"};
 int  sizeDanhSachMat[] = {10, 50, 100, 50, 20};
 char danhSachEmp[][30] = {"STT", "ID", "Last Name", "First Name", "Sex", "Nam", "Nu"};
 int  sizeDanhSachEmp[] = {10, 50, 100, 50, 20};
