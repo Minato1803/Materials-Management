@@ -229,6 +229,16 @@ struct listBillDeta
 		n = 0;
 	}
 	
+	long value()
+	{
+		long res = 0;
+		for (int i = 0; i < n; i++)
+		{
+			res += (nodeListDeta[i].unit*nodeListDeta[i].amount)*(nodeListDeta[i].VAT/100.0);
+		}
+		return res;
+	}
+	
 //	int Search_info(struct Details info)
 //	{
 //		for (int i = 0; i < n; i++)
@@ -460,6 +470,7 @@ struct listEmp
 struct billDateNode
 {
 	struct Bills *info;
+	struct Employee *Emp;
 	struct billDateNode *next;
 };
 typedef struct billDateNode* NODE_BDate;
@@ -476,11 +487,12 @@ struct listBillDate
 		firstNode = NULL;
 	}
 	
-	void insert(struct Bills &bill)
+	void insert(struct Bills &bill, struct Employee *Emp)
 	{
 		NODE_BDate newNode, before, after;
 		newNode = new billDateNode;
 		newNode->info = &bill;
+		newNode->Emp = Emp;
 		for (after = firstNode; 
 			after != NULL && after->info->date < newNode->info->date;
 			before = after, after = after->next);

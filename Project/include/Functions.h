@@ -24,8 +24,9 @@ void delBlank(char *s);
 int  KiemtraNhapLieu(char c, char s[]);
 bool KhoaNhapLieu(char s[], int n);
 void Nhap(int x, int y, int check, char c, char s[], int n);
-char* toChars(int num);
+char* toChars(long num);
 int  canLeGiua(char *S, int dis);
+char* charDate(int day, int month, int year);
 
 
 //do hoa

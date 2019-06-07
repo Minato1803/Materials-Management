@@ -31,7 +31,7 @@ int ChangeCharToNum (char s[])
 	return n;
 }
 
-char* toChars(int num)
+char* toChars(long num)
 {
 	char* a = new char[100];
 	if (num == 0)
@@ -222,5 +222,31 @@ void showPage(int x, int y, int page, int limit)
 	x += textwidth(" / ");	
 	
 	outtextxy(x, y, toChars(limit));
+}
+
+char* charDate(int day, int month, int year)
+{
+	char *res = new char[100];
+	res[0] = '\0';
+	
+	if (day < 10)
+		strcat(res, "0");
+	strcat(res, toChars(day));
+	strcat(res, "/");
+	
+	if (month < 10)
+		strcat(res, "0");
+	strcat(res, toChars(month));
+	strcat(res, "/");
+	
+	if (year < 10)
+		strcat(res, "0");
+	if (year < 100)
+		strcat(res, "0");
+	if (year < 1000)
+		strcat(res, "0");
+	strcat(res, toChars(year));
+	
+	return res;
 }
 

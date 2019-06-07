@@ -4607,28 +4607,33 @@ void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start)
 		{
 			setcolor(WHITE);
 			Bills* tmpB = new Bills;
-			NODE_BDate tmpBDate = new billDateNode;
-			tmpBDate = arr->index(i);
-			tmpB = tmpBDate->info;
+			tmpB = arr->index(i)->info;
 				
 			//outtextxy(disW+5, dis, tmpB->Num);
-			outtextxy(disW+5, dis, tmpB->Num);
-			dis += textwidth(trangBill[i]) + sizeTrangBill[i]*2;
+			outtextxy(disW+canLeGiua(tmpB->Num, textwidth(trangBill[1]) + sizeTrangBill[1]*2), dis, tmpB->Num);
+			disW += textwidth(trangBill[1]) + sizeTrangBill[1]*2;
 			
-//			outtextxy(dis, disY+5, list.Search_ID(tmpB->Num)->firstName);
-//			dis += textwidth(trangBill[i]) + sizeTrangBill[i]*2;
-//			
-//			outtextxy(dis, disY+5, list.Search_ID(tmpB->Num)->lastName);
-//			dis += textwidth(trangBill[i]) + sizeTrangBill[i]*2;
+			char *date = charDate(tmpB->date.day, tmpB->date.month, tmpB->date.year);
+			outtextxy(disW+canLeGiua(date, textwidth(trangBill[2]) + sizeTrangBill[2]*2), dis, date);
+			disW += textwidth(trangBill[2]) + sizeTrangBill[2]*2;
 			
-//			outtextxy(dis, disY+5, trangBill[i]);
-//			dis += textwidth(trangBill[i]) + sizeTrangBill[i]*2;
-//			
-//			outtextxy(dis, disY+5, trangBill[i]);
-//			dis += textwidth(trangBill[i]) + sizeTrangBill[i]*2;
-//			
-//			outtextxy(dis, disY+5, trangBill[i]);
-//			dis += textwidth(trangBill[i]) + sizeTrangBill[i]*2;
+			if (tmpB->type == 'N')
+				outtextxy(disW+(sizeTrangBill[3]*2-1.0/2*textwidth("N")), dis, "N");
+			else
+				outtextxy(disW+(sizeTrangBill[3]*2-1.0/2*textwidth("X")), dis, "X");
+			disW += textwidth(trangBill[3]) + sizeTrangBill[3]*2;
+			
+			Employee* tmpE = new Employee;
+			tmpE = arr->index(i)->Emp;
+			
+			outtextxy(disW+5, dis, tmpE->lastName);
+			disW += textwidth(trangBill[4]) + sizeTrangBill[4]*2;
+						
+			outtextxy(disW+5, dis, tmpE->firstName);
+			disW += textwidth(trangBill[5]) + sizeTrangBill[5]*2;
+			
+			disW += textwidth(trangBill[6]) + sizeTrangBill[6]*2;
+			outtextxy(disW-5-textwidth(toChars(tmpB->details->value())), dis, toChars(tmpB->details->value()));
 		}
 		
 		dis += h+5;
@@ -4647,7 +4652,7 @@ void taoMangBillDate(struct listEmp &List, struct listBillDate *arr, struct Date
 		{
 			struct Dates curDate = p->info.date;
 			if ((curDate < dayEnd || curDate == dayEnd) && (curDate > dayBegin || curDate == dayBegin))
-				arr->insert(p->info);
+				arr->insert(p->info, List.nodeListEmp[i]);
 		}
 	}
 }
