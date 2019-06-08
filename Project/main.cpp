@@ -30,7 +30,7 @@ void ChonMenuPhu(int x, struct listEmp &ListEmployees, NODEPTR &tree);
 void Materials(NODEPTR &tree);
 void Employees(struct listEmp &ListEmployees);
 void Bill(NODEPTR &tree,struct ListEmp &ListEmployees);
-void Statistics();
+void Statistics(struct listEmp &ListEmployees);
 void Help();
 void About();
 void Guild();
@@ -312,11 +312,24 @@ void Bill(NODEPTR &tree, struct listEmp &ListEmployees)
 	}
 }
 
-void Statistics()
+void Statistics(struct listEmp &ListEmployees)
 {
 	VeMenuPhu(3, MenuStat);
 	int thaoTac;
 	MenuPhu(3, MenuStat, 2, thaoTac);
+	switch (thaoTac)
+	{
+		case 1:
+			{
+				thongKeBill(ListEmployees);
+				break;
+			}
+		case 2:
+			{
+				About();
+				break;
+			}
+	}
 }
 
 void Help()
@@ -346,7 +359,7 @@ void ChonMenuPhu(int x, struct listEmp &ListEmployees, NODEPTR &tree)
 		case 0:	return Materials(tree,CountM);
 		case 1: return Employees(ListEmployees);
 		case 2:	return Bill(tree, ListEmployees);
-		case 3:	return Statistics();
+		case 3:	return Statistics(ListEmployees);
 		case 4:	return Help();
 		default : return;
 	}
