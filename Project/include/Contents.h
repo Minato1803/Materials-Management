@@ -23,31 +23,29 @@ int ViTriKhung[] 			   = {0, 200, 260, 320, 380,440};
 int KichThuocMenuPhu[MAX_MENU+1] = {200, 200, 180, 180, 120};
 
 // noti
-char Success[][50] 		 = {"Added Successfully!", "Remove Successfully!", "Adjust Successfully!"};
-char Fail[][50] 		 = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Bill Already exists!", "Employee Not Found!", "Not Enough Material!"};
+char Success[][50] = {"Added Successfully!", "Remove Successfully!", "Adjust Successfully!"};
+char Fail[][50] = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Already exists!", "Employee Not Found!", "Not Enough Material!","Current quantity: "};
 
 //error 
-char sameMat[][50] 		 = {"Error: The same  Material's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
-char sameEmp[][50]	 	 = {"Error: The same  Employees's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
-char lackAmount[][30]    = {"Error: ", };
-
-
+char sameMat[][50] = {"Error: The same  Material's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
+char sameEmp[][50] = {"Error: The same  Employees's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
+char lackAmount[][30] = {"Error: ", };
 
 //Materials=============
-char khungMat[][30] 	 = {"Material's Informations", "Add Material", "Exit", "ID", "Name", "Unit", "Amount", "Confirm"};
-char checkMat[][30]		 = {"Material's Informations", "Confirm", "Exit", "ID", "Name", "Unit", "Amount"};
-char danhSachMat[][30]   = {"STT", "ID", "Name", "Unit", "Amount"};
-int  sizeDanhSachMat[]   = {10, 50, 100, 50, 20};
-char choiceObject[][30]  = {"ID", "Materials List", "Employee List", "Check info", "Exit" };
-
+char khungMat[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Name", "Unit", "Quantity", "Confirm"};
+char checkMat[][30] = {"Material's Informations", "Confirm", "Exit", "ID", "Name", "Unit", "Quantity"};
+char danhSachMat[][30] = {"STT", "ID", "Name", "Unit", "Quantity"};
+int  sizeDanhSachMat[] = {10, 50, 100, 50, 20};
+char choiceObject[][30] = {"ID", "Materials List", "Employee List", "Check info", "Exit" };
 
 //Bill==================
-char khungBill[][30]	 = {"Bill's Informations", "Material List", "Exit", "ID", "Date (DD/MM/YYYY)", "Biller's ID", "Type"};
+char khungBill[][30]= {"Bill's Informations", "Material List", "Exit", "ID", "Date (DD/MM/YYYY)", "Biller's ID", "Type"};
 char khungListBill[][30] = {"Add Material", "Confirm", "Exit"};
 char khungchooseBill[][30] = {"Remove", "Adjust", "Exit"};
-char type[][30] 		 = {"N", "X","/"};
-int  sizeKhungDate[]	 = {55, 110, 165, 220, 275};
-
+char type[][30] 	={"N", "X","/"};
+char danhSachDetailBill[][30] = {"STT", "ID", "Rate", "VAT", "Quantity"};
+char khungDetailBill[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Rate (Dong)", "VAT (%)", "Quantity",};
+int  sizeKhungDate[] = {55, 110, 165, 220, 275};
 
 
 //Employees============
@@ -65,4 +63,6 @@ int  sizeTrangBill[]	 = {10, 50, 50, 20, 100, 50, 50};
 
 
 
+//thong bao
+char thongBao[][50] = {"Empty List"};
 #endif

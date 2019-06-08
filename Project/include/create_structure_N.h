@@ -239,17 +239,29 @@ struct listBillDeta
 		return res;
 	}
 	
-//	int Search_info(struct Details info)
-//	{
-//		for (int i = 0; i < n; i++)
-//		{
-//			if (nodeListDeta[i] == info)
-//			{
-//				return i;
-//			}
-//		}
-//		return -1;
-//	}
+	int Search_info(struct Details info)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			if (nodeListDeta[i] == info)
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+		bool cmp_ID(char keyID[])
+	{
+		for(int i = 0; i < n; i++)
+		{
+			if(strcmp(nodeListDeta[i].ID, keyID) == 0)
+			{
+				return 1;
+			}
+		}
+		return 0;
+	}
 };
 //=============endDanhsachCT_HOADON========
 
