@@ -30,7 +30,7 @@ void ChonMenuPhu(int x, struct listEmp &ListEmployees, NODEPTR &tree);
 void Materials(NODEPTR &tree);
 void Employees(struct listEmp &ListEmployees);
 void Bill(NODEPTR &tree,struct ListEmp &ListEmployees);
-void Statistics(struct listEmp &ListEmployees);
+void Statistics();
 void Help();
 void About();
 void Guild();
@@ -364,6 +364,7 @@ void ChonMenuPhu(int x, struct listEmp &ListEmployees, NODEPTR &tree)
 		default : return;
 	}
 }
+
 
 void TaoManHinhLamViec()
 {
@@ -2808,7 +2809,6 @@ void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][3
 								tmp.VAT = ChangeCharToNum(temp->tmpVAT);
 								tmp.unit = ChangeCharToNum(temp->tmpUnit);
 								tmpB.details->Insert(tmp);
-								tmpB.details->n++;
 								VeMenu();
 								return inChoiceBill(tree, ListEmployees, choiceObject,NoX, tmpB);
 							}

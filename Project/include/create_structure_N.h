@@ -3,8 +3,8 @@
 #include <time.h>
 #include "Functions.h"
 
-const int MAXL_DETAIL = 20;
-const int MAXL_EMP    = 500;
+#define MAXL_DETAIL 20
+#define MAXL_EMP 500
 using namespace std;
 
 //Global Vaiable
