@@ -12,7 +12,7 @@ struct Material	// info Materials
 	char code[11];
 	char name[51];
 	char type[26];
-	char amount[19];
+	char amount[26];
 	Material()
 	{
 		code[0] = '\0';

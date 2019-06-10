@@ -29,7 +29,7 @@ char Fail[][50] = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Alre
 //error 
 char sameMat[][50] = {"Error: The same  Material's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
 char sameEmp[][50] = {"Error: The same  Employees's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
-char lackAmount[][30] = {"Error: ", };
+char lackAmount[][30] = {"Current Quantity" };
 
 //Materials=============
 char khungMat[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Name", "Unit", "Quantity", "Confirm"};

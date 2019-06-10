@@ -251,7 +251,7 @@ struct listBillDeta
 		return -1;
 	}
 	
-		bool cmp_ID(char keyID[])
+	bool cmp_ID(char keyID[])
 	{
 		for(int i = 0; i < n; i++)
 		{
@@ -344,7 +344,7 @@ struct ListBill
 		return NULL;
 	}
 	
-	bool checkID(char ID[20])
+	bool checkID(char ID[])
 	{
 		for (NODE_LB p = firstNode; p != NULL; p = p->next)
 		{

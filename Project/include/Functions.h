@@ -17,7 +17,7 @@ using namespace std;
 
 bool CheckLetter(char s);
 bool CheckNum(char s);
-int  ChangeCharToNum (char s[]);
+long  ChangeCharToNum (char s[]);
 void AddChuoi(char c, char s[]);
 void get_chuoi(char *des, char *s );
 void delBlank(char *s);

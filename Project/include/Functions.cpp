@@ -20,9 +20,9 @@ bool CheckNum(char s)
 	return 0;	 
 }
 
-int ChangeCharToNum (char s[])
+long ChangeCharToNum (char s[])
 {
-	int n = 0;
+	long n = 0;
 	for(int i =0; i<strlen(s);i++)
 	{
 		n *= 10;
