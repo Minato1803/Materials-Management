@@ -8,7 +8,7 @@
 using namespace std;
 
 //Global Vaiable
-int numOfBill = 0;
+ofstream logs;
 
 //=====funtions======
 
@@ -234,7 +234,7 @@ struct listBillDeta
 		long res = 0;
 		for (int i = 0; i < n; i++)
 		{
-			res += (nodeListDeta[i].unit*nodeListDeta[i].amount)*(nodeListDeta[i].VAT/100.0);
+			res += nodeListDeta[i].unit*nodeListDeta[i].amount + (nodeListDeta[i].unit*nodeListDeta[i].amount)*(nodeListDeta[i].VAT/100.0);
 		}
 		return res;
 	}
@@ -281,6 +281,16 @@ struct Bills
 	{
 		return(strcmp(Num, other.Num) == 0);
 	}
+	
+	long value()
+	{
+		long res = 0;
+		for (int i = 0; i < details->n; i++)
+		{
+			res += (details->nodeListDeta[i].amount*details->nodeListDeta[i].unit)*((100+details->nodeListDeta[i].VAT)/100.0);
+		}
+		return res;
+	}
 };
 
 struct nodeListBill
@@ -307,14 +317,13 @@ struct ListBill
 		return (firstNode == NULL);
 	}
 	
-	void insertFirst(Bills nodeN)
+	void insertFirst(Bills &nodeN)
 	{
 		NODE_LB p = new nodeListBill;
 		p->info = nodeN;
 		p->next = firstNode;
 		firstNode = p;
 		Size++;
-		numOfBill++;
 	}
 	
 	void insertFirst(NODE_LB p)
@@ -322,7 +331,12 @@ struct ListBill
 		p->next = firstNode;
 		firstNode = p;
 		Size++;
-		numOfBill++;
+	}
+	
+	void loadNODE_LB(NODE_LB p)
+	{
+		p->next = firstNode;
+		firstNode = p;
 	}
 	
 	void insertAfter(NODE_LB pos, Bills nodeN)
@@ -468,7 +482,7 @@ struct listEmp
 	}
 	
 	
-	void addBill(char idEmp[11], Bills newBill)
+	void addBill(char idEmp[11], Bills &newBill)
 	{
 		struct Employee* p = Search_ID(idEmp);
 		p->listBill.insertFirst(newBill);
@@ -525,7 +539,7 @@ struct listBillDate
 	NODE_BDate index(int stt)
 	{
 		NODE_BDate newNode = firstNode;
-		for (int i = 0; i < stt; newNode = newNode->next);
+		for (int i = 0; i < stt; newNode = newNode->next, i++);
 		return newNode;
 	}
 };
@@ -642,7 +656,7 @@ void loadEmp(struct listEmp &ListEmployees)
 		{
 			NODE_LB p = new nodeListBill;
 			readBill(fileListBill, p);
-			ListEmployees.nodeListEmp[i]->listBill.insertFirst(p);			
+			ListEmployees.nodeListEmp[i]->listBill.loadNODE_LB(p);			
 			for (int noNode = 0; noNode < p->info.details->n; noNode++)
 			{
 				readDetail(fileListDetail, p->info.details->nodeListDeta[noNode]);	

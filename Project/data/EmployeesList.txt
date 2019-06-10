@@ -27,7 +27,7 @@ N17DCCN115
 Nhan
 Tran Nguyen Chi
 1
-0
+11
 N17DCCN113
 Nguyen
 Nguyen Tuan
@@ -108,3 +108,8 @@ Minh
 Bui Nhat
 1
 0
+N17DCCN066
+Khai
+Nguyen Duc
+1
+1

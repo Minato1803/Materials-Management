@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 //==========UI=============
 //Cac ham ve
 void KhoiTaoChuongTrinh();
@@ -30,7 +31,7 @@ void ChonMenuPhu(int x, struct listEmp &ListEmployees, NODEPTR &tree);
 void Materials(NODEPTR &tree);
 void Employees(struct listEmp &ListEmployees);
 void Bill(NODEPTR &tree,struct ListEmp &ListEmployees);
-void Statistics();
+void Statistics(struct listEmp &ListEmployees);
 void Help();
 void About();
 void Guild();
@@ -52,15 +53,17 @@ void Guild();
 	void inDanhSachMat(NODEPTR &tree, int size);
 	//cau e
 	void VeKhungAddBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][30], int H, int W);
-	void danhSachBill(NODEPTR &tree, listEmp &ListEmployees, bool NoX, Bills tmpB);
-	void chonTuDanhSachBill(NODEPTR &tree, listEmp &ListEmployees, int &stt, bool &selected, bool NoX, Bills tmpB);
-	void inTrangBillList(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], Bills tmpB, int start);
-	void inChoiceBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][30], bool NoX, Bills tmpB);
-	void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, char keyword[], bool NoX, Bills tmpB); //1:N   0:X
-	void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, Bills tmpB, int &ViTri, bool NoX);
-	void danhSachSelectMat(NODEPTR &tree,listEmp &ListEmployees, Bills tmpB, bool NoX);  
+	void danhSachBill(NODEPTR &tree, listEmp &ListEmployees, bool NoX, Bills &tmpB);
+	void chonTuDanhSachBill(NODEPTR &tree, listEmp &ListEmployees, int &stt, bool &selected, bool NoX, Bills &tmpB);
+	void inTrangBillList(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], Bills &tmpB, int start);
+	void inChoiceBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][30], bool NoX, Bills &tmpB);
+	void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, char keyword[], bool NoX, Bills &tmpB); //1:N   0:X
+	void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, Bills &tmpB, int &ViTri, bool NoX);
+	void danhSachSelectMat(NODEPTR &tree,listEmp &ListEmployees, Bills &tmpB, bool NoX);  
 	void inVatTuBill(Details VT, int posX, int posY);
 	//cau f
+	void inDanhSachBill(NODEPTR &tree,listEmp &ListEmployees,Bills &tmpB);
+	void TrangBillList(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], Bills &tmpB, int start);
 //	void inChoiceListBill()
 //  khungInfoBill()	
 	
@@ -91,6 +94,7 @@ void nhapNgay(Dates &dayBegin, Dates &dayEnd, char khungNoiDung[][30], bool &sel
 int main()
 {
 	KhoiTaoChuongTrinh();
+	logs.open("data/Logs.txt", ios::out);
 	NODEPTR tree = NULL;
 	loadFile(tree, CountM);
 	struct listEmp ListEmployees;
@@ -309,10 +313,17 @@ void Bill(NODEPTR &tree, struct listEmp &ListEmployees)
 	VeMenuPhu(2, MenuBill);
 	int thaoTac;
 	MenuPhu(2, MenuBill, 2, thaoTac);
-	if (thaoTac == 1)
+	Bills tmpB;
+	switch(thaoTac) 
 	{
-		Bills tmpB;
-		return VeKhungAddBill(tree,ListEmployees, khungBill, 450, 600);	
+		case 1:
+			{
+				return VeKhungAddBill(tree,ListEmployees, khungBill, 450, 600);	
+			}
+		case 2:
+			{
+				return inDanhSachBill(tree, ListEmployees, tmpB);
+			}	
 	}
 }
 
@@ -2358,9 +2369,12 @@ void VeKhungAddBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][3
 													tmpB.date.day = ChangeCharToNum(date->days);
 													tmpB.date.month = ChangeCharToNum(date->months);
 													tmpB.date.year = ChangeCharToNum(date->years);
-													ListEmployees.addBill(keyName, tmpB);
 													VeMenu();
-													return danhSachBill(tree, ListEmployees, fst, tmpB);
+													danhSachBill(tree, ListEmployees, fst, tmpB);
+													ListEmployees.addBill(keyName, tmpB);
+													logs << ListEmployees.Search_ID(keyName)->listBill.firstNode->info.value() << " value" << endl;
+													//saveEmp(ListEmployees);
+													return;
 												}
 												else
 												{
@@ -2421,7 +2435,7 @@ void VeKhungAddBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][3
 //	delete (ListM);
 }
 
-void inChoiceBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][30],bool NoX, Bills tmpB) // NoX = 1  nhap, NoX = 0 xuat
+void inChoiceBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][30],bool NoX, Bills &tmpB) // NoX = 1  nhap, NoX = 0 xuat
 {
 	bool choice = 1;
 	bool choiceN = 1; 
@@ -2672,7 +2686,7 @@ void inChoiceBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][30],
 	} // while
 }
 
-void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, char keyword[], bool NoX, Bills tmpB) //1:N   0:X
+void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, char keyword[], bool NoX, Bills &tmpB) //1:N   0:X
 {
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
@@ -2888,7 +2902,7 @@ void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][3
 	
 
 
-void danhSachSelectMat(NODEPTR &tree,listEmp &ListEmployees,Bills tmpB, bool NoX)
+void danhSachSelectMat(NODEPTR &tree,listEmp &ListEmployees,Bills &tmpB, bool NoX)
 {
 	//tao mang 1 chieu
 	Name_Mat* arrM = new Name_Mat[CountM];
@@ -2904,7 +2918,7 @@ void danhSachSelectMat(NODEPTR &tree,listEmp &ListEmployees,Bills tmpB, bool NoX
 		chonTuDanhSachMat(tree, arrM, size, removePos, page, select);
 		if(select == 1 && !tmpB.details->isFull())
 		{
-			// them vao ListM
+			// them vao listBill
 			NODEPTR p = Search(tree,arrM->code);
 			for(int i = 0 ; i < tmpB.details->n ; i++)
 			{
@@ -2927,7 +2941,7 @@ void danhSachSelectMat(NODEPTR &tree,listEmp &ListEmployees,Bills tmpB, bool NoX
 }
 
 
-void danhSachBill(NODEPTR &tree, listEmp &ListEmployees, bool NoX, Bills tmpB) // 1: N      0: X
+void danhSachBill(NODEPTR &tree, listEmp &ListEmployees, bool NoX, Bills &tmpB) // 1: N      0: X
 {
 	int removePos = 0;
 	bool select = 0;
@@ -2954,7 +2968,7 @@ void danhSachBill(NODEPTR &tree, listEmp &ListEmployees, bool NoX, Bills tmpB) /
 	VeMenu();
 }
 
-void chonTuDanhSachBill(NODEPTR &tree, listEmp &ListEmployees, int &stt, bool &selected, bool NoX, Bills tmpB)
+void chonTuDanhSachBill(NODEPTR &tree, listEmp &ListEmployees, int &stt, bool &selected, bool NoX, Bills &tmpB)
 {	
 	//in danh sach
 	//int startPage = 1;
@@ -3033,10 +3047,10 @@ void chonTuDanhSachBill(NODEPTR &tree, listEmp &ListEmployees, int &stt, bool &s
 						y = U+kichThuocSTT+(stt%20)*h;
 						// to den hinh chu nhat cu
 						setcolor(BLACK);
-						rectangle(x, yOld, x+W, yOld+h);
+						rectangle(x+3, yOld, x+W-3, yOld+h);
 						// ve hinh chu nhat moi
 						setcolor(GREEN);
-						rectangle(x, y, x+W, y+h);
+						rectangle(x+3, y, x+W-3, y+h);
 						yOld = y;
 					}
 					if(stt == 20)
@@ -3110,6 +3124,9 @@ void chonTuDanhSachBill(NODEPTR &tree, listEmp &ListEmployees, int &stt, bool &s
 										strcpy(tmpM->info.amount,  toChars(tmpNum));
 									}
 								}
+//								saveEmp(ListEmployees);
+								VeMenu();
+								return;
 							}
 							else if(choose == 3)
 							{
@@ -3122,7 +3139,7 @@ void chonTuDanhSachBill(NODEPTR &tree, listEmp &ListEmployees, int &stt, bool &s
 		}
 }
 
-void inTrangBillList(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], Bills tmpB, int start)
+void inTrangBillList(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], Bills &tmpB, int start)
 {
 	int kichThuocSTT = 30;
 	int kichThuocNut = 40;
@@ -3216,7 +3233,7 @@ void inVatTuBill(Details VT, int posX, int posY)
 	posX += textwidth(danhSachDetailBill[4]) + sizeDanhSachMat[4]*2;
 }
 
-void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, Bills tmpB, int &ViTri, bool NoX)
+void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, Bills &tmpB, int &ViTri, bool NoX)
 {
 	NODEPTR p;
 	int cases = 1;
@@ -4662,7 +4679,6 @@ void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start)
 			setcolor(WHITE);
 			Bills* tmpB = new Bills;
 			tmpB = arr->index(i)->info;
-				
 			//outtextxy(disW+5, dis, tmpB->Num);
 			outtextxy(disW+canLeGiua(tmpB->Num, textwidth(trangBill[1]) + sizeTrangBill[1]*2), dis, tmpB->Num);
 			disW += textwidth(trangBill[1]) + sizeTrangBill[1]*2;
@@ -4687,7 +4703,7 @@ void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start)
 			disW += textwidth(trangBill[5]) + sizeTrangBill[5]*2;
 			
 			disW += textwidth(trangBill[6]) + sizeTrangBill[6]*2;
-			outtextxy(disW-5-textwidth(toChars(tmpB->details->value())), dis, toChars(tmpB->details->value()));
+			outtextxy(disW-5-textwidth(toChars(tmpB->value())), dis, toChars(tmpB->value()));
 		}
 		
 		dis += h+5;
@@ -5025,4 +5041,107 @@ void nhapNgay(Dates &dayBegin, Dates &dayEnd, char khungNoiDung[][30], bool &sel
 }
 
 //==========endCHINHAN========
+
+void inDanhSachBill(NODEPTR &tree,listEmp &ListEmployees,Bills &tmpB)
+{
+	//in danh sach
+	int startPage = 1;
+	int limitPage = 1;
+	if (limitPage == 0)
+	{
+		VeMenu();
+		noti(thongBao[0]);
+	}
+	else
+	{
+		TrangBillList(tree, danhSachDetailBill, sizeDanhSachMat, tmpB, 0);
+		char key = getch();
+		if(key == 27)
+		{
+			VeMenu();
+			return;
+		}
+	}
+}
+
+void TrangBillList(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], Bills &tmpB, int start)
+{
+		int kichThuocSTT = 30;
+	int kichThuocNut = 40;
+	int h = textheight(khungNoiDung[0]);
+	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
+	int W = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		W += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i]*2;
+	}
+	
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2+255;
+	int R =	WD_WIDTH/2 + W/2+255;
+	
+	//in nen phan noi dung
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+	
+	//in nen phan danh sach
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	//in duong ke phan menu + vien
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								
+	rectangle(L-1, U-1, R+1, D+1);
+	
+	//in phan noi dung + gach doc
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	int dis = L;
+	for (int i = 0; i < 5; i++)
+	{
+		dis += sizeKhungNoiDung[i];
+		setcolor(MAU_TEXT_KHUNG);
+		outtextxy(dis, U+(kichThuocSTT-h)/2, khungNoiDung[i]);
+		dis += textwidth(khungNoiDung[i]) + sizeKhungNoiDung[i];
+		setcolor(BLACK);
+		line(dis, U, dis, D);
+	}
+	//in gach ngang
+	dis = U + kichThuocSTT;
+	for (int i = 0; i < 20; i++)
+	{
+		dis += h+5*2;
+		line(L, dis, R, dis);
+	}
+	
+	// in thong tin
+	setcolor(WHITE);
+	setbkcolor(NEN_KHUNG);
+	dis = U + kichThuocSTT;
+	int Size = 20;
+	for (int i = start; i < 20; i++)
+	{
+		dis += 5;	
+		// in STT
+		int disW = L;
+		char *d = toChars(i+1);
+		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[0])+sizeKhungNoiDung[0]*2), dis, d);
+		disW += textwidth(khungNoiDung[0]) + sizeKhungNoiDung[0]*2;
+		if(i < tmpB.details->n)
+		{
+			inVatTuBill(tmpB.details->nodeListDeta[i], disW, dis);
+		}
+		dis += h+5;
+	}
+}
+
+//void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, char keyword[], bool NoX, Bills tmpB);
+//{
+//	
+//}
+
 
