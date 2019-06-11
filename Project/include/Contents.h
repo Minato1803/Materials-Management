@@ -59,9 +59,11 @@ int  sizeDanhSachEmp[] 	 = {10, 50, 100, 50, 20};
 
 //Statistic============
 char khungNhapNgay[][30] = {"Statistics of bills in: ", "Check", "Exit", "From date:", "To date:"};
-char ngayTopVT[][30]    = {"Top 10 Materials in:", "Check", "Exit", "From date:", "To date:"};
+char ngayTopVT[][30]     = {"Top 10 Materials in:", "Check", "Exit", "From date:", "To date:"};
 char trangBill[][30] 	 = {"STT", "ID", "Date", "Type", "Last Name", "First Name", "Value"};
 int  sizeTrangBill[]	 = {10, 50, 50, 20, 100, 50, 50};
+char trangTop[][30]		 = {"Rank", "ID", "Name", "Revenue"};
+int  sizeTrangTop[]		 = {10, 50, 50, 50};
 
 
 

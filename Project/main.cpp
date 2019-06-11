@@ -88,6 +88,8 @@ void taoMangBillDate(struct listEmp &List, struct listBillDate *arr, struct Date
 void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start);
 void nhapNgay(Dates &dayBegin, Dates &dayEnd, char khungNoiDung[][30], bool &selected);
 void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees);
+void inTrangTopVT(struct listEmp &list, struct NameMats *arr, int Size, int start);
+void sortTopMat(NameMats *arr, int left, int right);
 //=========================
 //==========MAIN====================================
 int main()
@@ -5493,7 +5495,7 @@ void updateRevenue(NameMats *arr, listBillDate *arrBill)
 			listBillDeta *tmpDT = node->info->details;
 			for (int i = 0; i < tmpDT->n; i++)
 			{
-//				int Rev = tmpDT->nodeListDeta[i].amount
+				increaseRevenue(arr, tmpDT->nodeListDeta[i].ID, tmpDT->nodeListDeta[i].amount);
 			}
 		}
 	}
@@ -5515,11 +5517,12 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 		NameMats *arrMat = new NameMats[CountM];
 		Count = 0;
 		taoMangMat(tree, arrMat);
-		
-		sortTopMat(arrMat, 0, Count);
+		updateRevenue(arrMat, arrBill);
+		sortTopMat(arrMat, 0, CountM-1);
 		//in danh sach
 		int startPage = 1;
-		int limitPage = ceil(arrBill->Size*1.0/OBJ_PER_PAGE);
+		int limitPage = 1;
+		logs << "topVT" << endl;
 	
 		if (limitPage == 0)
 		{
@@ -5527,8 +5530,8 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 		}
 		else
 		{
-			inTrangBill(ListEmployees, arrBill, 0);
-			showPage(830, 650, startPage, limitPage);
+			inTrangTopVT(ListEmployees, arrMat, 15, 0);
+			showPage(720, 650, startPage, limitPage);
 			while(1)
 			{
 				if(kbhit())
@@ -5544,8 +5547,8 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 									startPage--;
 									if (startPage < 1)
 										startPage = limitPage;
-									inTrangBill(ListEmployees, arrBill, (startPage-1)*OBJ_PER_PAGE);
-									showPage(830, 650, startPage, limitPage);
+									inTrangTopVT(ListEmployees, arrMat, 15, (startPage-1)*OBJ_PER_PAGE);
+									showPage(720, 650, startPage, limitPage);
 									break;
 								}
 							case KEY_PGDN:
@@ -5553,8 +5556,8 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 									startPage++;
 									if (startPage > limitPage)
 										startPage = 1;
-									inTrangBill(ListEmployees, arrBill, (startPage-1)*OBJ_PER_PAGE);
-									showPage(830, 650, startPage, limitPage);
+									inTrangTopVT(ListEmployees, arrMat, 15, (startPage-1)*OBJ_PER_PAGE);
+									showPage(720, 650, startPage, limitPage);
 									break;
 								}
 						}
@@ -5567,9 +5570,115 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 				}
 			}
 		}
+		delete (arrMat);
 	}
 	
 	delete (arrBill);
+}
+
+void inTrangTopVT(struct listEmp &list, struct NameMats *arr, int Size, int start)
+{
+	int kichThuocSTT = 30;
+	int h = textheight(trangTop[0]);
+	int H = (h+5*2)*OBJ_PER_PAGE + kichThuocSTT;
+	int W = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		W += textwidth(trangTop[i]) + sizeTrangTop[i]*2;
+	}
+	
+	setusercharsize(1, 2, 1, 2);
+	//tinh kich thuoc khung
+	int U = WD_HEIGHT/2 - H/2;
+	int D =	WD_HEIGHT/2 + H/2;
+	int L =	WD_WIDTH/2 - W/2;
+	int R =	WD_WIDTH/2 + W/2;
+	
+	//in nen phan noi dung
+	setfillstyle(SOLID_FILL, NEN_KHUNG);
+	bar (L, U, R, D);
+	
+	//in nen phan danh sach
+	setbkcolor(MAU_MENU);
+	setfillstyle(SOLID_FILL, MAU_MENU);
+	bar (L, U, R, U+kichThuocSTT);
+	
+	//in duong ke phan menu + vien
+	setcolor(BLACK);
+	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
+	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								
+	rectangle(L-1, U-1, R+1, D+1);
+	
+	//in phan noi dung + gach doc
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	int dis = L;
+	for (int i = 0; i < 4; i++)
+	{
+		dis += sizeTrangTop[i];
+		setcolor(MAU_TEXT_KHUNG);
+		outtextxy(dis, U+(kichThuocSTT-h)/2, trangTop[i]);
+		dis += textwidth(trangTop[i]) + sizeTrangTop[i];
+		setcolor(BLACK);
+		line(dis, U, dis, D);
+	}
+	//in gach ngang
+	dis = U + kichThuocSTT;
+	for (int i = 0; i < 20; i++)
+	{
+		dis += h+5*2;
+		line(L, dis, R, dis);
+	}
+	
+	// in thong tin
+	setcolor(WHITE);
+	setbkcolor(NEN_KHUNG);
+	dis = U + kichThuocSTT;
+//	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
+//	{
+//		dis += 5;	
+//		// in STT
+//		int disW = L;
+//		char *d = toChars(i+1);
+//		outtextxy(disW + canLeGiua(d, textwidth(trangTop[0])+sizetrangTop[0]*2), dis, d);
+//		disW += textwidth(trangTop[0]) + sizetrangTop[0]*2;
+//		
+//		//int disY = L;
+//		//disY += sizetrangTop[0]*2 + textwidth(trangTop[0]);
+//		{
+//			setcolor(WHITE);
+//			Bills* tmpB = new Bills;
+//			tmpB = arr->index(i)->info;
+//			//outtextxy(disW+5, dis, tmpB->Num);
+//			outtextxy(disW+canLeGiua(tmpB->Num, textwidth(trangTop[1]) + sizetrangTop[1]*2), dis, tmpB->Num);
+//			disW += textwidth(trangTop[1]) + sizetrangTop[1]*2;
+//			
+//			char *date = charDate(tmpB->date.day, tmpB->date.month, tmpB->date.year);
+//			outtextxy(disW+canLeGiua(date, textwidth(trangTop[2]) + sizetrangTop[2]*2), dis, date);
+//			disW += textwidth(trangTop[2]) + sizetrangTop[2]*2;
+//			
+//			if (tmpB->type == 'N')
+//				outtextxy(disW+(sizetrangTop[3]*2-1.0/2*textwidth("N")), dis, "N");
+//			else
+//				outtextxy(disW+(sizetrangTop[3]*2-1.0/2*textwidth("X")), dis, "X");
+//			disW += textwidth(trangTop[3]) + sizetrangTop[3]*2;
+//			
+//			Employee* tmpE = new Employee;
+//			tmpE = arr->index(i)->Emp;
+//			
+//			outtextxy(disW+5, dis, tmpE->lastName);
+//			disW += textwidth(trangTop[4]) + sizetrangTop[4]*2;
+//						
+//			outtextxy(disW+5, dis, tmpE->firstName);
+//			disW += textwidth(trangTop[5]) + sizetrangTop[5]*2;
+//			
+//			disW += textwidth(trangTop[6]) + sizetrangTop[6]*2;
+//			outtextxy(disW-5-textwidth(toChars(tmpB->value())), dis, toChars(tmpB->value()));
+//		}
+//		
+//		dis += h+5;
+//	}
+	
+	setbkcolor(MAU_NEN);
 }
 
 //==========endCHINHAN========
