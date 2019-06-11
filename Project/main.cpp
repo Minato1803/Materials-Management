@@ -2840,8 +2840,8 @@ void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][3
 			 				ThongBao(720, 130, Success[0], GREEN, MAU_MENU);
 							tmp.VAT = ChangeCharToNum(tempM.tmpVAT);
 							tmp.amount = ChangeCharToNum(tempM.tmpAmount);
-							tmp.VAT = ChangeCharToNum(tempM.tmpVAT);
 							tmp.unit = ChangeCharToNum(tempM.tmpUnit);
+							tmpB.details->Insert(tmp);
 							VeMenu();
 							return inChoiceBill(tree, ListEmployees, choiceObject,NoX, tmpB);
 						}
@@ -5452,9 +5452,9 @@ void sortTopMat(NameMats *arr, int left, int right)
 	int i = left, j = right;
 	do
 	{
-		while(arr[i] < mid)
+		while(arr[i] > mid)
 			i++;
-		while(arr[j] > mid)
+		while(arr[j] < mid)
 			j--;
 		if(i <= j)
 		{
@@ -5501,7 +5501,20 @@ void updateRevenue(NameMats *arr, listBillDate *arrBill)
 	}
 }
 
-
+void findMaxMat(NameMats *arrMat, int &C)
+{
+	int rank = 0;
+	int valueOld = 0;
+	for (C = 0; C < CountM; C++) 
+	{
+		if (valueOld != arrMat[C].revenue)
+		{
+			rank++;
+		}
+		if (rank == 10 || arrMat[C].revenue == 0)
+			break;
+	}
+}
 
 void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 {
@@ -5519,10 +5532,14 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 		taoMangMat(tree, arrMat);
 		updateRevenue(arrMat, arrBill);
 		sortTopMat(arrMat, 0, CountM-1);
+		//check rank
+		int countMatRank = 0;
+		findMaxMat(arrMat, countMatRank);
 		//in danh sach
 		int startPage = 1;
-		int limitPage = 1;
-		logs << "topVT" << endl;
+		int limitPage = countMatRank;
+		for (int i = 0; i < CountM; i++)
+			logs << arrMat[i].code << " " << arrMat[i].revenue << endl;
 	
 		if (limitPage == 0)
 		{

@@ -4,6 +4,7 @@
 #include "Functions.h"
 
 using namespace std;
+ofstream logs;
 
 //=== create structures=== //
 int CountM = 0;
@@ -44,8 +45,6 @@ struct NameMats
 	}
 	
 };
-
-typedef struct NameMats Name_Mat;
 
 struct Node			//AVL tree
 {
@@ -147,15 +146,19 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 				tmp = root; 
 				root = NULL; 
 			} 
-			else 				// neu co 1 nut con 
-				root = tmp; 
-		} 
+			else
+			{
+			 	// neu co 1 nut con 
+				root = tmp;
+				tmp = NULL;	 
+			}
+		}
 		else
 		{ 
 			// node with two children: Get the inorder 
 			// successor (smallest in the right subtree) 
 			NODEPTR tmp = minValueNode(root->right); 
-//			strcpy(root->key,tmp->key);
+			strcpy(root->key,tmp->key);
 			tmp->info = root->info;  
 			// Delete the inorder successor 
 			root->right = deleteNode(root->right, tmp->key); 
@@ -232,7 +235,7 @@ NODEPTR Insert(NODEPTR root, char key[], Material a)
 
 	// Right Right
 	if (balance < -1 && (strcmp(key,root->right->key) > 0 )) 
-		return rotateR(root); 
+		return rotateL(root); 
 
 	// Left Right 
 	if (balance > 1 && (strcmp(key,root->left->key) > 0 )) 
@@ -252,26 +255,28 @@ NODEPTR Insert(NODEPTR root, char key[], Material a)
 } 
 
 	
-NODEPTR Search(NODEPTR &root, char x[])
+NODEPTR Search(NODEPTR &root, char x[11])
 {
-	if(root == NULL || strcmp(root->key, x) == 0)
-		return root;
-	else if(strcmp(root->key, x) < 0)
-		 {
-		 	Search(root->right,x);
-		 }	
-		 else if(strcmp(root->key, x) > 0)
-		 	  {
-		 	  	Search(root->left,x);
-			  }
-//	while(p != NULL && strcmp(p->key, x) != 0)
-//	{
-//		if(strcmp(p->key, x) < 0)
-//			p = p->left;
-//		else
-//		 	p = p->right;			 	
-//	}
-//	return p;
+//	if(root == NULL || strcmp(root->key, x) == 0)
+//		return root;
+//	else if(strcmp(root->key, x) < 0)
+//		 {
+//		 	Search(root->right,x);
+//		 }	
+//		 else if(strcmp(root->key, x) > 0)
+//		 	  {
+//		 	  	Search(root->left,x);
+//			  }
+	NODEPTR p;
+	p = root ;
+	while(p != NULL && strcmp(p->key, x) != 0)
+	{
+		if(strcmp(p->key, x) < 0)
+			p = p->right;
+		else if(strcmp(p->key, x) > 0)
+		 	 p = p->left;		 	
+	}
+	return p;
 }	
 
 void Inorder(NODEPTR &p)
@@ -289,9 +294,9 @@ void Inorder(NODEPTR &p)
 
 
 
-void Qsort(Name_Mat info[], int left, int right )
+void Qsort(NameMats info[], int left, int right )
 {
-	Name_Mat mid = info[(left + right) / 2];
+	NameMats mid = info[(left + right) / 2];
 	int i = left, j = right;
 	do
 	{
@@ -303,7 +308,7 @@ void Qsort(Name_Mat info[], int left, int right )
 		{
 			if(i < j)
 			{
-				Name_Mat tmp;
+				NameMats tmp;
 				tmp = info[i];
 				info[i] = info[j];
 				info[j] = tmp;
