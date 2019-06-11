@@ -46,6 +46,7 @@ char type[][30] 	={"N", "X","/"};
 char danhSachDetailBill[][30] = {"STT", "ID", "Rate", "VAT", "Quantity"};
 char khungDetailBill[][30] = {"Material's Informations", "Add Material", "Exit", "ID", "Rate (Dong)", "VAT (%)", "Quantity",};
 int  sizeKhungDate[] = {55, 110, 165, 220, 275};
+char choiceBillList[][30] = {"ID", "Bill List", "Check info", "Exit"};
 
 
 //Employees============
