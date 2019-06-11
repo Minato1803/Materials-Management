@@ -67,6 +67,7 @@ int  sizeTrangTop[]		 = {10, 50, 50, 50};
 
 
 
+
 //thong bao
 char thongBao[][50] = {"Empty List"};
 #endif

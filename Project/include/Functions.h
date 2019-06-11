@@ -8,6 +8,8 @@
 #include "colors.h"
 
 using namespace std;
+
+//ofstream logs;
 //struct NamesInfoEmp
 //{
 //	char fName[31];

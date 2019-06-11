@@ -8,8 +8,8 @@
 using namespace std;
 
 //Global Vaiable
-ofstream logs;
 
+ofstream logs;
 //=====funtions======
 
 struct NamesInfoEmp

@@ -4,7 +4,7 @@
 #include "Functions.h"
 
 using namespace std;
-ofstream logs;
+//ofstream logs;
 
 //=== create structures=== //
 int CountM = 0;
