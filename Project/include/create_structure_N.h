@@ -222,21 +222,12 @@ struct listBillDeta
 		{
 			nodeListDeta[j-1] = nodeListDeta[j];
 		}
+		n-=1;
 	}
 	
 	void Clear()
 	{
 		n = 0;
-	}
-	
-	long value()
-	{
-		long res = 0;
-		for (int i = 0; i < n; i++)
-		{
-			res += nodeListDeta[i].unit*nodeListDeta[i].amount + (nodeListDeta[i].unit*nodeListDeta[i].amount)*(nodeListDeta[i].VAT/100.0);
-		}
-		return res;
 	}
 	
 	int Search_info(struct Details info)
@@ -389,10 +380,6 @@ struct Employee
 		lastName[0] = '\0';
 		sex = 1;
 	}	
-//	bool operator == (struct Employees other)
-//	{
-//		return (strcmp(ID, other.ID) == 0);
-//	}
 };
 
 struct listEmp

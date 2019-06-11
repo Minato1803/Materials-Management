@@ -26,11 +26,23 @@ struct NameMats
 {
 	char code[11];
 	char name[51];
+	int  revenue;
 	NameMats()
 	{
 		code[0] = '\0';
 		name[0] = '\0';
+		revenue = 0;
 	}
+	
+	bool operator > (const struct NameMats &other)
+	{
+		return (this->revenue > other.revenue);
+	}
+	bool operator < (const struct NameMats &other)
+	{
+		return (this->revenue < other.revenue);
+	}
+	
 };
 
 typedef struct NameMats Name_Mat;
@@ -215,7 +227,7 @@ NODEPTR Insert(NODEPTR root, char key[], Material a)
 	//4 truong hop mat can bang
 
 	// Left Left 
-	if (balance > 1 && (strcmp(key,root->left->key) > 0 )) 
+	if (balance > 1 && (strcmp(key,root->left->key) < 0 )) 
 		return rotateR(root); 
 
 	// Right Right
