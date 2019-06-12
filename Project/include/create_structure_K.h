@@ -28,11 +28,13 @@ struct NameMats
 	char code[11];
 	char name[51];
 	int  revenue;
+	int  rank;
 	NameMats()
 	{
 		code[0] = '\0';
 		name[0] = '\0';
 		revenue = 0;
+		rank = 0;
 	}
 	
 	bool operator > (const struct NameMats &other)

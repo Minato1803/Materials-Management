@@ -24,7 +24,7 @@ int KichThuocMenuPhu[MAX_MENU+1] = {200, 200, 180, 180, 120};
 
 // noti
 char Success[][50] = {"Added Successfully!", "Remove Successfully!", "Adjust Successfully!"};
-char Fail[][50] = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Already exists!", "Employee Not Found!", "Not Enough Material!","Current quantity: "};
+char Fail[][50] = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Already exists!", "Employee Not Found!", "Not Enough Material!","Current quantity: ", "Full List!"};
 
 //error 
 char sameMat[][50] = {"Error: The same  Material's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};

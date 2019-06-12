@@ -475,6 +475,18 @@ struct listEmp
 		p->listBill.insertFirst(newBill);
 	}
 	
+//	struct Employee* Search_ID(char tmpID[11])
+//	{
+//		for (int i = 0; i < n; i++)
+//		{
+//			if (strcmp(nodeListEmp[i]->ID, tmpID) == 0)
+//			{
+//				return nodeListEmp[i];
+//			}
+//		}
+//		return NULL;
+//	}
+	
 };
 //==============endNHANVIEN============
 

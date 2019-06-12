@@ -4224,22 +4224,28 @@ void addEmp(struct listEmp &ListEmployees)
 		khungNhapEmp(ListEmployees, khungEmp, 450, 600, tmpE, entered);
 		if (entered)
 		{
-			if (!ListEmployees.isFull() && ListEmployees.Search_info(tmpE) == -1)
+			if (ListEmployees.isFull())
 			{
-				ListEmployees.Insert(tmpE);
-				ThongBao(725, 130, Success[0], GREEN, MAU_MENU);
+				ThongBao(725, 130, Fail[8], GREEN, MAU_MENU);
 			}
 			else
 			{
-				bool chooseY = 1;
-				notiBool(sameEmp, chooseY, 0);
-				if(chooseY)
+				if (ListEmployees.Search_info(tmpE) == -1)
 				{
-					About();  //Adjust------
+					ListEmployees.Insert(tmpE);
+					ThongBao(725, 130, Success[0], GREEN, MAU_MENU);
+				}
+				else
+				{
+					bool chooseY = 1;
+					notiBool(sameEmp, chooseY, 0);
+					if(chooseY)
+					{
+						khungNhapEmp(ListEmployees, khungAdjustEmp, 450, 600, ListEmployees.Search_ID(tmpE->ID), entered);
+					}
 				}
 			}	
 		}
-		delete (tmpE);
 	}while(entered);
 }
 
@@ -4382,7 +4388,7 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 					char nextK = getch();
 					switch(nextK)
 					{
-						case KEY_PGUP:
+						case KEY_PGDN:
 							{
 								startPage--;
 								if (startPage < 1)
@@ -4391,7 +4397,7 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 								showPage(830, 650, startPage, limitPage);
 								break;
 							}
-						case KEY_PGDN:
+						case KEY_PGUP:
 							{
 								startPage++;
 								if (startPage > limitPage)
@@ -5099,9 +5105,9 @@ void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start)
 			disW += textwidth(trangBill[2]) + sizeTrangBill[2]*2;
 			
 			if (tmpB->type == 'N')
-				outtextxy(disW+(sizeTrangBill[3]*2-1.0/2*textwidth("N")), dis, "N");
+				outtextxy(disW+(sizeTrangBill[3]*2-1.0/2*textwidth("NHAP")), dis, "NHAP");
 			else
-				outtextxy(disW+(sizeTrangBill[3]*2-1.0/2*textwidth("X")), dis, "X");
+				outtextxy(disW+(sizeTrangBill[3]*2-1.0/2*textwidth("XUAT")), dis, "XUAT");
 			disW += textwidth(trangBill[3]) + sizeTrangBill[3]*2;
 			
 			Employee* tmpE = new Employee;
@@ -5172,7 +5178,7 @@ void thongKeBill(struct listEmp &ListEmployees)
 						char nextK = getch();
 						switch(nextK)
 						{
-							case KEY_PGUP:
+							case KEY_PGDN:
 								{
 									startPage--;
 									if (startPage < 1)
@@ -5181,7 +5187,7 @@ void thongKeBill(struct listEmp &ListEmployees)
 									showPage(830, 650, startPage, limitPage);
 									break;
 								}
-							case KEY_PGDN:
+							case KEY_PGUP:
 								{
 									startPage++;
 									if (startPage > limitPage)
@@ -5500,7 +5506,10 @@ void updateRevenue(NameMats *arr, listBillDate *arrBill)
 			listBillDeta *tmpDT = node->info->details;
 			for (int i = 0; i < tmpDT->n; i++)
 			{
-				increaseRevenue(arr, tmpDT->nodeListDeta[i].ID, tmpDT->nodeListDeta[i].amount);
+				int amountMat	= tmpDT->nodeListDeta[i].amount;
+				int unitMat		= tmpDT->nodeListDeta[i].unit;
+				int VAT			= tmpDT->nodeListDeta[i].VAT;
+				increaseRevenue(arr, tmpDT->nodeListDeta[i].ID, (amountMat*unitMat)*((VAT+100)/100.0));
 			}
 		}
 	}
@@ -5512,9 +5521,15 @@ void findMaxMat(NameMats *arrMat, int &C)
 	int valueOld = 0;
 	for (C = 0; C < CountM; C++) 
 	{
+		logs << arrMat[C].revenue << endl;
 		if (valueOld != arrMat[C].revenue)
 		{
-			rank++;
+			arrMat[C].rank = ++rank;
+			valueOld = arrMat[C].revenue;
+		}
+		else
+		{
+			arrMat[C].rank = rank;
 		}
 		if (rank == 10 || arrMat[C].revenue == 0)
 			break;
@@ -5526,7 +5541,7 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 	struct listBillDate *arrBill = new listBillDate;
 	Dates dayBegin, dayEnd;
 	bool selected = false;
-	
+
 	nhapNgay(dayBegin, dayEnd, ngayTopVT, selected);
 	
 	if (selected)
@@ -5542,9 +5557,9 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 		findMaxMat(arrMat, countMatRank);
 		//in danh sach
 		int startPage = 1;
-		int limitPage = countMatRank;
+		int limitPage = ceil(countMatRank*1.0/OBJ_PER_PAGE);
 		for (int i = 0; i < CountM; i++)
-			logs << arrMat[i].code << " " << arrMat[i].revenue << endl;
+			logs << arrMat[i].code << " " << arrMat[i].name << endl;
 	
 		if (limitPage == 0)
 		{
@@ -5552,7 +5567,7 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 		}
 		else
 		{
-			inTrangTopVT(ListEmployees, arrMat, 15, 0);
+			inTrangTopVT(ListEmployees, arrMat, countMatRank, 0);
 			showPage(720, 650, startPage, limitPage);
 			while(1)
 			{
@@ -5564,21 +5579,21 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 						char nextK = getch();
 						switch(nextK)
 						{
-							case KEY_PGUP:
+							case KEY_PGDN:
 								{
 									startPage--;
 									if (startPage < 1)
 										startPage = limitPage;
-									inTrangTopVT(ListEmployees, arrMat, 15, (startPage-1)*OBJ_PER_PAGE);
+									inTrangTopVT(ListEmployees, arrMat, countMatRank, (startPage-1)*OBJ_PER_PAGE);
 									showPage(720, 650, startPage, limitPage);
 									break;
 								}
-							case KEY_PGDN:
+							case KEY_PGUP:
 								{
 									startPage++;
 									if (startPage > limitPage)
 										startPage = 1;
-									inTrangTopVT(ListEmployees, arrMat, 15, (startPage-1)*OBJ_PER_PAGE);
+									inTrangTopVT(ListEmployees, arrMat, countMatRank, (startPage-1)*OBJ_PER_PAGE);
 									showPage(720, 650, startPage, limitPage);
 									break;
 								}
@@ -5655,50 +5670,31 @@ void inTrangTopVT(struct listEmp &list, struct NameMats *arr, int Size, int star
 	setcolor(WHITE);
 	setbkcolor(NEN_KHUNG);
 	dis = U + kichThuocSTT;
-//	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
-//	{
-//		dis += 5;	
-//		// in STT
-//		int disW = L;
-//		char *d = toChars(i+1);
-//		outtextxy(disW + canLeGiua(d, textwidth(trangTop[0])+sizetrangTop[0]*2), dis, d);
-//		disW += textwidth(trangTop[0]) + sizetrangTop[0]*2;
-//		
-//		//int disY = L;
-//		//disY += sizetrangTop[0]*2 + textwidth(trangTop[0]);
-//		{
-//			setcolor(WHITE);
-//			Bills* tmpB = new Bills;
-//			tmpB = arr->index(i)->info;
-//			//outtextxy(disW+5, dis, tmpB->Num);
-//			outtextxy(disW+canLeGiua(tmpB->Num, textwidth(trangTop[1]) + sizetrangTop[1]*2), dis, tmpB->Num);
-//			disW += textwidth(trangTop[1]) + sizetrangTop[1]*2;
-//			
-//			char *date = charDate(tmpB->date.day, tmpB->date.month, tmpB->date.year);
-//			outtextxy(disW+canLeGiua(date, textwidth(trangTop[2]) + sizetrangTop[2]*2), dis, date);
-//			disW += textwidth(trangTop[2]) + sizetrangTop[2]*2;
-//			
-//			if (tmpB->type == 'N')
-//				outtextxy(disW+(sizetrangTop[3]*2-1.0/2*textwidth("N")), dis, "N");
-//			else
-//				outtextxy(disW+(sizetrangTop[3]*2-1.0/2*textwidth("X")), dis, "X");
-//			disW += textwidth(trangTop[3]) + sizetrangTop[3]*2;
-//			
-//			Employee* tmpE = new Employee;
-//			tmpE = arr->index(i)->Emp;
-//			
-//			outtextxy(disW+5, dis, tmpE->lastName);
-//			disW += textwidth(trangTop[4]) + sizetrangTop[4]*2;
-//						
-//			outtextxy(disW+5, dis, tmpE->firstName);
-//			disW += textwidth(trangTop[5]) + sizetrangTop[5]*2;
-//			
-//			disW += textwidth(trangTop[6]) + sizetrangTop[6]*2;
-//			outtextxy(disW-5-textwidth(toChars(tmpB->value())), dis, toChars(tmpB->value()));
-//		}
-//		
-//		dis += h+5;
-//	}
+	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
+	{
+		dis += 5;	
+		// in STT
+		int disW = L;
+		//char *d = toChars(i+1);
+		char *d = toChars(arr[i].rank);
+		outtextxy(disW + canLeGiua(d, textwidth(trangTop[0])+sizeTrangTop[0]*2), dis, d);
+		disW += textwidth(trangTop[0]) + sizeTrangTop[0]*2;
+		
+		//int disY = L;
+		//disY += sizetrangTop[0]*2 + textwidth(trangTop[0]);
+		{
+			setcolor(WHITE);
+			outtextxy(disW+canLeGiua(arr[i].code, textwidth(trangTop[1]) + sizeTrangTop[1]*2), dis, arr[i].code);
+			disW += textwidth(trangTop[1]) + sizeTrangTop[1]*2;
+			
+			outtextxy(disW+canLeGiua(arr[i].name, textwidth(trangTop[2]) + sizeTrangTop[2]*2), dis, arr[i].name);
+			disW += textwidth(trangTop[2]) + sizeTrangTop[2]*2;
+			
+			outtextxy(disW+(textwidth(trangTop[3]) + sizeTrangTop[3]*2-5) - textwidth(toChars(arr[i].revenue)), dis, toChars(arr[i].revenue));
+		}
+		
+		dis += h+5;
+	}
 	
 	setbkcolor(MAU_NEN);
 }
