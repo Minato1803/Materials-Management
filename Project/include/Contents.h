@@ -39,7 +39,7 @@ int  sizeDanhSachMat[] = {10, 50, 100, 50, 20};
 char choiceObject[][30] = {"ID", "Materials List", "Employee List", "Check info", "Exit" };
 
 //Bill==================
-char khungBill[][30]= {"Bill's Informations", "Material List", "Exit", "ID", "Date (DD/MM/YYYY)", "Biller's ID", "Type"};
+char khungBill[][30]= {"Bill's Informations", "Material List", "Exit", "ID", "Date (DD/MM/YYYY)", "Biller's ID", "Type", "Biller"};
 char khungListBill[][30] = {"Add Material", "Confirm", "Exit"};
 char khungchooseBill[][30] = {"Remove", "Adjust", "Exit"};
 char type[][30] 	={"N", "X","/"};

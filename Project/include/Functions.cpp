@@ -158,23 +158,20 @@ void Nhap(int x, int y,int check, char c, char s[], int n)
 	else
 	if(check == 2)
 	{
-			if((CheckNum(c) || CheckLetter(c)) && KhoaNhapLieu(s,n))
+		if((CheckNum(c) || CheckLetter(c)) && KhoaNhapLieu(s,n))
 		{
 			
-			if(KiemtraNhapLieu(c,s) == 1|| KiemtraNhapLieu(c,s) == -1)
+			if(KiemtraNhapLieu(c,s) == 1)
 			{
-					if(KiemtraNhapLieu(c,s) == 1)
-					{
-						AddChuoi(c,s);
-		//				outtextxy(x,y,s);
-					}
-					else
-						if(KiemtraNhapLieu(c,s)==-1)
-						{
-							c = toupper(c);
-							AddChuoi(c,s);
-						}
+				AddChuoi(c,s);
+//				outtextxy(x,y,s);
 			}
+			else
+				if(KiemtraNhapLieu(c,s)==-1)
+				{
+					c = toupper(c);
+					AddChuoi(c,s);
+				}
 		}
 	}
 	setcolor(WHITE);

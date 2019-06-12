@@ -142,7 +142,17 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 	{ 
 		if( (root->left == NULL) || (root->right == NULL) ) // neu chi co 1 nut con hoac ko co 
 		{ 
-			NODEPTR tmp = root->left ? root->left : root->right; 
+			NODEPTR tmp; 
+			tmp = NULL;
+//			tmp = root->left ? root->left : root->right;
+			if(root->left != NULL)
+			{
+				tmp = root->left;
+			} 
+			else
+			{
+				tmp = root->right;
+			}
 			if (tmp == NULL) 	// neu ko co nut con
 			{ 
 				tmp = root; 
@@ -161,7 +171,7 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 			// successor (smallest in the right subtree) 
 			NODEPTR tmp = minValueNode(root->right); 
 			strcpy(root->key,tmp->key);
-			tmp->info = root->info;  
+			root->info = tmp->info;  
 			// Delete the inorder successor 
 			root->right = deleteNode(root->right, tmp->key); 
 		} 

@@ -358,6 +358,15 @@ struct ListBill
 		}
 		return true;
 	}
+	
+	Bills findBill(char IDBill[20])
+	{
+		for (NODE_LB p = firstNode; p != NULL; p = p->next)
+		{
+			if (strcmp(p->info.Num, IDBill) == 0)
+				return p->info;
+		}
+	}
 };
 
 
@@ -466,6 +475,16 @@ struct listEmp
 				return false;
 		}
 		return true;
+	}
+	
+	Employee *FindEmp(char IDBill[20])
+	{
+		for (int numE = 0; numE < n; numE++)
+		{
+			if (nodeListEmp[numE]->listBill.checkID(IDBill) == false) // co ID trung
+				return nodeListEmp[numE];
+		}
+		return NULL;
 	}
 	
 	
