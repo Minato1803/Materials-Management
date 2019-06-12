@@ -192,6 +192,7 @@ int canLeGiua(char *S, int dis)
 void InThongTin(int x, int y, const char *s)
 {
 	setcolor(WHITE);
+	setbkcolor(NEN_TEXT);
 	outtextxy(x, y, s);
 }
 
@@ -209,6 +210,7 @@ void showPage(int x, int y, int page, int limit)
 {
 	//  Page: page / limit
 	setcolor(MAU_TEXT_KHUNG);
+	setbkcolor(MAU_NEN);
 	outtextxy(x, y, "Page: ");
 	x += textwidth("Page: ");
 	

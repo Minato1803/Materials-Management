@@ -388,7 +388,7 @@ struct Employee
 		firstName[0] = '\0';
 		lastName[0] = '\0';
 		sex = 1;
-	}	
+	}
 };
 
 struct listEmp
