@@ -8,9 +8,10 @@
 using namespace std;
 
 //Global Vaiable
-
 ofstream logs;
-//=====funtions======
+
+
+//============CAU-TRUC-TAM==================
 
 struct NamesInfoEmp
 {
@@ -170,10 +171,12 @@ struct Dates
 		return false;
 	}
 };
+//============CAU-TRUC-TAM==================
 
-//==========Struct============
 
 
+//==========CAU-TRUC-CHINH===============
+//======================================
 
 // CT_HOADON
 struct Details
@@ -254,7 +257,7 @@ struct listBillDeta
 		return 0;
 	}
 };
-//=============endDanhsachCT_HOADON========
+
 
 //=============HOADON======================
 struct Bills
@@ -291,7 +294,7 @@ struct nodeListBill
 };
 typedef struct nodeListBill* NODE_LB;
 
-
+//============DANH-SACH-HOA-DON===============
 struct ListBill
 {
 	int Size;
@@ -371,9 +374,6 @@ struct ListBill
 
 
 
-
-//=============end--HOADON================
-
 //=============NHANVIEN==================
 struct Employee
 {
@@ -391,6 +391,7 @@ struct Employee
 	}
 };
 
+//========DANH-SACH-NHAN-VIEN===========================
 struct listEmp
 {
 	int n;
@@ -494,23 +495,13 @@ struct listEmp
 		p->listBill.insertFirst(newBill);
 	}
 	
-//	struct Employee* Search_ID(char tmpID[11])
-//	{
-//		for (int i = 0; i < n; i++)
-//		{
-//			if (strcmp(nodeListEmp[i]->ID, tmpID) == 0)
-//			{
-//				return nodeListEmp[i];
-//			}
-//		}
-//		return NULL;
-//	}
 	
 };
-//==============endNHANVIEN============
+//=================================================
+//================================================
 
 
-//=====================================
+//==========DANH-SACH-BILL-THEO-NGAY===============
 struct billDateNode
 {
 	struct Bills *info;
@@ -561,12 +552,12 @@ struct listBillDate
 		return newNode;
 	}
 };
-//=====================================
+//================================================
 
 
 
 
-//=============SAVE-and-LOAD===========
+//=============SAVE-and-LOAD===================
 
 void writeDetail(ofstream &file, Details node)
 {

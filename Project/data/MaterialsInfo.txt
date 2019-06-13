@@ -1,8 +1,4 @@
 13
-KY
-Ky
-Ky
-131
 HOANG
 Hoang
 Hoang
@@ -35,6 +31,10 @@ HO
 Ho
 Ho
 32423
+KY
+Ky
+Ky
+131
 KHOA
 Khoa
 Khoa

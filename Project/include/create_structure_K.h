@@ -88,7 +88,7 @@ NODEPTR rotateR(NODEPTR y)
 	x->right = y; 
 	y->left = p; 
 	
-	// Update height
+	// Cap nhat chieu cao
 	 
 	x->height = max(Height(x->left), 
 					Height(x->right)) + 1;
@@ -105,7 +105,7 @@ NODEPTR rotateL(NODEPTR y)
 	x->left = y; 
 	y->right = p; 
 
-	// Update height
+	// Cap nhat chieu cao
 	x->height = max(Height(x->left), 
 					Height(x->right)) + 1; 
 	y->height = max(Height(y->left), 
@@ -167,17 +167,14 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 		}
 		else
 		{ 
-			// node with two children: Get the inorder 
-			// successor (smallest in the right subtree) 
+			// neu co hai nut con thi lay node con tan cung ben trai cua nhanh ben phai 
 			NODEPTR tmp = minValueNode(root->right); 
 			strcpy(root->key,tmp->key);
 			root->info = tmp->info;  
-			// Delete the inorder successor 
+			// xoa node con
 			root->right = deleteNode(root->right, tmp->key); 
 		} 
-	} 
-	// If the tree had only one node 
-	// then return 
+	}  
 	if (root == NULL) 
 		return root; 
 	
@@ -236,7 +233,6 @@ NODEPTR Insert(NODEPTR root, char key[], Material a)
 	root->height = max(Height(root->left), Height(root->right)) + 1; 
 
 	//can bang lai cay
-	
 	int balance = getBalance(root); 
 
 	//4 truong hop mat can bang
@@ -279,6 +275,7 @@ NODEPTR Search(NODEPTR &root, char x[11])
 //		 	  {
 //		 	  	Search(root->left,x);
 //			  }
+	//khu de quy
 	NODEPTR p;
 	p = root ;
 	while(p != NULL && strcmp(p->key, x) != 0)
@@ -291,20 +288,7 @@ NODEPTR Search(NODEPTR &root, char x[11])
 	return p;
 }	
 
-void Inorder(NODEPTR &p)
-{
-	if(p != NULL)
-	{
-		Inorder(p->left);
-//			cout<<p->info;
-		//show
-		Inorder(p->right);
-		
-	}
-}
 //functions
-
-
 
 void Qsort(NameMats info[], int left, int right )
 {
@@ -335,9 +319,9 @@ void Qsort(NameMats info[], int left, int right )
 }
 
 
-// save and load file
+// save and load
 
-void saveMat(NODEPTR &tree, ofstream &outMat)
+void saveNode(NODEPTR &tree, ofstream &outMat)
 {
 	if(tree != NULL)
 	{
@@ -347,19 +331,19 @@ void saveMat(NODEPTR &tree, ofstream &outMat)
 		outMat << tree->info.name <<endl;
 		outMat << tree->info.type <<endl;
 		outMat << tree->info.amount <<endl;
-		saveMat(tree->left,outMat);
-		saveMat(tree->right,outMat);
+		saveNode(tree->left,outMat);
+		saveNode(tree->right,outMat);
 	}
 	else
 		return;
 }	
 
-void saveFile(NODEPTR &tree, int &nMat)
+void saveMat(NODEPTR &tree, int &nMat)
 {
 	ofstream outMat;
 	outMat.open("data/MaterialsInfo.txt", ios::out);
 	outMat << nMat << endl;
-	saveMat(tree, outMat);
+	saveNode(tree, outMat);
 	outMat.close();
 }
 
