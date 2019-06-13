@@ -4355,12 +4355,12 @@ void chinhThongTinEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], in
 		}
 	}
 	
-	int pos = 1;
+	int pos = 2;
 	int fst = tmpE->sex;			//SEX
 	
 	//in thong tin
 	InThongTin(560, ViTriKhung[2], tmpE->firstName);
-	InThongTin(560, ViTriKhung[2], tmpE->firstName);
+	InThongTin(560, ViTriKhung[3], tmpE->lastName);
 	veMuc2Chon(380, 380, khungNoiDung[6], Sex, tmpE->sex, NEN_KHUNG, WHITE);
 	while(1)
 	{

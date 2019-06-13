@@ -27,7 +27,7 @@ N17DCCN115
 Nhan
 Tran Nguyen Chi
 1
-1
+2
 N17DCCN113
 Nguyen
 Nguyen Tuan
@@ -114,7 +114,7 @@ Nguyen Duc
 1
 0
 TESTSAVE
-A
-Df
+Test
+Save
 0
 0

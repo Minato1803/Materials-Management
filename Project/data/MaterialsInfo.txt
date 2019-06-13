@@ -102,7 +102,7 @@ Cai
 LENOVO
 A300
 Cai
-1
+0
 MOLTEN
 Bong Ro Molten
 Qua
@@ -126,7 +126,7 @@ Cuon
 OMO
 Bot Giat Omo
 Thung
-154
+144
 OPPO
 Oppo F11
 Cai 
