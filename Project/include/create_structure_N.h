@@ -8,7 +8,7 @@
 using namespace std;
 
 //Global Vaiable
-ofstream logs;
+//ofstream logs;
 
 
 //============CAU-TRUC-TAM==================

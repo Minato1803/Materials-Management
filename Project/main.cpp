@@ -41,7 +41,7 @@ void Guild();
 //==========DUCKHAI==============================================================================
 	int Count = 0;
 	// Cau A:
-	void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcase,  Material tmp);
+	void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcase,  Material &tmp);
 	void infoText(int x, int y, char noiDung[],char info[], int MauChu);
 	void hienThiInfoMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W, char keyword[]);
 	void inChoiceMat(NODEPTR &tree, char khungNoiDung[][30],bool RoA);
@@ -113,6 +113,7 @@ int main()
 	logs.open("data/Logs.txt", ios::out);
 	NODEPTR tree = NULL;
 	loadFile(tree, CountM);
+	logs << "list" << endl;
 	struct listEmp ListEmployees;
 	loadEmp(ListEmployees);
 	Menu(ListEmployees,tree);
@@ -420,7 +421,7 @@ void TaoManHinhLamViec()
 void KhoiTaoChuongTrinh()
 {
 	initwindow(WD_WIDTH, WD_HEIGHT);
-	setwindowtitle("Materials-Management 1.0.0");
+	setwindowtitle("Materials-Management 1.0.1");
 	TaoManHinhLamViec();
 }
 
@@ -478,7 +479,7 @@ void About()
 {
 	MessageBox(GetActiveWindow(), 
 	"Materials-Management \n"
-	"Version Beta 1.0\n\n"
+	"Version 1.0.1\n\n"
 	"Authors:\n"
 	"Nguyen Duc Khai 	  \t- N17DCCN066\n"
 	"Tran Nguyen Chi Nhan \t- N17DCCN115\n",
@@ -488,10 +489,11 @@ void About()
 void Guild()
 {
 	MessageBox(GetActiveWindow(), 
-	"Di chuyen: Dung phim mui ten.\n"
-	"Chon: Dung phim Enter.\n"
-	"Cuon trang: Dung phim pgUp, pgDown.\n"
-	"Thoat: Dung phim ESC.",
+	"Move		: Press Narrow keys.\n"
+	"Select		: Press Enter.\n"
+	"Save		: Press F9.\n"
+	"Exit		: Press ESC.\n"
+	"Scroll Page	: Press PageUp, PageDown.\n",
 	"Guild", MB_APPLMODAL | MB_ICONINFORMATION);
 }
 
@@ -1100,9 +1102,10 @@ void noti(char khungNoiDung[])
 
 
 //=========================================================DUCKHAI=================================================================//
-void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcase, Material tmp) // 1: choose addMat 0: choose adjust
+void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcase, Material &tmp) // 1: choose addMat 0: choose adjust
 {
-	Material recovertmp = tmp;
+	Material recovertmp;
+	recovertmp = tmp;
 	int cases = 1;
 	if(Mcase == 0)
 		cases = 7;
@@ -1225,7 +1228,7 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcas
 			}
 			else if (key == 27)
 			{
-				//VeMenu();
+				VeMenu();
 				return;
 			}
 			
@@ -1335,6 +1338,7 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcas
 												NotiY:
 												++CountM;
 												tree = Insert(tree,tmp.code,tmp);
+												logs << "bugs"<<endl;
 												if(Mcase == 1)	
 												{
 													ThongBao(725, 130, Success[0], GREEN, MAU_MENU);
@@ -1379,7 +1383,7 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcas
 										return;
 									}
 								}
-								else if (key5 == 27)
+								if (key5 == 27)
 								{
 									if(Mcase == 0)
 									{
@@ -1791,6 +1795,7 @@ void danhSachRoAMat(NODEPTR &tree, int &CountM, int RoA) //1: Remove 2: Adjust 3
 	bool select;
 	while(1)
 	{
+		logs << "x" << CountM << endl;
 		chonTuDanhSachMat(tree, arrM, CountM, removePos, page, select);
 		if(select)
 		{
@@ -1817,7 +1822,6 @@ void danhSachRoAMat(NODEPTR &tree, int &CountM, int RoA) //1: Remove 2: Adjust 3
 			break;
 		}
 	}
-//	delete (arrM);
 //	saveFile(tree, CountM);
 	VeMenu();
 }
@@ -1867,9 +1871,9 @@ void chonTuDanhSachMat(NODEPTR &tree, NameMats *arrM, int size, int &stt, int &s
 					char nextK = getch();
 					switch(nextK)
 					{
-						case KEY_PGUP:
+						case KEY_PGDN:
 							{
-								startPage++;
+								startPage--;
 								if (startPage < 1)
 									startPage = limitPage;
 								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE, size);
@@ -1877,9 +1881,9 @@ void chonTuDanhSachMat(NODEPTR &tree, NameMats *arrM, int size, int &stt, int &s
 								stt = (startPage-1)*OBJ_PER_PAGE;
 								break;
 							}
-						case KEY_PGDN:
+						case KEY_PGUP:
 							{
-								startPage--;
+								startPage++;
 								if (startPage > limitPage)
 									startPage = 1;
 								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE,size);
@@ -1993,6 +1997,7 @@ void inTrangMat(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], 
 	dis = U + kichThuocSTT;
 	int Size = sizeM;
 	NODEPTR p; 
+		logs << CountM <<endl;
 	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
 	{
 		dis += 5;	
@@ -2002,7 +2007,6 @@ void inTrangMat(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], 
 		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[0])+sizeKhungNoiDung[0]*2), dis, d);
 		disW += textwidth(khungNoiDung[0]) + sizeKhungNoiDung[0]*2;
 		p = Search(tree, arr[i].code);		
-//		logs << "bugs"<<endl;
 		if(p != NULL)
 		{
 			inVatTu(p->info, disW, dis);
@@ -2072,18 +2076,18 @@ void inDanhSachMat(NODEPTR &tree, int size)
 					char nextK = getch();
 					switch(nextK)
 					{
-						case KEY_PGUP:
+						case KEY_PGDN:
 							{
-								startPage++;
+								startPage--;
 								if (startPage < 1)
 									startPage = limitPage;
 								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE,size);	
 								showPage(830, 650, startPage, limitPage);
 								break;
 							}
-						case KEY_PGDN:
+						case KEY_PGUP:
 							{
-								startPage--;
+								startPage++;
 								if (startPage > limitPage)
 									startPage = 1;
 								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE,size);
@@ -4817,9 +4821,9 @@ void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &st
 					char nextK = getch();
 					switch(nextK)
 					{
-						case KEY_PGUP:
+						case KEY_PGDN:
 							{
-								startPage++;
+								startPage--;
 								if (startPage < 1)
 									startPage = limitPage;
 								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
@@ -4827,9 +4831,9 @@ void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &st
 								stt = (startPage-1)*OBJ_PER_PAGE;
 								break;
 							}
-						case KEY_PGDN:
+						case KEY_PGUP:
 							{
-								startPage--;
+								startPage++;
 								if (startPage > limitPage)
 									startPage = 1;
 								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);

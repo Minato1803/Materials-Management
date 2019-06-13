@@ -27,7 +27,7 @@ N17DCCN115
 Nhan
 Tran Nguyen Chi
 1
-11
+1
 N17DCCN113
 Nguyen
 Nguyen Tuan
@@ -112,7 +112,7 @@ N17DCCN066
 Khai
 Nguyen Duc
 1
-1
+0
 TESTSAVE
 A
 Df

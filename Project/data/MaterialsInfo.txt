@@ -1,53 +1,165 @@
-13
-HOANG
-Hoang
-Hoang
-187
-CHI
-Chi
-Chi
-137
-BAO
-Bao
-Bao
-322
-AN
-An
-An
-3425
-CANXOA
-Canxoa
-Canxoa
-213215
-HIEN
-Hien
-Hien
+41
+0100F
+Ten
+Unit
+100
+0115X
+Ten
+Unit
+100
+0127T
+Ten
+Unit
+100
+0138E
+Ten
+Unit
+100
+0156S
+Ten
+Unit
+100
+0169C
+Ten
+Unit
+100
+0174S
+Ten
+Unit
+100
+0215A
+Ten
+Unit
+100
+0444W
+Ten
+Unit
+100
+0676C
+Ten
+Unit
+100
+0810Y
+Ten
+Unit
+100
+0967O
+Ten
+Unit
+100
+AIRCOOLER
+Quat May Hoi Nuoc
+Cai
+212
+AIRPOD
+Tai Nghe Apple Airpod2
+Cai
+1254
+ALIENWARE
+Laptop Alienware M17
+Cai
+545
+BALOHS
+Balo Hoc Sinh
+Cai
+445
+BANHS
+Ban Xep Hoc Sinh
+Cai
+1254
+BITIS
+Bitis Hunter
+Doi
+1000
+BLACKBERRY
+Pearl
+Cai
+20
+BMHANOI
+Banh My Ha Noi
+Cai
 231
-DUC
-Duc
-Duc
-124
-HO
-Ho
-Ho
-32423
-KY
-Ky
-Ky
-131
-KHOA
-Khoa
-Khoa
-2123564
-LUU
-Luu
-Luu
-324
-LOC
-Loc
-Loc
-1543
-NHAN
-Khai
-Khai
+COCACOLA
+Nuoc Ngot Cocacola
+Lon
+1254
+DELL
+Vostro
+Cai
+1
+HUAWEI
+P30 Pro Plus
+Cai
+2
+IPHONE
+Iphone Se
+Cai
+80000
+JBL
+Loa Bluetooth Jbl
+Cai
+155
+LENOVO
+A300
+Cai
+1
+MOLTEN
+Bong Ro Molten
+Qua
+5151
+MTCASIO
+May Tinh Cam Tay Casio
+Cai
+545
+NINTENDO
+May Choi Game Nintendo
+Cai
+1255
+NK5
+Giay Bong Ro Nike Kyrie 5
+Doi
+1545
+NOTE
+Vo Campus
+Cuon
+123
+OMO
+Bot Giat Omo
+Thung
+154
+OPPO
+Oppo F11
+Cai 
+1545
+SAMSUNG
+Galaxy S10
+Cai
+1000000
+SENKO
+Quat Dien Senko
+Cai
+548
+SUNGMAY
+Galting Gun
+Cai
+10000
+THAU
+Thau Nhua
+Cai
+100
+TS100
+Ke Sach
+Cai
+125
+VINAMILK
+Sua Tuoi Vinamilk 
+Thung
+154
+XEMAY
+Xe Honda
+Chiec
+100
+XIAOMI
+Redmi Note 7
+Chiec
 125

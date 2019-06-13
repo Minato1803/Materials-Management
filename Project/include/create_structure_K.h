@@ -4,7 +4,7 @@
 #include "Functions.h"
 
 using namespace std;
-//ofstream logs;
+ofstream logs;
 
 //=== create structures=== //
 int CountM = 0;
@@ -51,15 +51,16 @@ struct NameMats
 struct Node			//AVL tree
 {
 	
-	char key[];
+	char key[11];
 	Material info;
-	int height ;
+	int height;
 	Node *left;
 	Node *right;
-	Node()
-	{
-		height = 1;
-	}
+//	Node()
+//	{
+//		key[0] = '0';
+//		height = 1;
+//	}
 };
 typedef struct Node *NODEPTR;
 
@@ -90,10 +91,10 @@ NODEPTR rotateR(NODEPTR y)
 	
 	// Cap nhat chieu cao
 	 
-	x->height = max(Height(x->left), 
-					Height(x->right)) + 1;
 	y->height = max(Height(y->left), 
 					Height(y->right)) + 1;
+	x->height = max(Height(x->left), 
+					Height(x->right)) + 1;
 	return x; 
 } 
 
@@ -106,10 +107,10 @@ NODEPTR rotateL(NODEPTR y)
 	y->right = p; 
 
 	// Cap nhat chieu cao
-	x->height = max(Height(x->left), 
-					Height(x->right)) + 1; 
 	y->height = max(Height(y->left), 
 					Height(y->right)) + 1; 
+	x->height = max(Height(x->left), 
+					Height(x->right)) + 1; 
 	return x; 
 } 
 
@@ -117,8 +118,7 @@ int getBalance(NODEPTR p)
 { 
 	if (p == NULL) 
 		return 0;
-	else	 
-		return Height(p->left) - Height(p->right); 
+	return (Height(p->left) - Height(p->right)); 
 } 
 
 NODEPTR minValueNode(NODEPTR root) 
@@ -207,7 +207,7 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 
 NODEPTR newNode(char key[], Material a)  
 {  
-    NODEPTR node = new Node(); 
+    NODEPTR node = new Node; 
     strcpy(node->key,key);
 	strcpy(node->info.code,a.code);
 	strcpy(node->info.name,a.name);
@@ -220,14 +220,16 @@ NODEPTR newNode(char key[], Material a)
 
 NODEPTR Insert(NODEPTR root, char key[], Material a) 
 { 
+//logs << key << endl;
 	if (root == NULL) 
 		return (newNode(key, a));
+		
 	if (strcmp(key,root->key) < 0) 
 		root->left = Insert(root->left, key, a); 
 	else if (strcmp(key,root->key) > 0) 
 		root->right = Insert(root->right, key, a); 
 	else
-		return (newNode(key, a)); 
+		return root; 
 
 	//cap nhat height
 	root->height = max(Height(root->left), Height(root->right)) + 1; 
@@ -258,7 +260,6 @@ NODEPTR Insert(NODEPTR root, char key[], Material a)
 		root->right = rotateR(root->right); 
 		return rotateL(root); 
 	} 
-
 	return root; 
 } 
 
@@ -327,11 +328,11 @@ void saveNode(NODEPTR &tree, ofstream &outMat)
 	{
 //		outMat << tree->key <<endl;
 //		outMat << tree->height <<endl;
+		saveNode(tree->left,outMat);
 		outMat << tree->info.code <<endl;
 		outMat << tree->info.name <<endl;
 		outMat << tree->info.type <<endl;
 		outMat << tree->info.amount <<endl;
-		saveNode(tree->left,outMat);
 		saveNode(tree->right,outMat);
 	}
 	else
@@ -354,9 +355,11 @@ void loadFile(NODEPTR &tree, int &CountM)
 	inMat.open("data/MaterialsInfo.txt",ios::in);
 	inMat >> CountM;
 	inMat.ignore();
+	logs << CountM << endl;
 	for(int i = 0; i < CountM; i++)
 	{
 		Material tmp;	
+		logs << i << endl;
 //			tmp = new Node(); 
 //			inMat.getline(tmp->key,sizeof(tmp->key));
 //			inMat >> tmp->height;
@@ -365,8 +368,13 @@ void loadFile(NODEPTR &tree, int &CountM)
 		inMat.getline(tmp.name, sizeof(tmp.name));
 		inMat.getline(tmp.type, sizeof(tmp.type));
 		inMat.getline(tmp.amount, sizeof(tmp.amount));
+//		logs << tmp.code << endl;
+//		logs << tmp.name << endl;
+//		logs << tmp.type << endl;
+//		logs << tmp.amount << endl;
 		tree = Insert(tree,tmp.code,tmp);
 	}	
+	logs << "finish" << endl;
 	inMat.close();
 }
 					
