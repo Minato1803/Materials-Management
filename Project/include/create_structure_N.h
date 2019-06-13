@@ -271,6 +271,7 @@ struct Bills
 		Num[0] = '\0';
 		details = new listBillDeta;
 	}
+	
 	bool operator == (struct Bills other)
 	{
 		return(strcmp(Num, other.Num) == 0);
@@ -331,15 +332,6 @@ struct ListBill
 	{
 		p->next = firstNode;
 		firstNode = p;
-	}
-	
-	void insertAfter(NODE_LB pos, Bills nodeN)
-	{
-		NODE_LB tmp = new nodeListBill;
-		tmp->info = nodeN;
-		tmp->next = pos->next;
-		pos->next = tmp;
-		Size++;	
 	}
 	
 	NODE_LB Search_LB(Bills nodeN)
@@ -498,7 +490,7 @@ struct listEmp
 	
 };
 //=================================================
-//================================================
+//=================================================
 
 
 //==========DANH-SACH-BILL-THEO-NGAY===============
@@ -557,7 +549,7 @@ struct listBillDate
 
 
 
-//=============SAVE-and-LOAD===================
+//=============SAVE-and-LOAD=====================
 
 void writeDetail(ofstream &file, Details node)
 {
