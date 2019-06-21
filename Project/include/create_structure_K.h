@@ -4,10 +4,11 @@
 #include "Functions.h"
 
 using namespace std;
-ofstream logs;
+//ofstream logs;
 
 //=== create structures=== //
 int CountM = 0;
+
 struct Material	// info Materials
 {
 	char code[11];
@@ -27,8 +28,8 @@ struct NameMats
 {
 	char code[11];
 	char name[51];
-	int  revenue;
-	int  rank;
+	unsigned long long  revenue;
+	unsigned int  rank;
 	NameMats()
 	{
 		code[0] = '\0';
@@ -83,6 +84,13 @@ int Height(NODEPTR p)
 
 NODEPTR rotateR(NODEPTR y) 
 { 
+												//				y
+						 						//			   / \	
+ 												//			  x   T4
+												//		     / \	
+												//          z   p
+												//         / \
+												//         T1 T2
 	NODEPTR x = y->left; 
 	NODEPTR p = x->right; 
  
@@ -289,7 +297,6 @@ NODEPTR Search(NODEPTR &root, char x[11])
 	return p;
 }	
 
-//functions
 
 void Qsort(NameMats info[], int left, int right )
 {
@@ -320,7 +327,7 @@ void Qsort(NameMats info[], int left, int right )
 }
 
 
-// save and load
+//===save and load====//
 
 void saveNode(NODEPTR &tree, ofstream &outMat)
 {
@@ -355,11 +362,11 @@ void loadFile(NODEPTR &tree, int &CountM)
 	inMat.open("data/MaterialsInfo.txt",ios::in);
 	inMat >> CountM;
 	inMat.ignore();
-	logs << CountM << endl;
+	//logs << CountM << endl;
 	for(int i = 0; i < CountM; i++)
 	{
 		Material tmp;	
-		logs << i << endl;
+		//logs << i << endl;
 //			tmp = new Node(); 
 //			inMat.getline(tmp->key,sizeof(tmp->key));
 //			inMat >> tmp->height;
@@ -368,13 +375,9 @@ void loadFile(NODEPTR &tree, int &CountM)
 		inMat.getline(tmp.name, sizeof(tmp.name));
 		inMat.getline(tmp.type, sizeof(tmp.type));
 		inMat.getline(tmp.amount, sizeof(tmp.amount));
-//		logs << tmp.code << endl;
-//		logs << tmp.name << endl;
-//		logs << tmp.type << endl;
-//		logs << tmp.amount << endl;
 		tree = Insert(tree,tmp.code,tmp);
 	}	
-	logs << "finish" << endl;
+	//logs << "finish" << endl;
 	inMat.close();
 }
 					

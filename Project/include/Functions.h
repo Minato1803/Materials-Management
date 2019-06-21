@@ -13,15 +13,15 @@ using namespace std;
 bool  CheckLetter(char s);
 bool  CheckNum(char s);
 bool  KhoaNhapLieu(char s[], int n);
-char* toChars(long num);
+char* toChars(unsigned long long num);
 char* charDate(int day, int month, int year);
 int   KiemtraNhapLieu(char c, char s[]);
 int   canLeGiua(char *S, int dis);
-long  ChangeCharToNum (char s[]);
 void  AddChuoi(char c, char s[]);
 void  get_chuoi(char *des, char *s );
 void  delBlank(char *s);
 void  Nhap(int x, int y, int check, char c, char s[], int n);
+unsigned long long  ChangeCharToNum (char s[]);
 
 
 //do hoa

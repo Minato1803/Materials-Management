@@ -69,6 +69,7 @@ void Guild();
 	void inInfoBill(NODEPTR &tree,listEmp &ListEmployees,Employee *tmpE, char findID[]);
 	void TrangBillList(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], Bills &tmpB, int start);
 	void veKhungSearchBill(NODEPTR &tree, listEmp &ListEmployees,char khungNoiDung[][30], Bills &tmpB);
+
 	
 //=========================
 
@@ -82,14 +83,13 @@ void Guild();
 	void inID_LIST(char khungNoiDung[][30], struct listEmp &ListEmployees, bool &list, char *findID, bool &selected);
 	void chinhThongTinEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, struct Employee *tmpE, bool &selected);
 	void danhSachAdjustEmp(struct listEmp &ListEmployees);
-	void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &stt, int &startPage, bool &selected);
+	void chonTuDanhSach(struct listEmp &ListEmployees, int &stt, int &startPage, bool &selected);
 	// xoa
 	void removeEmp(struct listEmp &ListEmployees);
 	void danhSachRemoveEmp(struct listEmp &ListEmployees);
 	void deleteInfoEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H, int W, struct Employee *Info);
 	//in
 	void inDanhSachEmp(struct listEmp &ListEmployees);
-	void taoMangEmp(struct listEmp &ListEmployees, struct NamesInfoEmp *arr);
 	void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start);
 	void inNhanVien(struct Employee *NV, int posX, int posY);
 
@@ -103,6 +103,9 @@ void Guild();
 	void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees);
 	void inTrangTopVT(struct listEmp &list, struct NameMats *arr, int Size, int start);
 	void sortTopMat(NameMats *arr, int left, int right);
+	void updateRevenue(NameMats *arr, listBillDate *arrBill);
+	void increaseRevenue(NameMats *arr, char code[11], unsigned long long Rev);
+	void findMaxMat(NameMats *arrMat, int &C);
 //=========================
 
 
@@ -421,7 +424,7 @@ void TaoManHinhLamViec()
 void KhoiTaoChuongTrinh()
 {
 	initwindow(WD_WIDTH, WD_HEIGHT);
-	setwindowtitle("Materials-Management 1.0.1");
+	setwindowtitle("Materials-Management 1.0.2");
 	TaoManHinhLamViec();
 }
 
@@ -479,7 +482,7 @@ void About()
 {
 	MessageBox(GetActiveWindow(), 
 	"Materials-Management \n"
-	"Version 1.0.1\n\n"
+	"Version 1.0.2\n\n"
 	"Authors:\n"
 	"Nguyen Duc Khai 	  \t- N17DCCN066\n"
 	"Tran Nguyen Chi Nhan \t- N17DCCN115\n",
@@ -1131,6 +1134,7 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcas
 	setcolor(BLACK);
 	setlinestyle(SOLID_LINE, EMPTY_FILL, NORM_WIDTH);		
 	line(L, U+kichThuocSTT, R, U+kichThuocSTT);								//top line
+	rectangle(L-1, U, R, D);
 	
 	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 	setcolor(MAU_TEXT_KHUNG);
@@ -1277,7 +1281,7 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcas
 				case 4:
 					{
 						veKhung(380, 380, khungNoiDung[6], 1, NEN_KHUNG, WHITE);
-						Nhap(560,380,0, key, tmp.amount,18);
+						Nhap(560,380,0, key, tmp.amount,8);
 						
 						break;
 					}
@@ -2835,9 +2839,9 @@ void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][3
 	InfoDetail tempM;
 	//===
 	infoText(380, ViTriKhung[1], khungNoiDung[1+2],tmp.ID,WHITE);
-	InThongTin(560,ViTriKhung[2],tempM.tmpUnit);
+	InThongTin(560,ViTriKhung[2],tempM.tmpAmount);
 	InThongTin(560,ViTriKhung[3],tempM.tmpVAT);
-	InThongTin(560,ViTriKhung[4],tempM.tmpAmount);
+	InThongTin(560,ViTriKhung[4],tempM.tmpUnit);
 	// ve khung amount
 	bool button = 1;
 	int pos = 0;
@@ -2908,9 +2912,15 @@ void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][3
 				 	{
 				 		if(strlen(tempM.tmpAmount) != 0 && strlen(tempM.tmpVAT) != 0  && strlen(tempM.tmpUnit) != 0 )
 				 		{
+				 			if(ChangeCharToNum(tempM.tmpUnit) == 0 || ChangeCharToNum(tempM.tmpAmount) == 0)
+				 			{
+				 				ThongBao(690, 130, Fail[9], LIGHTRED, MAU_MENU);
+				 				pos = 1;
+				 				goto cpos;
+							}
 				 			if(NoX == 0 )
 							{
-								if(ChangeCharToNum(tempM.tmpAmount) > ChangeCharToNum(MatInf->info.amount))
+								if(ChangeCharToNum(tempM.tmpUnit) >= ChangeCharToNum(MatInf->info.amount))
 								{
 					 				ThongBao(715, 130, Fail[6], LIGHTRED, MAU_MENU);
 									infoText(380,450, lackAmount[0], MatInf->info.amount, LIGHTRED);
@@ -2954,7 +2964,7 @@ void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][3
 					{
 						
 						veKhung(380,ViTriKhung[2],khungNoiDung[4],1,NEN_KHUNG,WHITE);
-						Nhap(560,ViTriKhung[2],0,key,tempM.tmpUnit,18);
+						Nhap(560,ViTriKhung[2],0,key,tempM.tmpAmount,9);
 						break;
 					}
 				case 1:
@@ -2966,7 +2976,7 @@ void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][3
 				case 2:	
 					{
 						veKhung(380,ViTriKhung[4],khungNoiDung[6],1,NEN_KHUNG,WHITE);
-						Nhap(560,ViTriKhung[4],0,key,tempM.tmpAmount,18);
+						Nhap(560,ViTriKhung[4],0,key,tempM.tmpUnit,8);
 						break;												
 					}
 				case 3:
@@ -2975,9 +2985,9 @@ void hienThiInfoBill(NODEPTR &tree,listEmp &ListEmployees, char khungNoiDung[][3
 						break;				
 					}		
 			}
-			InThongTin(560,ViTriKhung[2],tempM.tmpUnit);
+			InThongTin(560,ViTriKhung[2],tempM.tmpAmount);
 			InThongTin(560,ViTriKhung[3],tempM.tmpVAT);
-			InThongTin(560,ViTriKhung[4],tempM.tmpAmount);
+			InThongTin(560,ViTriKhung[4],tempM.tmpUnit);
 		}
 	}
 //	delete (temp);
@@ -2998,6 +3008,7 @@ void danhSachSelectMat(NODEPTR &tree,listEmp &ListEmployees,Bills &tmpB, bool No
 	bool select = 0;
 	while(1)
 	{
+		loop:
 		chonTuDanhSachMat(tree, arrM, size, removePos, page, select);
 		if(select == 1 && !tmpB.details->isFull())
 		{
@@ -3009,7 +3020,7 @@ void danhSachSelectMat(NODEPTR &tree,listEmp &ListEmployees,Bills &tmpB, bool No
 				if(tmpB.details->cmp_ID(p->info.code))
 				{
 					ThongBao(800, 35, Fail[4], LIGHTRED, MAU_NEN);
-					continue;
+					goto loop;
 				}
 			}
 			VeMenu();
@@ -3036,7 +3047,7 @@ void danhSachBill(NODEPTR &tree, listEmp &ListEmployees, bool NoX, Bills &tmpB) 
 		{
 			if(!tmpB.details->isEmpty())
 			{
-				return VeKhungChooseBill(tree, ListEmployees, khungBill, 450, 600,tmpB, removePos, NoX);
+				return VeKhungChooseBill(tree, ListEmployees, khungDetailBill, 450, 600,tmpB, removePos, NoX);
 			}
 			else
 			{
@@ -3197,19 +3208,18 @@ void chonTuDanhSachBill(NODEPTR &tree, listEmp &ListEmployees, int &stt, bool &s
 										long tmpNum = 0;
 										if(NoX == 1)
 										{
-											tmpNum = ChangeCharToNum(tmpM->info.amount) + tmpB.details->nodeListDeta[i].amount;
+											tmpNum = ChangeCharToNum(tmpM->info.amount) + tmpB.details->nodeListDeta[i].unit;
 										}
 										else
 										{
-											tmpNum = ChangeCharToNum(tmpM->info.amount) - tmpB.details->nodeListDeta[i].amount;
+											tmpNum = ChangeCharToNum(tmpM->info.amount) - tmpB.details->nodeListDeta[i].unit;
 											
 										}
 										strcpy(tmpM->info.amount,  toChars(tmpNum));
 									}
+									VeMenu();
+									return;
 								}
-//								saveEmp(ListEmployees);
-								VeMenu();
-								return;
 							}
 							else if(choose == 3)
 							{
@@ -3304,7 +3314,7 @@ void inVatTuBill(Details VT, int posX, int posY)
 	posX += textwidth(danhSachDetailBill[1]) + sizeDanhSachMat[1]*2;
 	
 	// in Rate
-	outtextxy(posX + 10, posY, toChars(VT.unit));
+	outtextxy(posX + 10, posY, toChars(VT.amount));
 	posX += textwidth(danhSachDetailBill[2]) + sizeDanhSachMat[2]*2;
 	
 	// in VAT
@@ -3312,7 +3322,7 @@ void inVatTuBill(Details VT, int posX, int posY)
 	posX += textwidth(danhSachDetailBill[3]) + sizeDanhSachMat[3]*2;
 	
 	// in Quantity
-	outtextxy(posX + canLeGiua(toChars(VT.amount) , textwidth(danhSachDetailBill[4])+sizeDanhSachMat[4]*2), posY, toChars(VT.amount));		
+	outtextxy(posX + canLeGiua(toChars(VT.amount) , textwidth(danhSachDetailBill[4])+sizeDanhSachMat[4]*2), posY, toChars(VT.unit));		
 	posX += textwidth(danhSachDetailBill[4]) + sizeDanhSachMat[4]*2;
 }
 
@@ -3450,7 +3460,7 @@ void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[
 				case 2:
 					{
 						veKhung(380, 260, khungNoiDung[4], 1, NEN_KHUNG, WHITE);
-						Nhap(560,260,0, key, tmpVT.amount, 18);
+						Nhap(560,260,0, key, tmpVT.amount, 9);
 						break;
 					}
 				case 3:
@@ -3462,7 +3472,7 @@ void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[
 				case 4:
 					{
 						veKhung(380, 380, khungNoiDung[6], 1, NEN_KHUNG, WHITE);
-						Nhap(560,380,0, key, tmpVT.unit,18);
+						Nhap(560,380,0, key, tmpVT.unit,8);
 						
 						break;
 					}
@@ -3526,7 +3536,6 @@ void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[
 												//remove
 												ThongBao(715, 130, Success[1], GREEN, MAU_MENU);
 												tmpB.details->Detele(ViTri);
-												tmpB.details->n--;
 
 												VeMenu();
 												return danhSachBill(tree, ListEmployees, NoX, tmpB);
@@ -3537,9 +3546,14 @@ void VeKhungChooseBill(NODEPTR &tree, listEmp &ListEmployees, char khungNoiDung[
 												p = Search(tree, tmpVT.ID);
 												if(p != NULL)
 												{		
+														if(ChangeCharToNum(tmpVT.unit) == 0 || ChangeCharToNum(tmpVT.amount) == 0)
+				 										{
+				 											ThongBao(690, 130, Fail[9], LIGHTRED, MAU_MENU);
+				 											goto NotiN;
+														}
 														if(NoX == 0)
 														{
-															if(ChangeCharToNum(p->info.amount) > ChangeCharToNum(tmpVT.unit))
+															if(ChangeCharToNum(p->info.amount) >= ChangeCharToNum(tmpVT.unit))
 															{
 																ThongBao(715, 130, Success[0], GREEN, MAU_MENU);
 																strcpy(tmpB.details->nodeListDeta[ViTri].ID,tmpVT.ID);
@@ -4603,7 +4617,7 @@ void addEmp(struct listEmp &ListEmployees)
 	VeMenu();
 }
 
-void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], struct NamesInfoEmp arr[], int start)
+void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiDung[], int start)
 {
 	int kichThuocSTT = 30;
 	int h = textheight(khungNoiDung[0]);
@@ -4670,7 +4684,7 @@ void inTrangEmp(struct listEmp &list, char khungNoiDung[][30], int sizeKhungNoiD
 		outtextxy(disW + canLeGiua(d, textwidth(khungNoiDung[0])+sizeKhungNoiDung[0]*2), dis, d);
 		disW += textwidth(khungNoiDung[0]) + sizeKhungNoiDung[0]*2;
 		
-		inNhanVien(list.Search_ID(arr[i].ID), disW, dis);
+		inNhanVien(list.nodeListEmp[i], disW, dis);
 		
 		dis += h+5;
 	}
@@ -4701,31 +4715,10 @@ void inNhanVien(struct Employee *NV, int posX, int posY)
 	posX += textwidth(danhSachEmp[4]) + sizeDanhSachEmp[4]*2;
 }
 
-void taoMangEmp(struct listEmp &ListEmployees, struct NamesInfoEmp *arr)
-{
-	for (int i = 0; i < ListEmployees.n; i++)
-	{
-		strcpy(arr[i].fName, ListEmployees.nodeListEmp[i]->firstName);
-		delBlank(arr[i].fName);
-		for (int j = 0; j < strlen(arr[i].fName); j++)
-			arr[i].fName[j] = tolower(arr[i].fName[j]);
-		strcpy(arr[i].lName, ListEmployees.nodeListEmp[i]->lastName);
-		
-		delBlank(arr[i].lName);
-		for (int j = 0; j < strlen(arr[i].lName); j++)
-			arr[i].lName[j] = tolower(arr[i].lName[j]);
-		strcpy(arr[i].ID, ListEmployees.nodeListEmp[i]->ID);
-	}
-}
-
 void inDanhSachEmp(struct listEmp &ListEmployees)
 {
-	NamesInfoEmp *arrEmp = new NamesInfoEmp[ListEmployees.n];
-	
-	taoMangEmp(ListEmployees, arrEmp);
-	// sort
-	sortEmp(arrEmp, 0, ListEmployees.n-1);
-	
+	sortEmp(ListEmployees.nodeListEmp, 0, ListEmployees.n-1);
+
 	//in danh sach
 	int startPage = 1;
 	int limitPage = ceil(ListEmployees.n*1.0/OBJ_PER_PAGE);
@@ -4735,7 +4728,7 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 	}
 	else
 	{
-		inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+		inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, (startPage-1)*OBJ_PER_PAGE);
 		showPage(830, 650, startPage, limitPage);
 		while(1)
 		{
@@ -4752,7 +4745,7 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 								startPage--;
 								if (startPage < 1)
 									startPage = limitPage;
-								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, (startPage-1)*OBJ_PER_PAGE);
 								showPage(830, 650, startPage, limitPage);
 								break;
 							}
@@ -4761,7 +4754,7 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 								startPage++;
 								if (startPage > limitPage)
 									startPage = 1;
-								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, (startPage-1)*OBJ_PER_PAGE);
 								showPage(830, 650, startPage, limitPage);
 								break;
 							}
@@ -4775,11 +4768,10 @@ void inDanhSachEmp(struct listEmp &ListEmployees)
 			}
 		}
 	}
-	delete (arrEmp);
 }
 
 
-void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &stt, int &startPage, bool &selected)
+void chonTuDanhSach(struct listEmp &ListEmployees, int &stt, int &startPage, bool &selected)
 {	
 	//in danh sach
 	//int startPage = 1;
@@ -4806,7 +4798,7 @@ void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &st
 		int x = L, y = U+kichThuocSTT+(stt%OBJ_PER_PAGE)*h;
 		int yOld = y;
 				
-		inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, 0);
+		inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, 0);
 		showPage(830, 650, startPage, limitPage);
 		
 		setcolor(GREEN);
@@ -4826,7 +4818,7 @@ void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &st
 								startPage--;
 								if (startPage < 1)
 									startPage = limitPage;
-								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, (startPage-1)*OBJ_PER_PAGE);
 								showPage(830, 650, startPage, limitPage);
 								stt = (startPage-1)*OBJ_PER_PAGE;
 								break;
@@ -4836,7 +4828,7 @@ void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &st
 								startPage++;
 								if (startPage > limitPage)
 									startPage = 1;
-								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, arrEmp, (startPage-1)*OBJ_PER_PAGE);
+								inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, (startPage-1)*OBJ_PER_PAGE);
 								showPage(830, 650, startPage, limitPage);
 								stt = (startPage-1)*OBJ_PER_PAGE;
 								break;
@@ -4883,28 +4875,23 @@ void chonTuDanhSach(struct listEmp &ListEmployees, NamesInfoEmp *arrEmp, int &st
 
 void danhSachRemoveEmp(struct listEmp &ListEmployees)
 {
-	//tao mang 1 chieu
-	NamesInfoEmp *arrEmp = new NamesInfoEmp[ListEmployees.n];
-	taoMangEmp(ListEmployees, arrEmp);
-	sortEmp(arrEmp, 0, ListEmployees.n-1);
+	sortEmp(ListEmployees.nodeListEmp, 0, ListEmployees.n-1);
 	
 	int removePos = 0;
 	int page = 1;
 	bool select;
 	while(1)
 	{
-		chonTuDanhSach(ListEmployees, arrEmp, removePos, page, select);
+		chonTuDanhSach(ListEmployees, removePos, page, select);
 		if(select)
 		{
-			ListEmployees.DeteleID(arrEmp[removePos].ID);
-			for (int i = removePos; i < ListEmployees.n; arrEmp[i]=arrEmp[++i]);
+			ListEmployees.Detele(removePos);
 		}
 		else
 		{
 			break;
 		}
 	}
-	delete (arrEmp);
 	VeMenu();
 }
 
@@ -5281,20 +5268,18 @@ void deleteInfoEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], int H
 void danhSachAdjustEmp(struct listEmp &ListEmployees)
 {
 	//tao mang 1 chieu
-	NamesInfoEmp *arrEmp = new NamesInfoEmp[ListEmployees.n];
-	taoMangEmp(ListEmployees, arrEmp);
-	sortEmp(arrEmp, 0, ListEmployees.n-1);
+	sortEmp(ListEmployees.nodeListEmp, 0, ListEmployees.n-1);
 	
 	int choosePos = 0;
 	int page = 1;
 	bool select;
 	while(1)
 	{
-		chonTuDanhSach(ListEmployees, arrEmp, choosePos, page, select);
+		chonTuDanhSach(ListEmployees, choosePos, page, select);
 		if(select)
 		{
 			struct Employee *tmpE;
-			tmpE = ListEmployees.Search_ID(arrEmp[choosePos].ID);
+			tmpE = ListEmployees.nodeListEmp[choosePos];
 			
 			struct Employee recoverE;
 			strcpy(recoverE.ID, tmpE->ID);
@@ -5306,11 +5291,7 @@ void danhSachAdjustEmp(struct listEmp &ListEmployees)
 			chinhThongTinEmp(ListEmployees, khungAdjustEmp, 450, 600, tmpE, saved);
 			if (saved)
 			{
-				strcpy(arrEmp[choosePos].ID, tmpE->ID);
-				strcpy(arrEmp[choosePos].fName, tmpE->firstName);
-				delBlank(arrEmp[choosePos].fName);
-				strcpy(arrEmp[choosePos].lName, tmpE->lastName);
-				delBlank(arrEmp[choosePos].fName);
+				//
 			}
 			else
 			{
@@ -5318,6 +5299,7 @@ void danhSachAdjustEmp(struct listEmp &ListEmployees)
 				strcpy(tmpE->firstName, recoverE.firstName);
 				strcpy(tmpE->lastName, recoverE.lastName);
 				tmpE->sex = recoverE.sex;
+				
 			}
 		}
 		else
@@ -5325,7 +5307,6 @@ void danhSachAdjustEmp(struct listEmp &ListEmployees)
 			break;
 		}
 	}
-	delete (arrEmp);
 	VeMenu();
 }
 
@@ -5479,6 +5460,7 @@ void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start)
 			
 			disW += textwidth(trangBill[6]) + sizeTrangBill[6]*2;
 			outtextxy(disW-5-textwidth(toChars(tmpB->value())), dis, toChars(tmpB->value()));
+			logs << "value:" << tmpB->value() << endl;
 		}
 		
 		dis += h+5;
@@ -5845,7 +5827,7 @@ void sortTopMat(NameMats *arr, int left, int right)
 		sortTopMat(arr, i, right);
 }
 
-void increaseRevenue(NameMats *arr, char code[11], int Rev)
+void increaseRevenue(NameMats *arr, char code[11], unsigned long long Rev)
 {
 	for (int i = 0; i < CountM; i++)
 	{
@@ -5869,7 +5851,7 @@ void updateRevenue(NameMats *arr, listBillDate *arrBill)
 				int amountMat	= tmpDT->nodeListDeta[i].amount;
 				int unitMat		= tmpDT->nodeListDeta[i].unit;
 				int VAT			= tmpDT->nodeListDeta[i].VAT;
-				increaseRevenue(arr, tmpDT->nodeListDeta[i].ID, (amountMat*unitMat)*((VAT+100)/100.0));
+				increaseRevenue(arr, tmpDT->nodeListDeta[i].ID, (1LL*amountMat*unitMat)*((VAT+100)/100.0));
 			}
 		}
 	}

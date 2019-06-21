@@ -8,83 +8,10 @@
 using namespace std;
 
 //Global Vaiable
-//ofstream logs;
+ofstream logs;
 
 
 //============CAU-TRUC-TAM==================
-
-struct NamesInfoEmp
-{
-	char fName[31];
-	char lName[31];
-	char ID[11];
-	
-	bool operator > (const struct NamesInfoEmp &other)
-	{
-		if (strcmp(this->fName, other.fName) > 0)
-		{
-			return true;
-		}
-		else if (strcmp(this->fName, other.fName) == 0)
-		{
-			if (strcmp(this->lName, other.lName) > 0)
-			{
-				return true;
-			}
-			else
-				return false;
-		}
-		else 
-			return false;
-	}
-	
-	bool operator < (const struct NamesInfoEmp &other)
-	{
-		if (strcmp(this->fName, other.fName) < 0)
-		{
-			return true;
-		}
-		else if (strcmp(this->fName, other.fName) == 0)
-		{
-			if (strcmp(this->lName, other.lName) < 0)
-			{
-				return true;
-			}
-			else
-				return false;
-		}
-		else 
-			return false;
-	}
-};
-
-void sortEmp(struct NamesInfoEmp *arr, int left, int right)
-{
-	NamesInfoEmp mid = arr[(left + right) / 2];
-	int i = left, j = right;
-	do
-	{
-		while(arr[i] < mid)
-			i++;
-		while(arr[j] > mid)
-			j--;
-		if(i <= j)
-		{
-			if(i < j)
-			{
-				NamesInfoEmp tmp;
-				tmp = arr[i];
-				arr[i] = arr[j];
-				arr[j] = tmp;
-			}
-			i++; j--;
-		}
-	} while(i<=j);
-	if(left < j)
-		sortEmp(arr, left, j);
-	if(right > i)
-		sortEmp(arr, i, right);
-}
 
 struct Dates
 {
@@ -182,8 +109,8 @@ struct Dates
 struct Details
 {
 	char ID[20];
-	int amount;
-	int unit;
+	unsigned int amount;
+	unsigned int unit;
 	int VAT;
 	
 	bool operator == (struct Details other)
@@ -271,18 +198,18 @@ struct Bills
 		Num[0] = '\0';
 		details = new listBillDeta;
 	}
-	
 	bool operator == (struct Bills other)
 	{
 		return(strcmp(Num, other.Num) == 0);
 	}
 	
-	long value()
+	long long value()
 	{
-		long res = 0;
+		long long res = 0;
 		for (int i = 0; i < details->n; i++)
 		{
-			res += (details->nodeListDeta[i].amount*details->nodeListDeta[i].unit)*((100+details->nodeListDeta[i].VAT)/100.0);
+			res += (1LL*details->nodeListDeta[i].amount*details->nodeListDeta[i].unit)/100.0*((100+details->nodeListDeta[i].VAT));
+			logs << "res" << res << endl;
 		}
 		return res;
 	}
@@ -334,6 +261,15 @@ struct ListBill
 		firstNode = p;
 	}
 	
+	void insertAfter(NODE_LB pos, Bills nodeN)
+	{
+		NODE_LB tmp = new nodeListBill;
+		tmp->info = nodeN;
+		tmp->next = pos->next;
+		pos->next = tmp;
+		Size++;	
+	}
+	
 	NODE_LB Search_LB(Bills nodeN)
 	{
 		for (NODE_LB p = firstNode; p != NULL; p = p->next)
@@ -381,6 +317,97 @@ struct Employee
 		lastName[0] = '\0';
 		sex = 1;
 	}
+	
+	bool operator > (const struct Employee &other)
+	{
+		char thisFN[31] = "";
+		char thisLN[31] = "";
+		char otherFN[31] = "";
+		char otherLN[31] = "";
+	
+		//chuyen ten -> xoa dau cach + viet thuong
+		strcpy(thisFN, this->firstName);
+		delBlank(thisFN);
+		for (int i = 0; i < strlen(thisFN); i++)
+			thisFN[i] = tolower(thisFN[i]);
+			
+		strcpy(thisLN, this->lastName);
+		delBlank(thisLN);
+		for (int i = 0; i < strlen(thisLN); i++)
+			thisLN[i] = tolower(thisLN[i]);
+			
+		strcpy(otherFN, other.firstName);
+		delBlank(otherFN);
+		for (int i = 0; i < strlen(otherFN); i++)
+			otherFN[i] = tolower(otherFN[i]);
+			
+		strcpy(otherLN, other.lastName);
+		delBlank(otherLN);
+		for (int i = 0; i < strlen(otherLN); i++)
+			otherLN[i] = tolower(otherLN[i]);
+		
+		if (strcmp(thisFN, otherFN) > 0)
+		{
+			return true;
+		}
+		else if (strcmp(thisFN, otherFN) == 0)
+		{
+			if (strcmp(thisLN, otherLN) > 0)
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		else 
+			return false;
+	}
+	
+	bool operator < (const struct Employee &other)
+	{
+		char thisFN[31] = "";
+		char thisLN[31] = "";
+		char otherFN[31] = "";
+		char otherLN[31] = "";
+	
+		//chuyen ten -> xoa dau cach + viet thuong
+		strcpy(thisFN, this->firstName);
+		delBlank(thisFN);
+		for (int i = 0; i < strlen(thisFN); i++)
+			thisFN[i] = tolower(thisFN[i]);
+			
+		strcpy(thisLN, this->lastName);
+		delBlank(thisLN);
+		for (int i = 0; i < strlen(thisLN); i++)
+			thisLN[i] = tolower(thisLN[i]);
+			
+		strcpy(otherFN, other.firstName);
+		delBlank(otherFN);
+		for (int i = 0; i < strlen(otherFN); i++)
+			otherFN[i] = tolower(otherFN[i]);
+			
+		strcpy(otherLN, other.lastName);
+		delBlank(otherLN);
+		for (int i = 0; i < strlen(otherLN); i++)
+			otherLN[i] = tolower(otherLN[i]);
+		
+		if (strcmp(thisFN, otherFN) < 0)
+		{
+			return true;
+		}
+		else if (strcmp(thisFN, otherFN) == 0)
+		{
+			if (strcmp(thisLN, otherLN) < 0)
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		else 
+			return false;
+	}
+	
 };
 
 //========DANH-SACH-NHAN-VIEN===========================
@@ -388,6 +415,7 @@ struct listEmp
 {
 	int n;
 	struct Employee *nodeListEmp[500];
+	
 	listEmp()
 	{
 		n = 0;
@@ -470,6 +498,7 @@ struct listEmp
 		return true;
 	}
 	
+	// check ID bill
 	Employee *FindEmp(char IDBill[20])
 	{
 		for (int numE = 0; numE < n; numE++)
@@ -487,10 +516,38 @@ struct listEmp
 		p->listBill.insertFirst(newBill);
 	}
 	
-	
 };
+
+void sortEmp(struct Employee **arr, int left, int right)
+{
+	logs << "sort" << endl;
+	Employee *mid = arr[(left + right) / 2];
+	int i = left, j = right;
+	do
+	{
+		while(*arr[i] < *mid)
+			i++;
+		while(*arr[j] > *mid)
+			j--;
+		if(i <= j)
+		{
+			if(i < j)
+			{
+				Employee *tmp;
+				tmp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = tmp;
+			}
+			i++; j--;
+		}
+	} while(i<=j);
+	if(left < j)
+		sortEmp(arr, left, j);
+	if(right > i)
+		sortEmp(arr, i, right);
+}
 //=================================================
-//=================================================
+//================================================
 
 
 //==========DANH-SACH-BILL-THEO-NGAY===============
@@ -549,7 +606,7 @@ struct listBillDate
 
 
 
-//=============SAVE-and-LOAD=====================
+//=============SAVE-and-LOAD===================
 
 void writeDetail(ofstream &file, Details node)
 {

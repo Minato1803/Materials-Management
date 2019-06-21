@@ -20,10 +20,10 @@ bool CheckNum(char s)
 	return 0;	 
 }
 
-long ChangeCharToNum (char s[])
+unsigned long long ChangeCharToNum (char s[])
 {
-	long n = 0;
-	for(int i =0; i<strlen(s);i++)
+	unsigned long long n = 0;
+	for(int i = 0; i<strlen(s);i++)
 	{
 		n *= 10;
 		n += (s[i]-48);
@@ -31,7 +31,7 @@ long ChangeCharToNum (char s[])
 	return n;
 }
 
-char* toChars(long num)
+char* toChars(unsigned long long num)
 {
 	char* a = new char[100];
 	if (num == 0)

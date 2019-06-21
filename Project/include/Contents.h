@@ -12,7 +12,7 @@
 char MenuChinh[MAX_MENU+1][30] = {"Materials", "Employees", "Bills", "Statistics", "Help"};
 char MenuMater[][30] 		   = {"Add", "Remove", "Adjust", "Materials List"};
 char MenuEmp[][30]			   = {"Add", "Remove", "Adjust", "Employees List"};
-char MenuBill[][30] 		   = {"Create Bill", "Bills List"};
+char MenuBill[][30] 		   = {"Create Bill", "Check Bill"};
 char MenuStat[][30]	  		   = {"Bills", "Top Materials"};
 char MenuHelp[][30] 		   = {"Guild", "About"};
 
@@ -25,7 +25,7 @@ int ViTriKhung[] 			     = {0, 200, 260, 320, 380,440};
 // noti
 char Success[][50] = {"Added Successfully!", "Remove Successfully!", "Adjust Successfully!", "Save Successfully!"};
 char Fail[][50]    = {"Empty Field", "Not Found", "Empty List","Wrong Date!", "Already exists!", 
-					  "Employee Not Found!", "Not Enough Material!","Current quantity: ", "Full List!"};
+					  "Employee Not Found!", "Not Enough Material!","Current quantity: ", "Full List!", "Value must not equal 0!"};
 
 //error 
 char sameMat[][50] 	  = {"Error: The same  Material's ID already exists!", "Yes", "No","Would you like to Adjust the existing object?"};
@@ -63,8 +63,8 @@ char khungNhapNgay[][30] = {"Statistics of bills in: ", "Check", "Exit", "From d
 char ngayTopVT[][30]     = {"Top 10 Materials in:", "Check", "Exit", "From date:", "To date:"};
 char trangBill[][30] 	 = {"STT", "ID", "Date", "Type", "Last Name", "First Name", "Value"};
 char trangTop[][30]		 = {"Rank", "ID", "Name", "Revenue"};
-int  sizeTrangBill[]	 = {10, 50, 50, 20, 100, 50, 50};
-int  sizeTrangTop[]		 = {10, 50, 50, 50};
+int  sizeTrangBill[]	 = {10, 50, 50, 20, 100, 50, 70};
+int  sizeTrangTop[]		 = {10, 50, 50, 70};
 
 
 #endif

@@ -1,4 +1,4 @@
-41
+43
 0100F
 Ten
 Unit
@@ -78,7 +78,7 @@ Cai
 BMHANOI
 Banh My Ha Noi
 Cai
-231
+221
 COCACOLA
 Nuoc Ngot Cocacola
 Lon
@@ -86,6 +86,10 @@ Lon
 DELL
 Vostro
 Cai
+1
+FINALTEST
+Final Test
+Lan
 1
 HUAWEI
 P30 Pro Plus
@@ -102,7 +106,7 @@ Cai
 LENOVO
 A300
 Cai
-0
+1
 MOLTEN
 Bong Ro Molten
 Qua
@@ -126,7 +130,7 @@ Cuon
 OMO
 Bot Giat Omo
 Thung
-144
+152
 OPPO
 Oppo F11
 Cai 
@@ -143,6 +147,10 @@ SUNGMAY
 Galting Gun
 Cai
 10000
+TESTMAX
+Max
+Lan
+0
 THAU
 Thau Nhua
 Cai
