@@ -4585,9 +4585,9 @@ void chinhThongTinEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], in
 void addEmp(struct listEmp &ListEmployees)
 {
 	bool entered = false;
+	struct Employee *tmpE = new struct Employee;
 	do
 	{
-		struct Employee *tmpE = new struct Employee;
 		khungNhapEmp(ListEmployees, khungEmp, 450, 600, tmpE, entered);
 		if (entered)
 		{
