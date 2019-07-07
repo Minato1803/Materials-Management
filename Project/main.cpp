@@ -5742,6 +5742,7 @@ void nhapNgay(Dates &dayBegin, Dates &dayEnd, char khungNoiDung[][30], bool &sel
 			else if (key == 27)
 			{
 				selected = false;
+				VeMenu();
 				return;
 			}
 			switch(pos)

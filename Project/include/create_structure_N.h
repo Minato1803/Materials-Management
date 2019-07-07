@@ -414,7 +414,7 @@ struct Employee
 struct listEmp
 {
 	int n;
-	struct Employee *nodeListEmp[500];
+	struct Employee *nodeListEmp[MAXL_EMP];
 	
 	listEmp()
 	{
