@@ -37,9 +37,9 @@ Lưu ý: Chương trình cho phép lưu các danh sách vào file; Kiểm tra c�
 
 Tác giả:
 - Nguyễn Đức Khải           
-- MSSV: N17DCCN066
+ +MSSV: N17DCCN066
 - Trần Nguyễn Chí Nhân      
-- MSSV: N17DCCN115
+ +MSSV: N17DCCN115
 
 Các chức năng được chia đều thành 2 phần cho mỗi thành viên:
 - Khải: a, b, e, f.
