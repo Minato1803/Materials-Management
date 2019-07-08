@@ -115,7 +115,7 @@ struct Details
 	
 	bool operator == (struct Details other)
 	{
-		return (strcmp(ID, other.ID) == 0);
+		return (strcmp(this->ID, other.ID) == 0);
 	}
 };
 
@@ -200,7 +200,7 @@ struct Bills
 	}
 	bool operator == (struct Bills other)
 	{
-		return(strcmp(Num, other.Num) == 0);
+		return(strcmp(this->Num, other.Num) == 0);
 	}
 	
 	long long value()
