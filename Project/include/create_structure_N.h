@@ -438,6 +438,7 @@ struct listEmp
 	
 	void Detele(int pos)
 	{
+		delete nodeListEmp[pos];
 		for (int j = pos+1; j < n; j++)
 		{
 			nodeListEmp[j-1] = nodeListEmp[j];

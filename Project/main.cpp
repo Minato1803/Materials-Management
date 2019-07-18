@@ -4798,7 +4798,7 @@ void chonTuDanhSach(struct listEmp &ListEmployees, int &stt, int &startPage, boo
 		int x = L, y = U+kichThuocSTT+(stt%OBJ_PER_PAGE)*h;
 		int yOld = y;
 				
-		inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, 0);
+		inTrangEmp(ListEmployees, danhSachEmp, sizeDanhSachEmp, (startPage-1)*OBJ_PER_PAGE);
 		showPage(830, 650, startPage, limitPage);
 		
 		setcolor(GREEN);
