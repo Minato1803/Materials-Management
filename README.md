@@ -3,8 +3,6 @@
 
 Khóa 2017 - Giảng viên: Lưu Nguyễn Kỳ Thư.
 
-Kết quả: 9 điểm.
-
 Đề bài:
 3.	Quản lý nhập xuất vật tư: Ta tổ chức các danh sách sau:
 - Danh sách Vattu : cây nhị phân tìm kiếm ( MAVT (C10), TENVT, DVT (đơn vị tính), Số lượng tồn).
