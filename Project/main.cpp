@@ -116,7 +116,7 @@ int main()
 	logs.open("data/Logs.txt", ios::out);
 	NODEPTR tree = NULL;
 	loadFile(tree, CountM);
-	logs << "list" << endl;
+	// logs << "list" << endl;
 	struct listEmp ListEmployees;
 	loadEmp(ListEmployees);
 	Menu(ListEmployees,tree);
@@ -1342,7 +1342,7 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcas
 												NotiY:
 												++CountM;
 												tree = Insert(tree,tmp.code,tmp);
-												logs << "bugs"<<endl;
+												//logs << "bugs"<<endl;
 												if(Mcase == 1)	
 												{
 													ThongBao(725, 130, Success[0], GREEN, MAU_MENU);
@@ -1799,7 +1799,7 @@ void danhSachRoAMat(NODEPTR &tree, int &CountM, int RoA) //1: Remove 2: Adjust 3
 	bool select;
 	while(1)
 	{
-		logs << "x" << CountM << endl;
+		//logs << "x" << CountM << endl;
 		chonTuDanhSachMat(tree, arrM, CountM, removePos, page, select);
 		if(select)
 		{
@@ -1860,7 +1860,7 @@ void chonTuDanhSachMat(NODEPTR &tree, NameMats *arrM, int size, int &stt, int &s
 		int x = L, y = U+kichThuocSTT+(stt%OBJ_PER_PAGE)*h;
 		int yOld = y;
 				
-		inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, 0,size);
+		inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE, size);
 		showPage(830, 650, startPage, limitPage);
 		
 		setcolor(GREEN);
@@ -1890,7 +1890,7 @@ void chonTuDanhSachMat(NODEPTR &tree, NameMats *arrM, int size, int &stt, int &s
 								startPage++;
 								if (startPage > limitPage)
 									startPage = 1;
-								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE,size);
+								inTrangMat(tree, danhSachMat, sizeDanhSachMat, arrM, (startPage-1)*OBJ_PER_PAGE, size);
 								showPage(830, 650, startPage, limitPage);
 								stt = (startPage-1)*OBJ_PER_PAGE;
 								break;
@@ -2001,7 +2001,7 @@ void inTrangMat(NODEPTR &tree, char khungNoiDung[][30], int sizeKhungNoiDung[], 
 	dis = U + kichThuocSTT;
 	int Size = sizeM;
 	NODEPTR p; 
-		logs << CountM <<endl;
+		//logs << CountM <<endl;
 	for (int i = start; i < min(start+OBJ_PER_PAGE, Size); i++)
 	{
 		dis += 5;	
@@ -4585,9 +4585,10 @@ void chinhThongTinEmp(struct listEmp &ListEmployees, char khungNoiDung[][30], in
 void addEmp(struct listEmp &ListEmployees)
 {
 	bool entered = false;
-	struct Employee *tmpE = new struct Employee;
 	do
 	{
+		struct Employee *tmpE = new struct Employee;
+		fixEmp:
 		khungNhapEmp(ListEmployees, khungEmp, 450, 600, tmpE, entered);
 		if (entered)
 		{
@@ -4609,6 +4610,10 @@ void addEmp(struct listEmp &ListEmployees)
 					if(chooseY)
 					{
 						chinhThongTinEmp(ListEmployees, khungAdjustEmp, 450, 600, ListEmployees.Search_ID(tmpE->ID), entered);
+					}
+					else
+					{
+						goto fixEmp;
 					}
 				}
 			}	
@@ -5460,7 +5465,7 @@ void inTrangBill(struct listEmp &list, struct listBillDate *arr, int start)
 			
 			disW += textwidth(trangBill[6]) + sizeTrangBill[6]*2;
 			outtextxy(disW-5-textwidth(toChars(tmpB->value())), dis, toChars(tmpB->value()));
-			logs << "value:" << tmpB->value() << endl;
+			//logs << "value:" << tmpB->value() << endl;
 		}
 		
 		dis += h+5;
@@ -5864,7 +5869,7 @@ void findMaxMat(NameMats *arrMat, int &C)
 	int valueOld = 0;
 	for (C = 0; C < CountM; C++) 
 	{
-		logs << arrMat[C].revenue << endl;
+		//logs << arrMat[C].revenue << endl;
 		if (valueOld != arrMat[C].revenue)
 		{
 			arrMat[C].rank = ++rank;
@@ -5901,8 +5906,8 @@ void topVatTu(NODEPTR &tree, struct listEmp &ListEmployees)
 		//in danh sach
 		int startPage = 1;
 		int limitPage = ceil(countMatRank*1.0/OBJ_PER_PAGE);
-		for (int i = 0; i < CountM; i++)
-			logs << arrMat[i].code << " " << arrMat[i].name << endl;
+//		for (int i = 0; i < CountM; i++)
+//			logs << arrMat[i].code << " " << arrMat[i].name << endl;
 	
 		if (limitPage == 0)
 		{
