@@ -1342,7 +1342,7 @@ void VeKhungAddMat(NODEPTR &tree, char khungNoiDung[][30], int H, int W,int Mcas
 												NotiY:
 												++CountM;
 												tree = Insert(tree,tmp.code,tmp);
-												logs << "bugs"<<endl;
+//												logs << "bugs"<<endl;
 												if(Mcase == 1)	
 												{
 													ThongBao(725, 130, Success[0], GREEN, MAU_MENU);
@@ -1787,7 +1787,7 @@ void inChoiceMat(NODEPTR &tree, char khungNoiDung[][30],bool RoA) // RoA = 1  re
 	} // while
 }
 
-void danhSachRoAMat(NODEPTR &tree, int &CountM, int RoA) //1: Remove 2: Adjust 3: Bill 
+void danhSachRoAMat(NODEPTR &tree, int &CountM, int RoA) //1: Remove 0: Adjust
 {
 	//tao mang 1 chieu
 	NameMats *arrM = new NameMats[CountM];

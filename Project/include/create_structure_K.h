@@ -175,7 +175,7 @@ NODEPTR deleteNode(NODEPTR root, char key[])
 		}
 		else
 		{ 
-			// neu co hai nut con thi lay node con tan cung ben trai cua nhanh ben phai 
+			// neu co hai nut con thi lay node con tan cung ben trai cua nhanh ben phai (lay node nho nhat lam node cha moi)
 			NODEPTR tmp = minValueNode(root->right); 
 			strcpy(root->key,tmp->key);
 			root->info = tmp->info;  
@@ -237,7 +237,7 @@ NODEPTR Insert(NODEPTR root, char key[], Material a)
 	else if (strcmp(key,root->key) > 0) 
 		root->right = Insert(root->right, key, a); 
 	else
-		return root; 
+		return (newNode(key, a)); 
 
 	//cap nhat height
 	root->height = max(Height(root->left), Height(root->right)) + 1; 
