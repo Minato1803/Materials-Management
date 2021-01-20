@@ -418,7 +418,7 @@ void ChonMenuPhu(int sttMenuChinh, struct listEmp &ListEmployees, NODEPTR &tree)
 void TaoManHinhLamViec()
 {
 	VeMenu();
-	NoiBatMuc(0, 0, MenuChinh, HIGHTLIGHT, USER_CHAR_SIZE);
+//	NoiBatMuc(0, 0, MenuChinh, HIGHTLIGHT, USER_CHAR_SIZE);
 }
 
 void KhoiTaoChuongTrinh()
